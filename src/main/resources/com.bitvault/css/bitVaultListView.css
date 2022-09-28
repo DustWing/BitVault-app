@@ -1,0 +1,24 @@
+
+.bit-vault-list-view, .bit-vault-list-view:focused, bit-vault-list-view:selected {
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+}
+
+.bit-vault-list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected,
+.bit-vault-list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:focused,
+.bit-vault-list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.bit-vault-list-view > .virtual-flow > .scroll-bar:vertical,
+.bit-vault-list-view > .virtual-flow > .scroll-bar:horizontal{
+    -fx-background-color: transparent;
+}
+
+
+.bit-vault-list-view {
+    /*-fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);*/
+    -fx-border-radius: 10;
+    -fx-padding: 0;
+}

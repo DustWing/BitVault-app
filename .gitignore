@@ -40,3 +40,13 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/.idea/.gitignore
+/.idea/cssdialects.xml
+/.idea/encodings.xml
+/.idea/gradle.xml
+/.idea/jpa-buddy.xml
+/.idea/misc.xml
+/.idea/resourceBundles.xml
+/.idea/sqldialects.xml
+/.idea/uiDesigner.xml
+/.idea/vcs.xml

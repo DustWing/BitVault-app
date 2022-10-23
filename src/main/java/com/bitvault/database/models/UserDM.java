@@ -1,6 +1,6 @@
 package com.bitvault.database.models;
 
-import com.bitvault.model.User;
+import com.bitvault.ui.model.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

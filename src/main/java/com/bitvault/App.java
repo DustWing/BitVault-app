@@ -1,7 +1,7 @@
 package com.bitvault;
 
 import com.bitvault.util.Theme;
-import com.bitvault.views.WelcomeView;
+import com.bitvault.ui.views.WelcomeView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

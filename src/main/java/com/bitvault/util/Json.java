@@ -3,16 +3,24 @@ package com.bitvault.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 public class Json {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static <T> T read(InputStream inputStream, Class<T> tClass) {
+    public static <T> T deserialize(String value, Class<T> tClass) {
 
         try {
-            return Json.MAPPER.readValue(inputStream, tClass);
+            return Json.MAPPER.readValue(value, tClass);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public static <T> String serialize(T value) {
+
+        try {
+            return Json.MAPPER.writeValueAsString(value);
         } catch (IOException e) {
             return null;
         }

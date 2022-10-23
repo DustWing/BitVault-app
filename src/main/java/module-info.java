@@ -1,30 +1,36 @@
 module com.bitvault {
+    requires javafx.controls;
+    //    requires javafx.fxml;
+
     requires com.sun.jna;
     requires java.sql;
     requires org.xerial.sqlitejdbc;
     requires de.mkammerer.argon2.nolibs;
-    requires javafx.controls;
-//    requires javafx.fxml;
+
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.databind;
+
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.materialdesign2;
+
+    requires io.netty.transport;
+    requires io.netty.handler;
+    requires io.netty.codec.http;
+    requires io.netty.buffer;
+    requires java.net.http;
 
 //    opens com.bitvault to javafx.fxml;
 //    opens com.bitvault.views to javafx.fxml;
 //    opens com.bitvault.components to javafx.fxml;
-    opens com.bitvault.model to com.fasterxml.jackson.databind;
+    opens com.bitvault.ui.model to com.fasterxml.jackson.databind;
 
     exports com.bitvault;
-    exports com.bitvault.components;
-    exports com.bitvault.model;
 
-    exports com.bitvault.toggle;
     exports com.bitvault.util;
-    exports com.bitvault.viewmodel;
-    exports com.bitvault.views;
-    exports com.bitvault.views.factory;
+    exports com.bitvault.ui.viewmodel;
+    exports com.bitvault.ui.views;
+    exports com.bitvault.ui.views.factory;
     exports com.bitvault.enums;
     exports com.bitvault.algos;
 
@@ -37,6 +43,9 @@ module com.bitvault {
     exports com.bitvault.services.factory;
     exports com.bitvault.services.interfaces;
     exports com.bitvault.services.local;
-
+    exports com.bitvault.ui.utils;
+    exports com.bitvault.ui.components;
+    exports com.bitvault.ui.model;
+    exports com.bitvault.ui.toggle;
 
 }

@@ -1,6 +1,6 @@
 package com.bitvault.services.interfaces;
 
-import com.bitvault.model.Profile;
+import com.bitvault.ui.model.Profile;
 import com.bitvault.util.Result;
 
 import java.util.List;

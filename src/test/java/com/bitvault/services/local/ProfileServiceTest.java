@@ -3,7 +3,7 @@ package com.bitvault.services.local;
 import com.bitvault.consts.Consts;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
-import com.bitvault.model.Profile;
+import com.bitvault.ui.model.Profile;
 import com.bitvault.services.interfaces.IProfileService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

@@ -4,7 +4,7 @@ import com.bitvault.algos.ArgonEncoder;
 import com.bitvault.consts.Consts;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
-import com.bitvault.model.User;
+import com.bitvault.ui.model.User;
 import com.bitvault.services.interfaces.IUserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

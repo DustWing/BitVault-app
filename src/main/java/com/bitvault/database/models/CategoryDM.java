@@ -1,6 +1,6 @@
 package com.bitvault.database.models;
 
-import com.bitvault.model.Category;
+import com.bitvault.ui.model.Category;
 import com.bitvault.util.DateTimeUtils;
 
 import java.sql.ResultSet;

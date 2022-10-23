@@ -1,13 +1,10 @@
 package com.bitvault.database.daos;
 
 import com.bitvault.database.models.UserDM;
-import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.utils.DBUtils;
-import com.bitvault.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;

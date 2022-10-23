@@ -1,7 +1,6 @@
 package com.bitvault.database.daos;
 
 import com.bitvault.database.models.UserDM;
-import com.bitvault.model.User;
 
 public interface IUserDao {
 

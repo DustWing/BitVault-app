@@ -1,8 +1,8 @@
 package com.bitvault.database.models;
 
 import com.bitvault.enums.Action;
-import com.bitvault.model.Password;
-import com.bitvault.model.SecureDetails;
+import com.bitvault.ui.model.Password;
+import com.bitvault.ui.model.SecureDetails;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

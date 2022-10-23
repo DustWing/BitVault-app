@@ -4,7 +4,7 @@ import com.bitvault.database.daos.IProfileDao;
 import com.bitvault.database.daos.ProfileDao;
 import com.bitvault.database.models.ProfileDM;
 import com.bitvault.database.provider.ConnectionProvider;
-import com.bitvault.model.Profile;
+import com.bitvault.ui.model.Profile;
 import com.bitvault.services.interfaces.IProfileService;
 import com.bitvault.util.Result;
 

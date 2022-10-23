@@ -7,10 +7,10 @@ import com.bitvault.database.models.ProfileDM;
 import com.bitvault.database.models.SecureDetailsDM;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.enums.Action;
-import com.bitvault.model.Category;
-import com.bitvault.model.Password;
-import com.bitvault.model.Profile;
-import com.bitvault.model.SecureDetails;
+import com.bitvault.ui.model.Category;
+import com.bitvault.ui.model.Password;
+import com.bitvault.ui.model.Profile;
+import com.bitvault.ui.model.SecureDetails;
 import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.util.Result;
 

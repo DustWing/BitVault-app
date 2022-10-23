@@ -1,6 +1,6 @@
 package com.bitvault.util;
 
-import com.bitvault.model.Identifiable;
+import com.bitvault.ui.model.Identifiable;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;

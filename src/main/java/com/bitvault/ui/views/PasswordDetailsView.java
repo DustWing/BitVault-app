@@ -1,13 +1,13 @@
 package com.bitvault.ui.views;
 
 import com.bitvault.enums.Action;
+import com.bitvault.ui.components.*;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
-import com.bitvault.ui.components.*;
 import com.bitvault.ui.utils.BvInsets;
-import com.bitvault.util.Labels;
 import com.bitvault.ui.viewmodel.PasswordDetailsVM;
+import com.bitvault.util.Labels;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.DatePicker;

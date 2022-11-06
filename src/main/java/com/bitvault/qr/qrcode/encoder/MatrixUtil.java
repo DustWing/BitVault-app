@@ -16,10 +16,10 @@
 
 package com.bitvault.qr.qrcode.encoder;
 
-import com.bitvault.qr.qrcode.decoder.ErrorCorrectionLevel;
-import com.bitvault.qr.qrcode.decoder.Version;
 import com.bitvault.qr.WriterException;
 import com.bitvault.qr.common.BitArray;
+import com.bitvault.qr.qrcode.decoder.ErrorCorrectionLevel;
+import com.bitvault.qr.qrcode.decoder.Version;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator

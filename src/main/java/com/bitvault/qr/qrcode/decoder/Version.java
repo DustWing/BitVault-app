@@ -16,8 +16,8 @@
 
 package com.bitvault.qr.qrcode.decoder;
 
-import com.bitvault.qr.common.BitMatrix;
 import com.bitvault.qr.FormatException;
+import com.bitvault.qr.common.BitMatrix;
 
 /**
  * See ISO 18004:2006 Annex D

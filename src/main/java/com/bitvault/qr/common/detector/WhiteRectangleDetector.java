@@ -16,9 +16,9 @@
 
 package com.bitvault.qr.common.detector;
 
-import com.bitvault.qr.common.BitMatrix;
 import com.bitvault.qr.NotFoundException;
 import com.bitvault.qr.ResultPoint;
+import com.bitvault.qr.common.BitMatrix;
 
 /**
  * <p>

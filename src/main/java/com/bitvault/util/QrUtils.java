@@ -1,9 +1,9 @@
 package com.bitvault.util;
 
 import com.bitvault.qr.BarcodeFormat;
+import com.bitvault.qr.MatrixToImageWriter;
 import com.bitvault.qr.MultiFormatWriter;
 import com.bitvault.qr.WriterException;
-import com.bitvault.qr.MatrixToImageWriter;
 import com.bitvault.qr.common.BitMatrix;
 import javafx.scene.image.Image;
 

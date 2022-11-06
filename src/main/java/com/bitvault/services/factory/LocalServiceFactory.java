@@ -1,10 +1,6 @@
 package com.bitvault.services.factory;
 
 import com.bitvault.algos.ArgonEncoder;
-import com.bitvault.database.creator.DbCreator;
-import com.bitvault.database.creator.IDbCreator;
-import com.bitvault.database.daos.IUserDao;
-import com.bitvault.database.daos.UserDao;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
 import com.bitvault.services.interfaces.ICategoryService;

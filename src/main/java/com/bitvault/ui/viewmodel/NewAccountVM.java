@@ -1,8 +1,8 @@
 package com.bitvault.ui.viewmodel;
 
+import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.ui.components.ValidatedForm;
 import com.bitvault.ui.model.User;
-import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.ui.views.factory.ViewFactory;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;

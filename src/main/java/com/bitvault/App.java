@@ -1,6 +1,5 @@
 package com.bitvault;
 
-import com.bitvault.ui.views.ServerView;
 import com.bitvault.ui.views.WelcomeView;
 import com.bitvault.util.Theme;
 import javafx.application.Application;

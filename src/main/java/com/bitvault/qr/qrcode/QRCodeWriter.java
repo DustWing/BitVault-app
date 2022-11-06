@@ -16,15 +16,15 @@
 
 package com.bitvault.qr.qrcode;
 
-import com.bitvault.qr.qrcode.decoder.ErrorCorrectionLevel;
-import com.bitvault.qr.qrcode.encoder.ByteMatrix;
-import com.bitvault.qr.qrcode.encoder.Encoder;
-import com.bitvault.qr.qrcode.encoder.QRCode;
 import com.bitvault.qr.BarcodeFormat;
 import com.bitvault.qr.EncodeHintType;
 import com.bitvault.qr.Writer;
 import com.bitvault.qr.WriterException;
 import com.bitvault.qr.common.BitMatrix;
+import com.bitvault.qr.qrcode.decoder.ErrorCorrectionLevel;
+import com.bitvault.qr.qrcode.encoder.ByteMatrix;
+import com.bitvault.qr.qrcode.encoder.Encoder;
+import com.bitvault.qr.qrcode.encoder.QRCode;
 
 import java.util.Map;
 

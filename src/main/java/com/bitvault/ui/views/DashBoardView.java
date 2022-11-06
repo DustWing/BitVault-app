@@ -2,9 +2,9 @@ package com.bitvault.ui.views;
 
 import com.bitvault.ui.components.BitVaultFlatButton;
 import com.bitvault.ui.components.BitVaultVBox;
+import com.bitvault.ui.viewmodel.DashBoardVM;
 import com.bitvault.util.Labels;
 import com.bitvault.util.ResourceLoader;
-import com.bitvault.ui.viewmodel.DashBoardVM;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;

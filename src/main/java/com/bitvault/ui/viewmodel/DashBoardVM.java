@@ -1,7 +1,7 @@
 package com.bitvault.ui.viewmodel;
 
-import com.bitvault.ui.model.Profile;
 import com.bitvault.services.factory.IServiceFactory;
+import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.views.PasswordView;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleObjectProperty;

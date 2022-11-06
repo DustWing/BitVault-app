@@ -1,16 +1,16 @@
 package com.bitvault.ui.views;
 
+import com.bitvault.services.factory.IServiceFactory;
+import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.ui.components.BitVaultFlatButton;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.WrappedTextField;
 import com.bitvault.ui.model.User;
-import com.bitvault.services.factory.IServiceFactory;
-import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.ui.utils.BvInsets;
+import com.bitvault.ui.viewmodel.LoginVM;
 import com.bitvault.ui.views.factory.ViewFactory;
 import com.bitvault.util.JavaFxUtil;
 import com.bitvault.util.Labels;
-import com.bitvault.ui.viewmodel.LoginVM;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

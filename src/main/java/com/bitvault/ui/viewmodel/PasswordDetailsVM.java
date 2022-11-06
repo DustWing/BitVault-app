@@ -1,7 +1,7 @@
 package com.bitvault.ui.viewmodel;
 
-import com.bitvault.ui.components.ValidatedForm;
 import com.bitvault.enums.Action;
+import com.bitvault.ui.components.ValidatedForm;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;

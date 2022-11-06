@@ -4,8 +4,8 @@ import com.bitvault.database.daos.CategoryDao;
 import com.bitvault.database.daos.ICategoryDao;
 import com.bitvault.database.models.CategoryDM;
 import com.bitvault.database.provider.ConnectionProvider;
-import com.bitvault.ui.model.Category;
 import com.bitvault.services.interfaces.ICategoryService;
+import com.bitvault.ui.model.Category;
 import com.bitvault.util.Result;
 
 import java.sql.Connection;

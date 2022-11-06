@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import javax.crypto.SecretKey;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class AESTest {
 

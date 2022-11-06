@@ -1,6 +1,5 @@
 package com.bitvault.util;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public final class Result<T> {

@@ -1,13 +1,13 @@
 package com.bitvault.ui.views;
 
-import com.bitvault.ui.model.Password;
 import com.bitvault.ui.components.*;
+import com.bitvault.ui.model.Password;
 import com.bitvault.ui.utils.BvInsets;
+import com.bitvault.ui.viewmodel.PasswordCardVM;
+import com.bitvault.ui.viewmodel.PasswordVM;
 import com.bitvault.util.JavaFxUtil;
 import com.bitvault.util.Labels;
 import com.bitvault.util.ListNodeConverter;
-import com.bitvault.ui.viewmodel.PasswordCardVM;
-import com.bitvault.ui.viewmodel.PasswordVM;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;

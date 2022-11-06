@@ -1,10 +1,10 @@
 package com.bitvault.ui.viewmodel;
 
+import com.bitvault.services.interfaces.ICategoryService;
+import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
-import com.bitvault.services.interfaces.ICategoryService;
-import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.util.Result;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

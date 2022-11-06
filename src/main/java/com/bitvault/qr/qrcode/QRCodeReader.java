@@ -16,13 +16,13 @@
 
 package com.bitvault.qr.qrcode;
 
-import com.bitvault.qr.qrcode.decoder.Decoder;
-import com.bitvault.qr.qrcode.decoder.QRCodeDecoderMetaData;
-import com.bitvault.qr.qrcode.detector.Detector;
 import com.bitvault.qr.*;
 import com.bitvault.qr.common.BitMatrix;
 import com.bitvault.qr.common.DecoderResult;
 import com.bitvault.qr.common.DetectorResult;
+import com.bitvault.qr.qrcode.decoder.Decoder;
+import com.bitvault.qr.qrcode.decoder.QRCodeDecoderMetaData;
+import com.bitvault.qr.qrcode.detector.Detector;
 
 import java.util.List;
 import java.util.Map;

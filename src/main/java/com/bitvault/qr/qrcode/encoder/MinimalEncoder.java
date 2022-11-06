@@ -16,12 +16,12 @@
 
 package com.bitvault.qr.qrcode.encoder;
 
-import com.bitvault.qr.qrcode.decoder.ErrorCorrectionLevel;
-import com.bitvault.qr.qrcode.decoder.Mode;
-import com.bitvault.qr.qrcode.decoder.Version;
 import com.bitvault.qr.WriterException;
 import com.bitvault.qr.common.BitArray;
 import com.bitvault.qr.common.ECIEncoderSet;
+import com.bitvault.qr.qrcode.decoder.ErrorCorrectionLevel;
+import com.bitvault.qr.qrcode.decoder.Mode;
+import com.bitvault.qr.qrcode.decoder.Version;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;

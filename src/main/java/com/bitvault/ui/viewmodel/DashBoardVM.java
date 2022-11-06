@@ -3,6 +3,7 @@ package com.bitvault.ui.viewmodel;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.services.factory.IServiceFactory;
 import com.bitvault.ui.views.PasswordView;
+import com.bitvault.util.Result;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public final class DashBoardVM {
 
     private final IServiceFactory serviceFactory;
     private List<Profile> profiles;
-    private SimpleObjectProperty<Profile> selectedProfile;
+    private final SimpleObjectProperty<Profile> selectedProfile;
 
 
     public DashBoardVM(final IServiceFactory serviceFactory) {
@@ -24,16 +25,17 @@ public final class DashBoardVM {
 
     private void init() {
 
-        serviceFactory.getProfileService().getProfiles()
-                .apply(
-                        profiles1 -> {
-                            profiles.addAll(profiles1);
-                            selectedProfileProperty().set(profiles1.get(0));
-                        },
-                        exception -> {
+        Result<List<Profile>> profilesResult = serviceFactory.getProfileService().getProfiles();
 
-                        }
-                );
+        if (profilesResult.isFail()) {
+            return;
+        }
+
+        profiles = profilesResult.getOrThrow();
+
+        if (!profiles.isEmpty())
+            selectedProfileProperty().set(profiles.get(0));
+
     }
 
     public Profile getSelectedProfile() {

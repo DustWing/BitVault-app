@@ -1,4 +1,4 @@
-package com.bitvault.listcell;
+package com.bitvault.ui.listcell;
 
 import javafx.scene.control.ListCell;
 

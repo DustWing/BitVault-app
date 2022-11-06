@@ -13,7 +13,7 @@ public class Json {
         try {
             return Json.MAPPER.readValue(value, tClass);
         } catch (IOException e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -22,7 +22,7 @@ public class Json {
         try {
             return Json.MAPPER.writeValueAsString(value);
         } catch (IOException e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 }

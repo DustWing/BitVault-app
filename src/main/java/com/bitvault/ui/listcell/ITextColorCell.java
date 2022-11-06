@@ -1,4 +1,4 @@
-package com.bitvault.listcell;
+package com.bitvault.ui.listcell;
 
 public interface ITextColorCell {
     String getColor();

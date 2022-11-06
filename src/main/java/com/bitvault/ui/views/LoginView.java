@@ -11,6 +11,7 @@ import com.bitvault.ui.views.factory.ViewFactory;
 import com.bitvault.util.JavaFxUtil;
 import com.bitvault.util.Labels;
 import com.bitvault.ui.viewmodel.LoginVM;
+import com.bitvault.util.Result;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -106,13 +107,13 @@ public class LoginView extends BitVaultVBox {
                     loginVM.getPassword()
             );
 
-            serviceFactory.getUserService().authenticate(user)
-                    .apply(
-                            user1 -> {
-                            },
-                            exception -> {
-                            }
-                    );
+
+            Result<User> authResult = serviceFactory.getUserService().authenticate(user);
+
+            if (authResult.isFail()) {
+                //TODO handle exception
+                return;
+            }
 
 
             ViewFactory viewFactory = new ViewFactory(serviceFactory);

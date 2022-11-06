@@ -4,13 +4,14 @@ import com.bitvault.algos.ArgonEncoder;
 import com.bitvault.consts.Consts;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
-import com.bitvault.ui.model.User;
 import com.bitvault.services.interfaces.IUserService;
-import org.junit.jupiter.api.Assertions;
+import com.bitvault.ui.model.User;
+import com.bitvault.util.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class UserServiceTest {
 
@@ -35,11 +36,21 @@ class UserServiceTest {
     void register() {
 
         final User user = new User("id1", "name1", "credentials1");
-        userService.register(user);
-        userService.authenticate(user)
-                .apply(
-                        user1 -> assertEquals(user.id(), user1.id()),
-                        Assertions::fail
-                );
+        Result<User> registerResult = userService.register(user);
+
+        if (registerResult.isFail()) {
+            fail(registerResult.getException());
+        }
+
+        Result<User> authenticateRes = userService.authenticate(user);
+
+        if (authenticateRes.isFail()) {
+            fail(authenticateRes.getException());
+        }
+
+        User user1 = authenticateRes.getOrThrow();
+
+        assertEquals(user.id(), user1.id());
+
     }
 }

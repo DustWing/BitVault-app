@@ -5,6 +5,7 @@ import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.services.interfaces.IPasswordService;
+import com.bitvault.util.Result;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -36,19 +37,23 @@ public class PasswordVM {
 
     private void init() {
 
-        passwordService.getPasswords().apply(
-                this.passwords::addAll,
-                exception -> {
-                    //TODO handle exception
-                }
-        );
+        Result<List<Password>> passwordsRes = passwordService.getPasswords();
+        if (passwordsRes.isFail()) {
+            //TODO handle exception
+            return;
+        }
 
-        categoryService.getCategories().apply(
-                categories::addAll,
-                exception -> {
-                    //TODO handle exception
-                }
-        );
+        passwords.addAll(passwordsRes.getOrThrow());
+
+
+        Result<List<Category>> categoriesResult = categoryService.getCategories();
+
+        if (categoriesResult.isFail()) {
+            //TODO handle exception
+            return;
+        }
+        categories.addAll(categoriesResult.getOrThrow());
+
 
     }
 
@@ -75,15 +80,7 @@ public class PasswordVM {
     }
 
     public void reload() {
-        passwordService.getPasswords().apply(
-                passwordList -> {
-                    passwords.clear();
-                    passwords.addAll(passwordList);
-                },
-                exception -> {
-                    //TODO need exception
-                }
-        );
+
     }
 
     public ObservableList<Password> getPasswords() {

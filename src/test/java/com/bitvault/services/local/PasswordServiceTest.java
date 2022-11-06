@@ -4,22 +4,22 @@ import com.bitvault.consts.Consts;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
 import com.bitvault.enums.Action;
+import com.bitvault.services.interfaces.ICategoryService;
+import com.bitvault.services.interfaces.IPasswordService;
+import com.bitvault.services.interfaces.IProfileService;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.model.SecureDetails;
-import com.bitvault.services.interfaces.ICategoryService;
-import com.bitvault.services.interfaces.IPasswordService;
-import com.bitvault.services.interfaces.IProfileService;
-import org.junit.jupiter.api.Assertions;
+import com.bitvault.util.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class PasswordServiceTest {
 
@@ -46,19 +46,25 @@ class PasswordServiceTest {
     @Test
     void create() {
 
-        final List<Category> categoryList = new ArrayList<>();
-        categoryService.getCategories().apply(
-                categoryList::addAll,
-                Assertions::fail
-        );
+        Result<List<Category>> resultCat = categoryService.getCategories();
 
-        final List<Profile> profileList = new ArrayList<>();
-        profileService.getProfiles()
-                .apply(
-                        profileList::addAll,
-                        Assertions::fail
+        if (resultCat.isFail()) {
+            fail(resultCat.getException());
+            return;
+        }
 
-                );
+        final List<Category> categoryList = resultCat.getOrThrow();
+
+
+        Result<List<Profile>> profilesResult = profileService.getProfiles();
+
+        if (profilesResult.isFail()) {
+            fail(resultCat.getException());
+            return;
+        }
+
+        final List<Profile> profileList = profilesResult.getOrThrow();
+
 
         final SecureDetails secureDetails = new SecureDetails(
                 null,
@@ -84,80 +90,95 @@ class PasswordServiceTest {
                 Action.NEW
         );
 
-        passwordService.create(
-                password
-        ).apply(
-                password1 -> assertEquals(password1.password(), password.password()),
-                Assertions::fail
-        );
+        Result<Password> passwordResult = passwordService.create(password);
+        if (passwordResult.isFail()) {
+            fail(resultCat.getException());
+            return;
+        }
+
+        Password password1 = passwordResult.getOrThrow();
+
+        assertEquals(password1.password(), password.password());
 
     }
 
     @Test
     void getPasswords() {
 
-        passwordService.getPasswords()
-                .apply(System.out::println, Assertions::fail);
+        Result<List<Password>> passwordsResult = passwordService.getPasswords();
+        if (passwordsResult.isFail()) {
+            fail(passwordsResult.getException());
+            return;
+        }
+
+        System.out.println(passwordsResult.getOrThrow());
+
 
     }
 
     @Test
     void update() {
 
-        passwordService.getPasswords()
-                .apply(
-                        passwordList -> {
-                            if (passwordList.isEmpty()) {
-                                return;
-                            }
-                            Password password = passwordList.get(0);
+        Result<List<Password>> passwordsResults = passwordService.getPasswords();
 
-                            final SecureDetails secureDetails = new SecureDetails(
-                                    password.secureDetails().id(),
-                                    password.secureDetails().category(),
-                                    password.secureDetails().profile(),
-                                    "DomainUpdated.com",
-                                    "titleUpdated",
-                                    "descriptionUpdated",
-                                    true,
-                                    password.secureDetails().createdOn(),
-                                    LocalDateTime.now(),
-                                    LocalDateTime.now().plusYears(10),
-                                    null,
-                                    false,
-                                    false
-                            );
+        List<Password> passwordList = passwordsResults.getOrThrow();
 
-                            final Password passwordUpdated = new Password(
-                                    password.id(),
-                                    password.username() + "updated",
-                                    password.password() + "updated",
-                                    secureDetails,
-                                    password.action()
-                            );
+        if (passwordList.isEmpty()) {
+            System.out.println("No passwords found");
+            return;
+        }
 
-                            passwordService.update(passwordUpdated).
-                                    apply(
-                                            Assertions::assertTrue,
-                                            Assertions::fail
-                                    );
-                        },
-                        Assertions::fail
-                );
+        Password password = passwordList.get(0);
+
+        final SecureDetails secureDetails = new SecureDetails(
+                password.secureDetails().id(),
+                password.secureDetails().category(),
+                password.secureDetails().profile(),
+                "DomainUpdated.com",
+                "titleUpdated",
+                "descriptionUpdated",
+                true,
+                password.secureDetails().createdOn(),
+                LocalDateTime.now(),
+                LocalDateTime.now().plusYears(10),
+                null,
+                false,
+                false
+        );
+
+        final Password passwordUpdated = new Password(
+                password.id(),
+                password.username() + "updated",
+                password.password() + "updated",
+                secureDetails,
+                password.action()
+        );
+
+        Result<Boolean> updateResult = passwordService.update(passwordUpdated);
+
+        if (updateResult.isFail()) {
+            fail(updateResult.getException());
+        }
+
 
     }
 
     @Test
     void delete() {
 
-        passwordService.getPasswords()
-                .apply(
-                        passwordList -> {
-                            if (!passwordList.isEmpty()) {
-                                passwordService.delete(passwordList.get(0));
-                            }
-                        }, Assertions::fail
-                );
+        Result<List<Password>> passwordsResults = passwordService.getPasswords();
 
+        List<Password> passwordList = passwordsResults.getOrThrow();
+
+        if (passwordList.isEmpty()) {
+            System.out.println("No passwords found");
+            return;
+        }
+
+        Result<Boolean> deleteResult = passwordService.delete(passwordList.get(0));
+
+        if (deleteResult.isFail()) {
+            fail(deleteResult.getException());
+        }
     }
 }

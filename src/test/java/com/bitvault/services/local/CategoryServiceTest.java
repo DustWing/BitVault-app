@@ -3,14 +3,15 @@ package com.bitvault.services.local;
 import com.bitvault.consts.Consts;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
-import com.bitvault.ui.model.Category;
 import com.bitvault.services.interfaces.ICategoryService;
+import com.bitvault.ui.model.Category;
 import com.bitvault.ui.utils.BvColors;
-import org.junit.jupiter.api.Assertions;
+import com.bitvault.util.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,11 +44,17 @@ class CategoryServiceTest {
                 LocalDateTime.now(),
                 "Password"
         );
-        categoryService.create(category1)
-                .apply(
-                        category -> assertEquals(category.name(), category1.name()),
-                        Assertions::fail
-                );
+
+        Result<Category> categoryResult = categoryService.create(category1);
+
+        if (categoryResult.isFail()) {
+            fail(categoryResult.getException());
+        }
+
+        Category category = categoryResult.getOrThrow();
+
+        assertEquals(category.name(), category1.name());
+
 
         final Category category2 = new Category(
                 UUID.randomUUID().toString(),
@@ -57,68 +64,88 @@ class CategoryServiceTest {
                 LocalDateTime.now(),
                 "Password"
         );
-        categoryService.create(category2)
-                .apply(
-                        category -> assertEquals(category.name(), category2.name()),
-                        Assertions::fail
-                );
+
+
+        Result<Category> categoryResult2 = categoryService.create(category2);
+
+        if (categoryResult2.isFail()) {
+            fail(categoryResult2.getException());
+        }
+
+        Category categoryRes2 = categoryResult2.getOrThrow();
+
+        assertEquals(categoryRes2.name(), category2.name());
+
     }
 
     @Test
     void getCategories() {
-        categoryService.getCategories().apply(
-                System.out::println,
-                Assertions::fail
-        );
+        Result<List<Category>> resultCat = categoryService.getCategories();
+
+        if (resultCat.isFail()) {
+            fail(resultCat.getException());
+        }
+
+        System.out.println(resultCat.getOrThrow());
+
     }
 
     @Test
     void update() {
+        Result<List<Category>> resultCat = categoryService.getCategories();
 
-        categoryService.getCategories().apply(
-                categories -> {
+        if (resultCat.isFail()) {
+            fail(resultCat.getException());
+            return;
+        }
 
-                    if (categories.isEmpty()) {
-                        fail("No Categories found");
-                    }
+        List<Category> categories = resultCat.getOrThrow();
+        if (categories.isEmpty()) {
+            fail("No Categories found");
+            return;
+        }
 
-                    Category category = categories.get(0);
+        Category category = categories.get(0);
 
-                    categoryService.update(
-                            new Category(
-                                    category.id(),
-                                    category.name(),
-                                    category.color(),
-                                    category.createdOn(),
-                                    LocalDateTime.now(),
-                                    category.type()
-                            )
-                    ).apply(
-                            Assertions::assertTrue,
-                            Assertions::fail
-                    );
-
-                },
-                Assertions::fail
+        Result<Boolean> update = categoryService.update(
+                new Category(
+                        category.id(),
+                        category.name(),
+                        category.color(),
+                        category.createdOn(),
+                        LocalDateTime.now(),
+                        category.type()
+                )
         );
+
+        if (update.isFail()) {
+            fail(update.getException());
+        }
+
+
     }
 
     @Test
     void delete() {
 
-        categoryService.getCategories().apply(
-                categories -> {
-                    if (categories.isEmpty()) {
-                        fail("No Categories found");
-                    }
-                    Category category = categories.get(0);
-                    categoryService.delete(category)
-                            .apply(
-                                    Assertions::assertTrue,
-                                    Assertions::fail
-                            );
-                },
-                Assertions::fail
-        );
+        Result<List<Category>> resultCat = categoryService.getCategories();
+
+        if (resultCat.isFail()) {
+            fail(resultCat.getException());
+            return;
+        }
+
+        List<Category> categories = resultCat.getOrThrow();
+        if (categories.isEmpty()) {
+            fail("No Categories found");
+            return;
+        }
+
+        Category category = categories.get(0);
+        Result<Boolean> delete = categoryService.delete(category);
+        if (delete.isFail()) {
+            fail(delete.getException());
+        }
+
     }
 }

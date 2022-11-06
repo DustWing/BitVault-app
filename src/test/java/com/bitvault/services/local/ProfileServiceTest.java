@@ -3,16 +3,16 @@ package com.bitvault.services.local;
 import com.bitvault.consts.Consts;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
-import com.bitvault.ui.model.Profile;
 import com.bitvault.services.interfaces.IProfileService;
-import org.junit.jupiter.api.Assertions;
+import com.bitvault.ui.model.Profile;
+import com.bitvault.util.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ProfileServiceTest {
 
@@ -41,68 +41,73 @@ class ProfileServiceTest {
                 null
         );
 
-        profileService.create(profile)
-                .apply(
-                        profile1 -> assertEquals(profile.name(), profile1.name()),
-                        Assertions::fail
+        Result<Profile> profileResult = profileService.create(profile);
 
-                );
+        if (profileResult.isFail()) {
+            fail(profileResult.getException());
+        }
+
+        Profile profile1 = profileResult.getOrThrow();
+
+        assertEquals(profile.name(), profile1.name());
+
     }
 
     @Test
     void getProfiles() {
-        profileService.getProfiles()
-                .apply(
-                        System.out::println,
-                        Assertions::fail
-                );
+
+        Result<List<Profile>> profilesResult = profileService.getProfiles();
+
+        if (profilesResult.isFail()) {
+            fail(profilesResult.getException());
+        }
+
     }
 
     @Test
     void update() {
-        profileService.getProfiles()
-                .apply(
-                        profiles -> {
-                            assertFalse(profiles.isEmpty());
 
-                            final Profile profile1 = profiles.get(0);
+        Result<List<Profile>> profilesResult = profileService.getProfiles();
+        if (profilesResult.isFail()) {
+            fail(profilesResult.getException());
+        }
 
-                            profileService.update(
-                                    new Profile(
-                                            profile1.id(),
-                                            "updatedName",
-                                            profile1.createdOn(),
-                                            LocalDateTime.now()
-                                    )
-                            ).apply(
-                                    Assertions::assertTrue,
-                                    Assertions::fail
-                            );
+        List<Profile> profiles = profilesResult.getOrThrow();
+        assertFalse(profiles.isEmpty());
 
-                        },
-                        Assertions::fail
-                );
+        final Profile profile1 = profiles.get(0);
+
+        Result<Boolean> updateResult = profileService.update(
+                new Profile(
+                        profile1.id(),
+                        "updatedName",
+                        profile1.createdOn(),
+                        LocalDateTime.now()
+                )
+        );
+
+        if (updateResult.isFail()) {
+            fail(updateResult.getException());
+        }
     }
 
     @Test
     void delete() {
 
-        profileService.getProfiles()
-                .apply(
-                        profiles -> {
-                            assertFalse(profiles.isEmpty());
+        Result<List<Profile>> profilesResult = profileService.getProfiles();
 
-                            final Profile profile1 = profiles.get(0);
+        if (profilesResult.isFail()) {
+            fail(profilesResult.getException());
+        }
+        List<Profile> profiles = profilesResult.getOrThrow();
 
-                            profileService.delete(
-                                    profile1
-                            ).apply(
-                                    Assertions::assertTrue,
-                                    Assertions::fail
-                            );
+        assertFalse(profiles.isEmpty());
 
-                        },
-                        Assertions::fail
-                );
+        final Profile profile1 = profiles.get(0);
+
+        Result<Boolean> deleteRes = profileService.delete(profile1);
+        if (deleteRes.isFail()) {
+            fail(deleteRes.getException());
+        }
     }
 }

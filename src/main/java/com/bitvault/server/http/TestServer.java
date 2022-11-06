@@ -1,4 +1,4 @@
-package com.bitvault.server;
+package com.bitvault.server.http;
 
 import java.io.IOException;
 import java.net.URI;

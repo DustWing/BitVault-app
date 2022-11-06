@@ -1,6 +1,8 @@
 module com.bitvault {
+    requires java.desktop;
+
     requires javafx.controls;
-    //    requires javafx.fxml;
+    requires javafx.fxml;
 
     requires com.sun.jna;
     requires java.sql;
@@ -19,6 +21,11 @@ module com.bitvault {
     requires io.netty.codec.http;
     requires io.netty.buffer;
     requires java.net.http;
+    requires io.netty.codec;
+    requires io.netty.common;
+//
+//    requires com.google.zxing;
+//    requires com.google.zxing.javase;
 
 //    opens com.bitvault to javafx.fxml;
 //    opens com.bitvault.views to javafx.fxml;

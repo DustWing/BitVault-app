@@ -1,6 +1,6 @@
 package com.bitvault.ui.model;
 
-import com.bitvault.listcell.ITextColorCell;
+import com.bitvault.ui.listcell.ITextColorCell;
 
 import java.time.LocalDateTime;
 

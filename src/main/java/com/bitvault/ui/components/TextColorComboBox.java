@@ -1,8 +1,8 @@
 package com.bitvault.ui.components;
 
-import com.bitvault.listcell.ITextColorCell;
-import com.bitvault.listcell.TextColorButtonCell;
-import com.bitvault.listcell.TextColorListCell;
+import com.bitvault.ui.listcell.ITextColorCell;
+import com.bitvault.ui.listcell.TextColorButtonCell;
+import com.bitvault.ui.listcell.TextColorListCell;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 

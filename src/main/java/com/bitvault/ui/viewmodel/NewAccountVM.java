@@ -4,6 +4,7 @@ import com.bitvault.ui.components.ValidatedForm;
 import com.bitvault.ui.model.User;
 import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.ui.views.factory.ViewFactory;
+import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -35,13 +36,17 @@ public class NewAccountVM {
         );
 
         final LocalServiceFactory localServiceFactory = new LocalServiceFactory(getLocation() + "/" + getFileName() + ".vault");
-        localServiceFactory.getUserService().register(user).apply(
-                user1 -> {
-                },
-                exception -> {
-                }
 
-        );
+
+        Result<User> userResult = localServiceFactory.getUserService()
+                .register(user);
+
+        if (userResult.isFail()) {
+
+        }
+
+        User registeredUser = userResult.getOrThrow();
+
 
         return new ViewFactory(localServiceFactory);
     }

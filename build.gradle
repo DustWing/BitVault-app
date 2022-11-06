@@ -1,4 +1,4 @@
-    plugins {
+plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
@@ -58,7 +58,14 @@ dependencies {
     implementation group: 'io.netty', name: 'netty-codec', version: '4.1.84.Final'
     implementation group: 'io.netty', name: 'netty-common', version: '4.1.84.Final'
     implementation group: 'io.netty', name: 'netty-transport', version: '4.1.84.Final'
-    implementation 'io.netty:netty-codec-http:4.1.84.Final'
+    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.84.Final'
+    // https://mvnrepository.com/artifact/io.projectreactor.tools/blockhound
+    implementation group: 'io.projectreactor.tools', name: 'blockhound', version: '1.0.6.RELEASE'
+
+
+//    // QR code
+//    implementation 'com.google.zxing:core:3.5.0'
+//    implementation 'com.google.zxing:javase:3.5.0'
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
@@ -70,11 +77,17 @@ test {
 
 jar {
     manifest {
-        attributes 'Main-Class' : 'com.bitvault.Launcher'
+        attributes 'Main-Class': 'com.bitvault.Launcher'
     }
 }
 
 jlink {
+
+    //https://stackoverflow.com/questions/56512064/gradle-jlink-plugin-fails-during-createmergedmodule-with-the-service-implementa
+//    mergedModule {
+//        requires "java.xml"
+//    }
+
     imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
@@ -85,7 +98,7 @@ jlink {
 jlinkZip {
     group = 'distribution'
 }
-jpackage{
+jpackage {
 
 }
 

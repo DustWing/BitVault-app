@@ -20,7 +20,8 @@ public class WelcomeView extends BitVaultVBox {
 
         NewAccountView view = new NewAccountView(
                 new NewAccountVM(),
-                (newAccountView) -> changeScene(this, newAccountView, loginView));
+                (newAccountView) -> changeScene(this, newAccountView, loginView)
+        );
         changeScene(this, loginView, view);
     }
 

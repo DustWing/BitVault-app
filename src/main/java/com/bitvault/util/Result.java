@@ -1,6 +1,7 @@
 package com.bitvault.util;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public final class Result<T> {
 
@@ -11,6 +12,8 @@ public final class Result<T> {
 
     private final T value;
     private final Exception exception;
+
+    private final boolean isFail;
 
     public static <T> Result<T> exception(final Exception exception) {
         return new Result<>(exception);
@@ -24,32 +27,47 @@ public final class Result<T> {
 
         this.value = value;
         this.exception = null;
+        this.isFail = false;
     }
 
     private Result(final Exception exception) {
         this.value = null;
         this.exception = exception;
+        this.isFail = true;
     }
 
-    public T get() {
+    public T getOrThrow() {
         if (exception != null) {
             throw new RuntimeException(exception);
         }
         return value;
     }
 
-    public void apply(
-            Consumer<T> resultConsumer,
-            Consumer<Exception> exceptionConsumer
+    public boolean isFail() {
+        return isFail;
+    }
+
+    public boolean isSuccess() {
+        return !isFail;
+    }
+
+    public Exception getException() {
+        return this.exception;
+    }
+
+    public T apply(
+            Function<T, T> onSuccess,
+            Function<Exception, T> onFail
 
     ) {
 
         if (exception == null) {
-            resultConsumer.accept(value);
+            return onSuccess.apply(value);
         } else {
-            exceptionConsumer.accept(exception);
+            return onFail.apply(exception);
         }
 
     }
+
 
 }

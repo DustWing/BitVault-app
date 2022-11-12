@@ -28,7 +28,7 @@ public class ProfileService implements IProfileService {
 
             final List<ProfileDM> profiles = new ProfileDao(connection).get();
 
-            return Result.value(
+            return Result.ok(
                     profiles.stream()
                             .map(
                                     ProfileDM::convert
@@ -36,7 +36,7 @@ public class ProfileService implements IProfileService {
                             .toList()
             );
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
     }
 
@@ -54,10 +54,10 @@ public class ProfileService implements IProfileService {
             profileDao.create(profileDM);
 
             final Profile profileResult = ProfileDM.convert(profileDM);
-            return Result.value(profileResult);
+            return Result.ok(profileResult);
 
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
     }
 
@@ -70,7 +70,7 @@ public class ProfileService implements IProfileService {
             final ProfileDM profileDM = profileDao.get(profile.id());
 
             if (profileDM == null) {
-                return Result.exception(new Exception("No Profile found"));
+                return Result.error(new Exception("No Profile found"));
             }
 
             profileDao.update(
@@ -80,7 +80,7 @@ public class ProfileService implements IProfileService {
             return Result.Success;
 
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
     }
 
@@ -93,7 +93,7 @@ public class ProfileService implements IProfileService {
             final ProfileDM profileDM = profileDao.get(profile.id());
 
             if (profileDM == null) {
-                return Result.exception(new Exception("No Profile found"));
+                return Result.error(new Exception("No Profile found"));
             }
 
             profileDao.delete(profile.id());
@@ -101,7 +101,7 @@ public class ProfileService implements IProfileService {
             return Result.Success;
 
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
     }
 }

@@ -31,7 +31,7 @@ public class CategoryService implements ICategoryService {
 
             final List<CategoryDM> categories = new CategoryDao(connection).get();
 
-            return Result.value(
+            return Result.ok(
                     categories.stream()
                             .map(
                                     CategoryDM::convert
@@ -39,7 +39,7 @@ public class CategoryService implements ICategoryService {
                             .toList()
             );
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
     }
 
@@ -58,10 +58,10 @@ public class CategoryService implements ICategoryService {
             categoryDao.create(categoryDM);
 
             final Category catResult = CategoryDM.convert(categoryDM);
-            return Result.value(catResult);
+            return Result.ok(catResult);
 
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
     }
 
@@ -76,7 +76,7 @@ public class CategoryService implements ICategoryService {
             final CategoryDM categoryDM = categoryDao.get(category.id());
 
             if (categoryDM == null) {
-                return Result.exception(new Exception("No category found"));
+                return Result.error(new Exception("No category found"));
             }
 
             categoryDao.update(
@@ -86,7 +86,7 @@ public class CategoryService implements ICategoryService {
             return Result.Success;
 
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
 
     }
@@ -100,7 +100,7 @@ public class CategoryService implements ICategoryService {
             final CategoryDM categoryDM = categoryDao.get(category.id());
 
             if (categoryDM == null) {
-                return Result.exception(new Exception("No category found"));
+                return Result.error(new Exception("No category found"));
             }
 
             categoryDao.delete(category.id());
@@ -108,7 +108,7 @@ public class CategoryService implements ICategoryService {
             return Result.Success;
 
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
     }
 }

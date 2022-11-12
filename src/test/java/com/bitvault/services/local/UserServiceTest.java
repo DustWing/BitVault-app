@@ -39,16 +39,16 @@ class UserServiceTest {
         Result<User> registerResult = userService.register(user);
 
         if (registerResult.isFail()) {
-            fail(registerResult.getException());
+            fail(registerResult.getError());
         }
 
         Result<User> authenticateRes = userService.authenticate(user);
 
         if (authenticateRes.isFail()) {
-            fail(authenticateRes.getException());
+            fail(authenticateRes.getError());
         }
 
-        User user1 = authenticateRes.getOrThrow();
+        User user1 = authenticateRes.get();
 
         assertEquals(user.id(), user1.id());
 

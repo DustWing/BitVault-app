@@ -47,11 +47,11 @@ public class PasswordService implements IPasswordService {
             final IProfileDao profileDao = new ProfileDao(connection);
             final List<ProfileDM> profileList = profileDao.get();
 
-            return Result.value(
+            return Result.ok(
                     convert(passwords, categories, secureDetailsList, profileList)
             );
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
     }
 
@@ -100,7 +100,7 @@ public class PasswordService implements IPasswordService {
                         password.secureDetails().profile()
                 );
 
-                return Result.value(
+                return Result.ok(
                         PasswordDM.convert(
                                 passwordDM,
                                 secureDetails,
@@ -114,7 +114,7 @@ public class PasswordService implements IPasswordService {
             }
 
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
 
     }
@@ -143,11 +143,11 @@ public class PasswordService implements IPasswordService {
 
             } catch (SQLException e) {
                 connection.rollback();
-                return Result.exception(e);
+                return Result.error(e);
             }
 
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
     }
 
@@ -166,7 +166,7 @@ public class PasswordService implements IPasswordService {
             return Result.Success;
 
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
 
     }

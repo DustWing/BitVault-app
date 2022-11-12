@@ -43,7 +43,7 @@ public class PasswordVM {
             return;
         }
 
-        passwords.addAll(passwordsRes.getOrThrow());
+        passwords.addAll(passwordsRes.get());
 
 
         Result<List<Category>> categoriesResult = categoryService.getCategories();
@@ -52,7 +52,7 @@ public class PasswordVM {
             //TODO handle exception
             return;
         }
-        categories.addAll(categoriesResult.getOrThrow());
+        categories.addAll(categoriesResult.get());
 
 
     }

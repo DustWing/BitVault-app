@@ -1,45 +1,44 @@
 package com.bitvault.util;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public final class Result<T> {
 
-
-    public static final Result<Boolean> Success = Result.value(Boolean.TRUE);
-    public static final Result<Boolean> Fail = Result.value(Boolean.FALSE);
-
+    public static final Result<Boolean> Success = Result.ok(Boolean.TRUE);
 
     private final T value;
     private final Exception exception;
-
     private final boolean isFail;
 
-    public static <T> Result<T> exception(final Exception exception) {
-        return new Result<>(exception);
+    public static <T> Result<T> error(final Exception exception) {
+        return new Result<>(null, exception);
     }
 
-    public static <T> Result<T> value(final T value) {
-        return new Result<>(value);
+    public static <T> Result<T> ok(final T value) {
+        return new Result<>(value, null);
     }
 
-    private Result(final T value) {
+    private Result(final T value, final Exception exception) {
 
         this.value = value;
-        this.exception = null;
-        this.isFail = false;
-    }
-
-    private Result(final Exception exception) {
-        this.value = null;
         this.exception = exception;
-        this.isFail = true;
+        this.isFail = exception != null;
     }
 
-    public T getOrThrow() {
-        if (exception != null) {
-            throw new RuntimeException(exception);
+    public T get() {
+        if (isFail) {
+            throw new IllegalStateException(exception);
         }
         return value;
+    }
+
+    public Optional<T> getOpt() {
+        if (isFail) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(value);
     }
 
     public boolean isFail() {
@@ -50,20 +49,19 @@ public final class Result<T> {
         return !isFail;
     }
 
-    public Exception getException() {
+    public Exception getError() {
         return this.exception;
     }
 
     public T apply(
             Function<T, T> onSuccess,
-            Function<Exception, T> onFail
-
+            Function<Exception, T> onError
     ) {
 
         if (exception == null) {
             return onSuccess.apply(value);
         } else {
-            return onFail.apply(exception);
+            return onError.apply(exception);
         }
 
     }

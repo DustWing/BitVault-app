@@ -17,7 +17,7 @@ import java.io.InputStream;
 public class QrUtils {
 
 
-    public static BufferedImage generateQRCode(String data, int h, int w) {
+    public static Result<BufferedImage> generateQRCode(String data, int h, int w) {
         try {
             BitMatrix matrix = new MultiFormatWriter()
                     .encode(
@@ -25,23 +25,24 @@ public class QrUtils {
                             BarcodeFormat.QR_CODE, w, h
                     );
 
-            return MatrixToImageWriter.toBufferedImage(matrix);
+            return Result.ok(MatrixToImageWriter.toBufferedImage(matrix));
         } catch (WriterException e) {
-            throw new RuntimeException(e);
+            return Result.error(e);
         }
 
     }
 
-    public static Image createImage(BufferedImage bufferedImage) {
+    public static Result<Image> createImage(BufferedImage bufferedImage) {
         try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             ImageIO.write(bufferedImage, "png", output);
 
             try (InputStream is = new ByteArrayInputStream(output.toByteArray())) {
-                return new Image(is);
+
+                return Result.ok(new Image(is));
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return Result.error(e);
         }
     }
 

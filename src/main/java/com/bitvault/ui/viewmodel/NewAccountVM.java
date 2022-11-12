@@ -45,7 +45,7 @@ public class NewAccountVM {
 
         }
 
-        User registeredUser = userResult.getOrThrow();
+        User registeredUser = userResult.get();
 
 
         return new ViewFactory(localServiceFactory);

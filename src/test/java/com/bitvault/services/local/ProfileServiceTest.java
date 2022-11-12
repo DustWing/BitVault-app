@@ -44,10 +44,10 @@ class ProfileServiceTest {
         Result<Profile> profileResult = profileService.create(profile);
 
         if (profileResult.isFail()) {
-            fail(profileResult.getException());
+            fail(profileResult.getError());
         }
 
-        Profile profile1 = profileResult.getOrThrow();
+        Profile profile1 = profileResult.get();
 
         assertEquals(profile.name(), profile1.name());
 
@@ -59,7 +59,7 @@ class ProfileServiceTest {
         Result<List<Profile>> profilesResult = profileService.getProfiles();
 
         if (profilesResult.isFail()) {
-            fail(profilesResult.getException());
+            fail(profilesResult.getError());
         }
 
     }
@@ -69,10 +69,10 @@ class ProfileServiceTest {
 
         Result<List<Profile>> profilesResult = profileService.getProfiles();
         if (profilesResult.isFail()) {
-            fail(profilesResult.getException());
+            fail(profilesResult.getError());
         }
 
-        List<Profile> profiles = profilesResult.getOrThrow();
+        List<Profile> profiles = profilesResult.get();
         assertFalse(profiles.isEmpty());
 
         final Profile profile1 = profiles.get(0);
@@ -87,7 +87,7 @@ class ProfileServiceTest {
         );
 
         if (updateResult.isFail()) {
-            fail(updateResult.getException());
+            fail(updateResult.getError());
         }
     }
 
@@ -97,9 +97,9 @@ class ProfileServiceTest {
         Result<List<Profile>> profilesResult = profileService.getProfiles();
 
         if (profilesResult.isFail()) {
-            fail(profilesResult.getException());
+            fail(profilesResult.getError());
         }
-        List<Profile> profiles = profilesResult.getOrThrow();
+        List<Profile> profiles = profilesResult.get();
 
         assertFalse(profiles.isEmpty());
 
@@ -107,7 +107,7 @@ class ProfileServiceTest {
 
         Result<Boolean> deleteRes = profileService.delete(profile1);
         if (deleteRes.isFail()) {
-            fail(deleteRes.getException());
+            fail(deleteRes.getError());
         }
     }
 }

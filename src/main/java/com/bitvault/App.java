@@ -12,18 +12,20 @@ public class App extends Application {
     public void start(Stage stage) {
 
         Platform.runLater(
-                ()->{
-                    final WelcomeView view = new WelcomeView();
-                    final Scene scene = new Scene(view, 640, 400);
-                    //set Theme - TODO read from external properties
-                    Theme.toDark(scene);
-                    stage.setTitle("The Vault");
-                    stage.setScene(scene);
-                    stage.show();
-                }
+                () -> show(stage)
         );
 
 
+    }
+
+    private void show(Stage stage) {
+        final WelcomeView view = new WelcomeView();
+        final Scene scene = new Scene(view, 640, 400);
+        //set Theme - TODO read from external properties
+        Theme.toDark(scene);
+        stage.setTitle("The Vault");
+        stage.setScene(scene);
+        stage.show();
     }
 
 

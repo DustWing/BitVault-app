@@ -31,7 +31,7 @@ public final class DashBoardVM {
             return;
         }
 
-        profiles = profilesResult.getOrThrow();
+        profiles = profilesResult.get();
 
         if (!profiles.isEmpty())
             selectedProfileProperty().set(profiles.get(0));

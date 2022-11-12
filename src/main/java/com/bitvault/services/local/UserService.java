@@ -53,10 +53,10 @@ public class UserService implements IUserService {
             createProfile(connection);
 
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
 
-        return Result.value(user);
+        return Result.ok(user);
 
     }
 
@@ -93,16 +93,16 @@ public class UserService implements IUserService {
             final IUserDao userDao = new UserDao(connection);
             dbUser = userDao.get();
         } catch (SQLException e) {
-            return Result.exception(e);
+            return Result.error(e);
         }
 
         boolean verify = argonEncoder.verify(dbUser.credentials(), (user.name() + user.credentials()).toCharArray());
         if (!verify) {
-            return Result.exception(
+            return Result.error(
                     new RuntimeException("Invalid user")
             );
         }
-        return Result.value(
+        return Result.ok(
                 UserDM.convert(dbUser)
         );
     }

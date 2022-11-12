@@ -49,21 +49,21 @@ class PasswordServiceTest {
         Result<List<Category>> resultCat = categoryService.getCategories();
 
         if (resultCat.isFail()) {
-            fail(resultCat.getException());
+            fail(resultCat.getError());
             return;
         }
 
-        final List<Category> categoryList = resultCat.getOrThrow();
+        final List<Category> categoryList = resultCat.get();
 
 
         Result<List<Profile>> profilesResult = profileService.getProfiles();
 
         if (profilesResult.isFail()) {
-            fail(resultCat.getException());
+            fail(resultCat.getError());
             return;
         }
 
-        final List<Profile> profileList = profilesResult.getOrThrow();
+        final List<Profile> profileList = profilesResult.get();
 
 
         final SecureDetails secureDetails = new SecureDetails(
@@ -92,11 +92,11 @@ class PasswordServiceTest {
 
         Result<Password> passwordResult = passwordService.create(password);
         if (passwordResult.isFail()) {
-            fail(resultCat.getException());
+            fail(resultCat.getError());
             return;
         }
 
-        Password password1 = passwordResult.getOrThrow();
+        Password password1 = passwordResult.get();
 
         assertEquals(password1.password(), password.password());
 
@@ -107,11 +107,11 @@ class PasswordServiceTest {
 
         Result<List<Password>> passwordsResult = passwordService.getPasswords();
         if (passwordsResult.isFail()) {
-            fail(passwordsResult.getException());
+            fail(passwordsResult.getError());
             return;
         }
 
-        System.out.println(passwordsResult.getOrThrow());
+        System.out.println(passwordsResult.get());
 
 
     }
@@ -121,7 +121,7 @@ class PasswordServiceTest {
 
         Result<List<Password>> passwordsResults = passwordService.getPasswords();
 
-        List<Password> passwordList = passwordsResults.getOrThrow();
+        List<Password> passwordList = passwordsResults.get();
 
         if (passwordList.isEmpty()) {
             System.out.println("No passwords found");
@@ -157,7 +157,7 @@ class PasswordServiceTest {
         Result<Boolean> updateResult = passwordService.update(passwordUpdated);
 
         if (updateResult.isFail()) {
-            fail(updateResult.getException());
+            fail(updateResult.getError());
         }
 
 
@@ -168,7 +168,7 @@ class PasswordServiceTest {
 
         Result<List<Password>> passwordsResults = passwordService.getPasswords();
 
-        List<Password> passwordList = passwordsResults.getOrThrow();
+        List<Password> passwordList = passwordsResults.get();
 
         if (passwordList.isEmpty()) {
             System.out.println("No passwords found");
@@ -178,7 +178,7 @@ class PasswordServiceTest {
         Result<Boolean> deleteResult = passwordService.delete(passwordList.get(0));
 
         if (deleteResult.isFail()) {
-            fail(deleteResult.getException());
+            fail(deleteResult.getError());
         }
     }
 }

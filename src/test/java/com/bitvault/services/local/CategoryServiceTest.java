@@ -49,10 +49,10 @@ class CategoryServiceTest {
         Result<Category> categoryResult = categoryService.create(category1);
 
         if (categoryResult.isFail()) {
-            fail(categoryResult.getException());
+            fail(categoryResult.getError());
         }
 
-        Category category = categoryResult.getOrThrow();
+        Category category = categoryResult.get();
 
         assertEquals(category.name(), category1.name());
 
@@ -70,10 +70,10 @@ class CategoryServiceTest {
         Result<Category> categoryResult2 = categoryService.create(category2);
 
         if (categoryResult2.isFail()) {
-            fail(categoryResult2.getException());
+            fail(categoryResult2.getError());
         }
 
-        Category categoryRes2 = categoryResult2.getOrThrow();
+        Category categoryRes2 = categoryResult2.get();
 
         assertEquals(categoryRes2.name(), category2.name());
 
@@ -84,10 +84,10 @@ class CategoryServiceTest {
         Result<List<Category>> resultCat = categoryService.getCategories();
 
         if (resultCat.isFail()) {
-            fail(resultCat.getException());
+            fail(resultCat.getError());
         }
 
-        System.out.println(resultCat.getOrThrow());
+        System.out.println(resultCat.get());
 
     }
 
@@ -96,11 +96,11 @@ class CategoryServiceTest {
         Result<List<Category>> resultCat = categoryService.getCategories();
 
         if (resultCat.isFail()) {
-            fail(resultCat.getException());
+            fail(resultCat.getError());
             return;
         }
 
-        List<Category> categories = resultCat.getOrThrow();
+        List<Category> categories = resultCat.get();
         if (categories.isEmpty()) {
             fail("No Categories found");
             return;
@@ -120,7 +120,7 @@ class CategoryServiceTest {
         );
 
         if (update.isFail()) {
-            fail(update.getException());
+            fail(update.getError());
         }
 
 
@@ -132,11 +132,11 @@ class CategoryServiceTest {
         Result<List<Category>> resultCat = categoryService.getCategories();
 
         if (resultCat.isFail()) {
-            fail(resultCat.getException());
+            fail(resultCat.getError());
             return;
         }
 
-        List<Category> categories = resultCat.getOrThrow();
+        List<Category> categories = resultCat.get();
         if (categories.isEmpty()) {
             fail("No Categories found");
             return;
@@ -145,7 +145,7 @@ class CategoryServiceTest {
         Category category = categories.get(0);
         Result<Boolean> delete = categoryService.delete(category);
         if (delete.isFail()) {
-            fail(delete.getException());
+            fail(delete.getError());
         }
 
     }

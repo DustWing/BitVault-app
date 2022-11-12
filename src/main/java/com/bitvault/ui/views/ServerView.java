@@ -8,6 +8,7 @@ import com.bitvault.ui.model.LocalServerInfo;
 import com.bitvault.util.Json;
 import com.bitvault.util.Labels;
 import com.bitvault.util.QrUtils;
+import com.bitvault.util.Result;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,7 +38,6 @@ public class ServerView extends BitVaultVBox {
 
         textArea = new TextArea();
 
-
         InetAddress localHost = getLocalHost();
 
         String hostAddress = localHost.getHostAddress();
@@ -53,12 +53,23 @@ public class ServerView extends BitVaultVBox {
 
         textArea.appendText("Host: %s\n".formatted(serialize));
 
-        BufferedImage bufferedImage = QrUtils.generateQRCode(serialize, 200, 200);
+        final Result<BufferedImage> bufferedImageResult = QrUtils.generateQRCode(serialize, 200, 200);
 
-        Image image = QrUtils.createImage(bufferedImage);
+        if (bufferedImageResult.isFail()) {
+            //TODO handle error
+        }
 
-        ImageView imageView = new ImageView(image);
+        final BufferedImage bufferedImage = bufferedImageResult.get();
 
+        final Result<Image> imageResult = QrUtils.createImage(bufferedImage);
+
+        if (imageResult.isFail()) {
+            //TODO handle error
+        }
+
+        final Image image = imageResult.get();
+
+        final ImageView imageView = new ImageView(image);
 
         this.getChildren().addAll(
                 start,
@@ -99,9 +110,8 @@ public class ServerView extends BitVaultVBox {
         );
 
 
-        new Thread(
-                () -> httpServer.start()
-        ).start();
+        new Thread(() -> httpServer.start())
+                .start();
 
         textArea.appendText("SERVER STARTED\n");
 

@@ -16,10 +16,10 @@ ext {
     junitVersion = '5.9.0'
 }
 
-sourceCompatibility = '18'
-targetCompatibility = '18'
+sourceCompatibility = '19'
+targetCompatibility = '19'
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
@@ -30,7 +30,7 @@ application {
 
 
 javafx {
-    version = '18.0.2'
+    version = '19'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
@@ -88,7 +88,7 @@ jlink {
 //        requires "java.xml"
 //    }
 
-    imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
+    imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip") as RegularFile
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
         name = 'TheVault'

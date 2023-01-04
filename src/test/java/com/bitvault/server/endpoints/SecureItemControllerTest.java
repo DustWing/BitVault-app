@@ -1,21 +1,19 @@
-package com.bitvault.server.http;
+package com.bitvault.server.endpoints;
 
 import com.bitvault.algos.AES;
+import com.bitvault.server.cache.ImportCache;
 import com.bitvault.server.model.KeyDto;
+import com.bitvault.server.model.ResultRsDto;
 import com.bitvault.server.model.SecureItemRqDto;
 import com.bitvault.util.Json;
 import com.bitvault.util.Result;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -23,29 +21,44 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
 
-public class TestServer {
+import static org.junit.jupiter.api.Assertions.*;
 
-    public static void main(String[] args) throws Exception {
+class SecureItemControllerTest {
 
-        HttpClient httpClient = HttpClient
-                .newBuilder()
-                .build();
+    private static SecureItemController secureItemController;
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://127.0.0.1:8080/"))
-                .GET()
-                .build();
+    @BeforeAll
+    public static void init() {
 
-        HttpResponse<String> response = httpClient
-                .send(request, HttpResponse.BodyHandlers.ofString());
+        ImportCache importCache = ImportCache.create();
 
+        secureItemController = new SecureItemController(importCache);
+    }
 
-        Result<KeyDto> keyDtoResult = Json.deserialize(response.body(), KeyDto.class);
+    @Test
+    public void get() {
 
+        Result<KeyDto> keyDtoResult = secureItemController.get();
         if (keyDtoResult.isFail()) {
-            throw keyDtoResult.getError();
+            fail(keyDtoResult.getError());
         }
+
         KeyDto keyDto = keyDtoResult.get();
+        System.out.println(keyDto);
+
+    }
+
+    @Test
+    public void post() {
+        Result<KeyDto> keyDtoResult = secureItemController.get();
+        if (keyDtoResult.isFail()) {
+            fail(keyDtoResult.getError());
+        }
+
+        KeyDto keyDto = keyDtoResult.get();
+        System.out.println(keyDto);
+
+
         String encoded = keyDto.key();
         byte[] decode = Base64.getDecoder().decode(encoded);
         byte[] iv = Arrays.copyOf(decode, 12);
@@ -75,9 +88,12 @@ public class TestServer {
                 "",
                 SecureItemRqDto.SecureItemSharedType.PRIVATE
         );
+
         Result<String> serialize = Json.serialize(localPasswordDto);
+
         if (serialize.isFail()) {
-            throw serialize.getError();
+            fail(serialize.getError());
+            return;
         }
 
         String s = serialize.get();
@@ -98,20 +114,17 @@ public class TestServer {
         );
 
         Result<String> body = Json.serialize(secureItemRqDto);
-
         if (body.isFail()) {
-            throw body.getError();
+            fail(body.getError());
+            return;
         }
 
+        Result<ResultRsDto> post = secureItemController.post(body.get());
+        if (post.isFail()) {
+            fail(post.getError());
+            return;
+        }
 
-
-
-        HttpRequest request2 = HttpRequest.newBuilder()
-                .uri(new URI("http://127.0.0.1:8080/"))
-                .POST(HttpRequest.BodyPublishers.ofString(body.get()))
-                .build();
-
-        httpClient
-                .send(request2, HttpResponse.BodyHandlers.ofString());
+        System.out.println(post.get());
     }
 }

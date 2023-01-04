@@ -42,7 +42,7 @@ public class NewAccountVM {
                 .register(user);
 
         if (userResult.isFail()) {
-
+        //TODO handle
         }
 
         User registeredUser = userResult.get();

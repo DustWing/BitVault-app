@@ -92,7 +92,7 @@ public class UserService implements IUserService {
         try (Connection connection = connectionProvider.connect()) {
             final IUserDao userDao = new UserDao(connection);
             dbUser = userDao.get();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             return Result.error(e);
         }
 

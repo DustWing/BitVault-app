@@ -8,21 +8,23 @@ public class Json {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static <T> T deserialize(String value, Class<T> tClass) {
+    public static <T> Result<T> deserialize(String value, Class<T> tClass) {
 
         try {
-            return Json.MAPPER.readValue(value, tClass);
+            T t = Json.MAPPER.readValue(value, tClass);
+            return Result.ok(t);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return Result.error(e);
         }
     }
 
-    public static <T> String serialize(T value) {
+    public static <T> Result<String> serialize(T value) {
 
         try {
-            return Json.MAPPER.writeValueAsString(value);
+            String s = Json.MAPPER.writeValueAsString(value);
+            return Result.ok(s);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return Result.error(e);
         }
     }
 }

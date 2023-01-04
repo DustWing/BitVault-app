@@ -1,6 +1,6 @@
 package com.bitvault.server.http;
 
-import com.bitvault.server.ServerListener;
+import com.bitvault.server.endpoints.SecureItemController;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -19,14 +19,17 @@ public class HttpServer {
     private final EventLoopGroup mBossGroup;
     private final EventLoopGroup mWorkerGroup;
     private final ChannelFuture mChannelFuture;
-
     private final Set<ServerListener> serverListeners;
 
 
-    public HttpServer(int port) {
-        this.mPort = port;
+    public static HttpServer create(int port, SecureItemController secureItemController) {
+        Set<ServerListener> serverListeners = new HashSet<>();
+        return new HttpServer(port, serverListeners, secureItemController);
+    }
 
-        this.serverListeners = new HashSet<>();
+    private HttpServer(int port, Set<ServerListener> serverListeners, SecureItemController secureItemController) {
+        this.mPort = port;
+        this.serverListeners = serverListeners;
 
 
         // Configure the server.
@@ -40,7 +43,7 @@ public class HttpServer {
             serverBootstrap.group(mBossGroup, mWorkerGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new HttpServerInitializer(serverListeners));
+                    .childHandler(new HttpServerInitializer(serverListeners, secureItemController));
 
             final Channel ch = serverBootstrap.bind(this.mPort).sync().channel();
 
@@ -78,9 +81,13 @@ public class HttpServer {
 
 
     public void stop() {
-        System.out.println("shutting down");
+        onMsg("SHUTTING DOWN - fu");
         mBossGroup.shutdownGracefully();
         mWorkerGroup.shutdownGracefully();
+    }
+
+    private void onMsg(String msg) {
+        serverListeners.forEach(e -> e.onMessage(msg));
     }
 
     public int getPort() {

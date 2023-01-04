@@ -14,6 +14,7 @@ import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -108,15 +109,20 @@ public class LoginView extends BitVaultVBox {
             );
 
 
-            Result<User> authResult = serviceFactory.getUserService().authenticate(user);
+            Result<User> authResult = serviceFactory.getUserService()
+                    .authenticate(user);
 
             if (authResult.isFail()) {
                 //TODO handle exception
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("LILS");
+                alert.setContentText(authResult.getError().getMessage());
+                alert.showAndWait();
                 return;
             }
 
 
-            ViewFactory viewFactory = new ViewFactory(serviceFactory);
+            final ViewFactory viewFactory = new ViewFactory(serviceFactory);
             final DashBoardView view = viewFactory.getDashboardView();
             final Scene scene = new Scene(view, 1080, 960);
             //copy css

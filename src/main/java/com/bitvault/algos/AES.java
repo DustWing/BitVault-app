@@ -4,12 +4,11 @@ import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
 public class AES {
 
@@ -22,10 +21,11 @@ public class AES {
     private static final String ENCRYPTION = "AES/GCM/NoPadding";
 
     public static SecretKey randomSecretKey() throws NoSuchAlgorithmException {
-        final KeyGenerator keyGenerator = KeyGenerator.getInstance(ENCRYPTION);
+        final KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
         keyGenerator.init(KEY_SIZE);
         return keyGenerator.generateKey();
     }
+
 
     public static byte[] generateIv() {
         byte[] iv = new byte[GCM_IV_LENGTH];
@@ -38,6 +38,11 @@ public class AES {
         final SecretKeyFactory factory = SecretKeyFactory.getInstance(FACTORY_ALGORITHM);
         final KeySpec spec = new PBEKeySpec(from, salt, ITERATION_COUNT, KEY_SIZE);
         return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), ALGORITHM);
+    }
+
+    public static SecretKey secretKey(final byte[] bytes)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return new SecretKeySpec(bytes, ALGORITHM);
     }
 
     public static byte[] encrypt(final byte[] value, final SecretKey key, final byte[] iv)

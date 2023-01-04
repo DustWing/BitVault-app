@@ -1,4 +1,4 @@
-package com.bitvault.server;
+package com.bitvault.server.http;
 
 public interface ServerListener {
 

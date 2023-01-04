@@ -20,9 +20,9 @@ public class LocalServiceFactory implements IServiceFactory {
     private final IUserService userService;
     private final IProfileService profileService;
 
-    public LocalServiceFactory(String location) {
-        this.location = location;
-        final ConnectionProvider connectionProvider = new LocalDB(location);
+    public LocalServiceFactory(String filepath) {
+        this.location = filepath;
+        final ConnectionProvider connectionProvider = new LocalDB(filepath);
 
         final ArgonEncoder argonEncoder = new ArgonEncoder();
 

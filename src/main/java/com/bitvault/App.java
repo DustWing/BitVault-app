@@ -1,5 +1,6 @@
 package com.bitvault;
 
+import com.bitvault.ui.views.ServerView;
 import com.bitvault.ui.views.WelcomeView;
 import com.bitvault.util.Theme;
 import javafx.application.Application;
@@ -19,8 +20,10 @@ public class App extends Application {
     }
 
     private void show(Stage stage) {
-        final WelcomeView view = new WelcomeView();
-        final Scene scene = new Scene(view, 640, 400);
+//        final WelcomeView view = new WelcomeView();
+        final ServerView view = new ServerView();
+
+        final Scene scene = new Scene(view, 840, 700);
         //set Theme - TODO read from external properties
         Theme.toDark(scene);
         stage.setTitle("The Vault");

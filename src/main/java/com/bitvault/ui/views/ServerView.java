@@ -1,27 +1,36 @@
 package com.bitvault.ui.views;
 
-import com.bitvault.server.ServerListener;
+import com.bitvault.server.cache.ImportCache;
+import com.bitvault.server.endpoints.SecureItemController;
+import com.bitvault.server.http.ServerListener;
 import com.bitvault.server.http.HttpServer;
 import com.bitvault.ui.components.BitVaultFlatButton;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.model.LocalServerInfo;
-import com.bitvault.util.Json;
-import com.bitvault.util.Labels;
-import com.bitvault.util.QrUtils;
-import com.bitvault.util.Result;
+import com.bitvault.util.*;
+import javafx.geometry.Pos;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import org.sqlite.util.StringUtils;
 
 import java.awt.image.BufferedImage;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class ServerView extends BitVaultVBox {
 
 
-    HttpServer httpServer;
+    private HttpServer httpServer;
     private final TextArea textArea;
+
+    private ImportCache importCache;
+
 
     private final int port = 8080;
 
@@ -36,12 +45,28 @@ public class ServerView extends BitVaultVBox {
         stop.setOnAction(event -> stop());
         stop.setDefaultButton(false);
 
+        BitVaultFlatButton clearLog = new BitVaultFlatButton(Labels.i18n("clear"));
+        clearLog.setOnAction(event -> clear());
+        clearLog.setDefaultButton(false);
+
+        BitVaultFlatButton showCache = new BitVaultFlatButton("Show Cache");
+        showCache.setOnAction(event -> showCache());
+        showCache.setDefaultButton(false);
+
+        ButtonBar buttonBar = new ButtonBar();
+        buttonBar.getButtons().addAll(start, stop, clearLog, showCache);
+
+
         textArea = new TextArea();
 
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(textArea);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+
         InetAddress localHost = getLocalHost();
-
         String hostAddress = localHost.getHostAddress();
-
 
         final LocalServerInfo localServerInfo = new LocalServerInfo(
                 "v1.0",
@@ -49,9 +74,14 @@ public class ServerView extends BitVaultVBox {
                 port
         );
 
-        String serialize = Json.serialize(localServerInfo);
+        Result<String> res = Json.serialize(localServerInfo);
 
-        textArea.appendText("Host: %s\n".formatted(serialize));
+        if (res.isFail()) {
+            //TODO handle error
+        }
+        String serialize = res.get();
+
+        appendText("Host: %s".formatted(serialize));
 
         final Result<BufferedImage> bufferedImageResult = QrUtils.generateQRCode(serialize, 200, 200);
 
@@ -72,12 +102,12 @@ public class ServerView extends BitVaultVBox {
         final ImageView imageView = new ImageView(image);
 
         this.getChildren().addAll(
-                start,
-                stop,
                 imageView,
-                textArea
+                scrollPane,
+                buttonBar
         );
 
+        setAlignment(Pos.CENTER);
         vGrowAlways();
 
     }
@@ -93,13 +123,14 @@ public class ServerView extends BitVaultVBox {
 
     public void start() {
 
-        httpServer = new HttpServer(port);
+        importCache = ImportCache.create();
+        httpServer = HttpServer.create(port, new SecureItemController(importCache));
 
         httpServer.addListener(
                 new ServerListener() {
                     @Override
                     public void onMessage(String msg) {
-                        textArea.appendText(msg);
+                        appendText(msg);
                     }
 
                     @Override
@@ -113,16 +144,43 @@ public class ServerView extends BitVaultVBox {
         new Thread(() -> httpServer.start())
                 .start();
 
-        textArea.appendText("SERVER STARTED\n");
+        appendText("SERVER STARTED");
 
 
     }
 
+    String newLine = System.getProperty("line.separator");
+
+    private void appendText(String text) {
+        var log = "%s-->%s".formatted(DateTimeUtils.getTimeNow(), text) + newLine;
+        textArea.appendText(log);
+    }
 
     public void stop() {
 
+        if (httpServer == null) {
+            return;
+        }
+
         httpServer.stop();
 
+    }
+
+    public void clear() {
+        textArea.clear();
+    }
+
+    public void showCache() {
+
+        if (importCache == null) {
+            appendText("You need to start the server to initialize the cache. FU");
+            return;
+        }
+
+
+        List<String> strings = importCache.getCache().stream().map(Object::toString).toList();
+        String join = StringUtils.join(strings, newLine);
+        appendText("===CACHE====" + newLine + join);
     }
 
 }

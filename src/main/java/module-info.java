@@ -23,14 +23,12 @@ module com.bitvault {
     requires java.net.http;
     requires io.netty.codec;
     requires io.netty.common;
-//
-//    requires com.google.zxing;
-//    requires com.google.zxing.javase;
 
 //    opens com.bitvault to javafx.fxml;
-//    opens com.bitvault.views to javafx.fxml;
-//    opens com.bitvault.components to javafx.fxml;
+//    opens com.bitvault.ui.views to javafx.fxml;
+//    opens com.bitvault.ui.components to javafx.fxml;
     opens com.bitvault.ui.model to com.fasterxml.jackson.databind;
+    opens com.bitvault.server.model to com.fasterxml.jackson.databind;
 
     exports com.bitvault;
 
@@ -54,5 +52,7 @@ module com.bitvault {
     exports com.bitvault.ui.components;
     exports com.bitvault.ui.model;
     exports com.bitvault.ui.toggle;
+
+    exports com.bitvault.server.model;
 
 }

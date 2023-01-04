@@ -53,12 +53,13 @@ dependencies {
     implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.39.2.0'
 
     //server
-    implementation platform('io.netty:netty-bom:4.1.84.Final')
-    implementation group: 'io.netty', name: 'netty-buffer', version: '4.1.84.Final'
-    implementation group: 'io.netty', name: 'netty-codec', version: '4.1.84.Final'
-    implementation group: 'io.netty', name: 'netty-common', version: '4.1.84.Final'
-    implementation group: 'io.netty', name: 'netty-transport', version: '4.1.84.Final'
-    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.84.Final'
+    var nettyVersion ='4.1.86.Final'
+    implementation platform('io.netty:netty-bom:4.1.86.Final')
+    implementation group: 'io.netty', name: 'netty-buffer', version: nettyVersion
+    implementation group: 'io.netty', name: 'netty-codec', version: nettyVersion
+    implementation group: 'io.netty', name: 'netty-common', version: nettyVersion
+    implementation group: 'io.netty', name: 'netty-transport', version: nettyVersion
+    implementation group: 'io.netty', name: 'netty-codec-http', version: nettyVersion
     // https://mvnrepository.com/artifact/io.projectreactor.tools/blockhound
     implementation group: 'io.projectreactor.tools', name: 'blockhound', version: '1.0.6.RELEASE'
 
@@ -82,11 +83,6 @@ jar {
 }
 
 jlink {
-
-    //https://stackoverflow.com/questions/56512064/gradle-jlink-plugin-fails-during-createmergedmodule-with-the-service-implementa
-//    mergedModule {
-//        requires "java.xml"
-//    }
 
     imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip") as RegularFile
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']

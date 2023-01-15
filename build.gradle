@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
-    id 'org.beryx.jlink' version '2.25.0'
+    id 'org.beryx.jlink' version '2.26.0'
 }
 
 group 'com.bitvault'
@@ -16,8 +16,8 @@ ext {
     junitVersion = '5.9.0'
 }
 
-sourceCompatibility = '17'
-targetCompatibility = '17'
+sourceCompatibility = '19'
+targetCompatibility = '19'
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
@@ -30,7 +30,7 @@ application {
 
 
 javafx {
-    version = '17'
+    version = '19'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 

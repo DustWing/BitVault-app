@@ -14,9 +14,9 @@ package com.bitvault.server.http;/*
  * under the License.
  */
 
-import com.bitvault.server.endpoints.SecureItemController;
-import com.bitvault.server.model.KeyDto;
-import com.bitvault.server.model.ResultRsDto;
+import com.bitvault.server.dto.ErrorDto;
+import com.bitvault.server.endpoints.EndpointException;
+import com.bitvault.server.endpoints.EndpointResolver;
 import com.bitvault.util.Json;
 import com.bitvault.util.Result;
 import io.netty.buffer.ByteBuf;
@@ -39,11 +39,11 @@ class HttpHandler extends SimpleChannelInboundHandler<Object> {
     private HttpRequest mRequest;
 
     private final Set<ServerListener> serverListeners;
-    private final SecureItemController secureItemController;
+    private final EndpointResolver endpointProvider;
 
-    public HttpHandler(Set<ServerListener> serverListeners, SecureItemController secureItemController) {
+    public HttpHandler(Set<ServerListener> serverListeners, EndpointResolver endpointProvider) {
         this.serverListeners = serverListeners;
-        this.secureItemController = secureItemController;
+        this.endpointProvider = endpointProvider;
     }
 
 
@@ -55,8 +55,6 @@ class HttpHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
 
-
-        final StringBuilder buf = new StringBuilder();
 
         if (msg instanceof HttpRequest request) {
             mRequest = request;
@@ -70,48 +68,65 @@ class HttpHandler extends SimpleChannelInboundHandler<Object> {
 
             ByteBuf content = httpContent.content();
 
+            Response response;
 
             if (HttpMethod.GET.equals(mRequest.method())) {
-                Result<KeyDto> get = secureItemController.get();
-                KeyDto resultRsDto = get.get();
-                Result<String> serialize = Json.serialize(resultRsDto);
-                buf.append(serialize.get());
 
-            }
-            if (HttpMethod.POST.equals(mRequest.method())) {
+                Result<?> result = endpointProvider.get(mRequest.uri());
+                response = createResponseBody(result);
+
+            } else if (HttpMethod.POST.equals(mRequest.method())) {
                 String body = content.toString(CharsetUtil.UTF_8);
-                onMsg("BODY: %s".formatted(body));
-                Result<ResultRsDto> post = secureItemController.post(body);
+                onMsg("REQUEST BODY: %s".formatted(body));
+                Result<?> result = endpointProvider.post(mRequest.uri(), body);
+                response = createResponseBody(result);
 
-                if (post.isFail()) {
-                    buf.append(post.getError().getMessage());
-                }else {
-                    ResultRsDto resultRsDto = post.get();
-                    Result<String> serialize = Json.serialize(resultRsDto);
-                    buf.append(serialize.get());
-                }
-
+            } else {
+                response = Response.createServerError("Could not handle HttpMethod - Use GET or POST");
             }
 
-
-            if (msg instanceof LastHttpContent trailer) {
-                onMsg("RESPONSE: %s".formatted(buf.toString()));
-                writeResponse(mRequest, ctx, trailer, buf.toString());
+            if (msg instanceof LastHttpContent) {
+                onMsg("RESPONSE: %s".formatted(response.body));
+                writeResponse(mRequest, ctx, response);
             }
         }
 
     }
 
+    private Response createResponseBody(Result<?> result) {
+        if (result.isFail()) {
+
+            Exception error = result.getError();
+
+            if (error instanceof EndpointException endpointException) {
+                return Response.fromEndpointException(endpointException);
+            }
+
+            EndpointException fromException = EndpointException.createFromException(error);
+            return Response.fromEndpointException(fromException);
+        }
+
+        Result<String> serializeResult = Json.serialize(result.get());
+        if (serializeResult.isFail()) {
+            return Response.createServerError(serializeResult.getError().getMessage());
+        }
+        String body = serializeResult.get();
+        return Response.createOk(body);
+
+    }
+
+
     private void writeResponse(
             HttpRequest request,
             ChannelHandlerContext ctx,
-            LastHttpContent trailer,
-            String responseData
+            Response response
     ) {
         boolean keepAlive = HttpUtil.isKeepAlive(request);
-        FullHttpResponse httpResponse = new DefaultFullHttpResponse(HTTP_1_1,
-                trailer.decoderResult().isSuccess() ? OK : BAD_REQUEST,
-                Unpooled.copiedBuffer(responseData, CharsetUtil.UTF_8));
+        FullHttpResponse httpResponse = new DefaultFullHttpResponse(
+                HTTP_1_1,
+                response.status,
+                Unpooled.copiedBuffer(response.body, CharsetUtil.UTF_8)
+        );
 
         httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json; charset=UTF-8");
 
@@ -154,5 +169,30 @@ class HttpHandler extends SimpleChannelInboundHandler<Object> {
 
     private void onError(Throwable throwable) {
         serverListeners.forEach(e -> e.onError(throwable));
+    }
+
+    private record Response(
+            String body,
+            HttpResponseStatus status
+    ) {
+        public static Response createOk(String body) {
+            return new Response(body, OK);
+        }
+
+        public static Response createServerError(String body) {
+            return new Response(body, INTERNAL_SERVER_ERROR);
+        }
+
+        public static Response fromEndpointException(EndpointException endpointException) {
+
+            ErrorDto errorDto = endpointException.convertToDto();
+
+            Result<String> serializeResult = Json.serialize(errorDto);
+            if (serializeResult.isFail()) {
+                return Response.createServerError(serializeResult.getError().getMessage());
+            }
+
+            return new Response(serializeResult.get(), endpointException.getStatus());
+        }
     }
 }

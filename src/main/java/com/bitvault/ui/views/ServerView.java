@@ -1,6 +1,7 @@
 package com.bitvault.ui.views;
 
 import com.bitvault.server.cache.ImportCache;
+import com.bitvault.server.endpoints.EndpointResolver;
 import com.bitvault.server.endpoints.SecureItemController;
 import com.bitvault.server.http.ServerListener;
 import com.bitvault.server.http.HttpServer;
@@ -124,7 +125,9 @@ public class ServerView extends BitVaultVBox {
     public void start() {
 
         importCache = ImportCache.create();
-        httpServer = HttpServer.create(port, new SecureItemController(importCache));
+
+        EndpointResolver endpointResolver = EndpointResolver.create(importCache);
+        httpServer = HttpServer.create(port, endpointResolver);
 
         httpServer.addListener(
                 new ServerListener() {

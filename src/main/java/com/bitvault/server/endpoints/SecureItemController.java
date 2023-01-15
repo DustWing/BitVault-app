@@ -3,9 +3,9 @@ package com.bitvault.server.endpoints;
 import com.bitvault.algos.AES;
 import com.bitvault.enums.Action;
 import com.bitvault.server.cache.ImportCache;
-import com.bitvault.server.model.KeyDto;
-import com.bitvault.server.model.ResultRsDto;
-import com.bitvault.server.model.SecureItemRqDto;
+import com.bitvault.server.dto.KeyDto;
+import com.bitvault.server.dto.ResultRsDto;
+import com.bitvault.server.dto.SecureItemRqDto;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.SecureDetails;
@@ -15,7 +15,7 @@ import com.bitvault.util.Result;
 import java.time.LocalDateTime;
 import java.util.Base64;
 
-public class SecureItemController {
+public class SecureItemController implements IGetEndpoint<KeyDto>, IPostEndpoint<ResultRsDto> {
 
     private final ImportCache importCache;
 

@@ -1,4 +1,4 @@
-package com.bitvault.server.model;
+package com.bitvault.server.dto;
 
 public record KeyDto(
         String key,

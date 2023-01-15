@@ -1,8 +1,8 @@
 package com.bitvault.server.http;
 
 import com.bitvault.algos.AES;
-import com.bitvault.server.model.KeyDto;
-import com.bitvault.server.model.SecureItemRqDto;
+import com.bitvault.server.dto.KeyDto;
+import com.bitvault.server.dto.SecureItemRqDto;
 import com.bitvault.util.Json;
 import com.bitvault.util.Result;
 
@@ -10,9 +10,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -32,13 +30,17 @@ public class TestServer {
                 .build();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://127.0.0.1:8080/"))
+                .uri(new URI("http://127.0.0.1:8080/key"))
                 .GET()
                 .build();
 
         HttpResponse<String> response = httpClient
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(response.body());
+        }
 
         Result<KeyDto> keyDtoResult = Json.deserialize(response.body(), KeyDto.class);
 
@@ -104,10 +106,8 @@ public class TestServer {
         }
 
 
-
-
         HttpRequest request2 = HttpRequest.newBuilder()
-                .uri(new URI("http://127.0.0.1:8080/"))
+                .uri(new URI("http://127.0.0.1:8080/shareSecureItem"))
                 .POST(HttpRequest.BodyPublishers.ofString(body.get()))
                 .build();
 

@@ -28,7 +28,7 @@ module com.bitvault {
 //    opens com.bitvault.ui.views to javafx.fxml;
 //    opens com.bitvault.ui.components to javafx.fxml;
     opens com.bitvault.ui.model to com.fasterxml.jackson.databind;
-    opens com.bitvault.server.model to com.fasterxml.jackson.databind;
+    opens com.bitvault.server.dto to com.fasterxml.jackson.databind;
 
     exports com.bitvault;
 
@@ -53,6 +53,6 @@ module com.bitvault {
     exports com.bitvault.ui.model;
     exports com.bitvault.ui.toggle;
 
-    exports com.bitvault.server.model;
+    exports com.bitvault.server.dto;
 
 }

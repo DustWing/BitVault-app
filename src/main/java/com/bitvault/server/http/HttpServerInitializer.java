@@ -1,6 +1,6 @@
 package com.bitvault.server.http;
 
-import com.bitvault.server.cache.ImportCache;
+import com.bitvault.server.endpoints.EndpointResolver;
 import com.bitvault.server.endpoints.SecureItemController;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -14,13 +14,12 @@ class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 
 
     private final Set<ServerListener> serverListeners;
-    private final SecureItemController secureItemController;
+    private final EndpointResolver endpointResolver;
 
 
-
-    public HttpServerInitializer(Set<ServerListener> serverListeners, SecureItemController secureItemController) {
+    public HttpServerInitializer(Set<ServerListener> serverListeners, EndpointResolver endpointResolver) {
         this.serverListeners = serverListeners;
-        this.secureItemController = secureItemController;
+        this.endpointResolver = endpointResolver;
     }
 
     @Override
@@ -28,6 +27,6 @@ class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
         final ChannelPipeline p = ch.pipeline();
         p.addLast(new HttpServerCodec());
         p.addLast(new HttpServerExpectContinueHandler());
-        p.addLast(new HttpHandler(serverListeners, secureItemController));
+        p.addLast(new HttpHandler(serverListeners, endpointResolver));
     }
 }

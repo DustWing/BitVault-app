@@ -2,9 +2,9 @@ package com.bitvault.server.endpoints;
 
 import com.bitvault.algos.AES;
 import com.bitvault.server.cache.ImportCache;
-import com.bitvault.server.model.KeyDto;
-import com.bitvault.server.model.ResultRsDto;
-import com.bitvault.server.model.SecureItemRqDto;
+import com.bitvault.server.dto.KeyDto;
+import com.bitvault.server.dto.ResultRsDto;
+import com.bitvault.server.dto.SecureItemRqDto;
 import com.bitvault.util.Json;
 import com.bitvault.util.Result;
 import org.junit.jupiter.api.BeforeAll;

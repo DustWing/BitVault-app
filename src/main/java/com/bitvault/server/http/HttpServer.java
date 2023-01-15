@@ -1,6 +1,6 @@
 package com.bitvault.server.http;
 
-import com.bitvault.server.endpoints.SecureItemController;
+import com.bitvault.server.endpoints.EndpointResolver;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -22,12 +22,12 @@ public class HttpServer {
     private final Set<ServerListener> serverListeners;
 
 
-    public static HttpServer create(int port, SecureItemController secureItemController) {
+    public static HttpServer create(int port, EndpointResolver endpointResolver) {
         Set<ServerListener> serverListeners = new HashSet<>();
-        return new HttpServer(port, serverListeners, secureItemController);
+        return new HttpServer(port, serverListeners, endpointResolver);
     }
 
-    private HttpServer(int port, Set<ServerListener> serverListeners, SecureItemController secureItemController) {
+    private HttpServer(int port, Set<ServerListener> serverListeners, EndpointResolver endpointResolver) {
         this.mPort = port;
         this.serverListeners = serverListeners;
 
@@ -43,7 +43,7 @@ public class HttpServer {
             serverBootstrap.group(mBossGroup, mWorkerGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new HttpServerInitializer(serverListeners, secureItemController));
+                    .childHandler(new HttpServerInitializer(serverListeners, endpointResolver));
 
             final Channel ch = serverBootstrap.bind(this.mPort).sync().channel();
 

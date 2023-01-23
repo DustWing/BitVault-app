@@ -1,13 +1,17 @@
 package com.bitvault.ui.views;
 
+import com.bitvault.enums.Action;
 import com.bitvault.server.cache.ImportCache;
+import com.bitvault.server.dto.SecureItemRqDto;
 import com.bitvault.server.endpoints.EndpointResolver;
-import com.bitvault.server.endpoints.SecureItemController;
-import com.bitvault.server.http.ServerListener;
 import com.bitvault.server.http.HttpServer;
+import com.bitvault.server.http.ServerListener;
 import com.bitvault.ui.components.BitVaultFlatButton;
 import com.bitvault.ui.components.BitVaultVBox;
+import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.LocalServerInfo;
+import com.bitvault.ui.model.Password;
+import com.bitvault.ui.model.SecureDetails;
 import com.bitvault.util.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.ButtonBar;
@@ -15,7 +19,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import org.sqlite.util.StringUtils;
 
 import java.awt.image.BufferedImage;
@@ -26,17 +29,13 @@ import java.util.List;
 
 public class ServerView extends BitVaultVBox {
 
-
     private HttpServer httpServer;
     private final TextArea textArea;
-
     private ImportCache importCache;
-
-
     private final int port = 8080;
 
-    public ServerView() {
 
+    public ServerView() {
 
         BitVaultFlatButton start = new BitVaultFlatButton(Labels.i18n("start"));
         start.setOnAction(event -> start());
@@ -57,14 +56,12 @@ public class ServerView extends BitVaultVBox {
         ButtonBar buttonBar = new ButtonBar();
         buttonBar.getButtons().addAll(start, stop, clearLog, showCache);
 
-
         textArea = new TextArea();
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(textArea);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
-
 
         InetAddress localHost = getLocalHost();
         String hostAddress = localHost.getHostAddress();
@@ -124,7 +121,9 @@ public class ServerView extends BitVaultVBox {
 
     public void start() {
 
-        importCache = ImportCache.create();
+        importCache = ImportCache.createDefault(
+                password -> System.out.printf("printing pass %s%n", password)
+        );
 
         EndpointResolver endpointResolver = EndpointResolver.create(importCache);
         httpServer = HttpServer.create(port, endpointResolver);
@@ -176,14 +175,45 @@ public class ServerView extends BitVaultVBox {
     public void showCache() {
 
         if (importCache == null) {
-            appendText("You need to start the server to initialize the cache. FU");
+            appendText("You need to start the server to initialize the cache.");
             return;
         }
 
 
-        List<String> strings = importCache.getCache().stream().map(Object::toString).toList();
+        List<String> strings = importCache.getCache()
+                .stream()
+                .map(Object::toString)
+                .toList();
         String join = StringUtils.join(strings, newLine);
         appendText("===CACHE====" + newLine + join);
+    }
+
+    private Password fromDto(SecureItemRqDto.LocalPasswordDto localPasswordDto) {
+        SecureDetails secureDetails = new SecureDetails(
+                localPasswordDto.id(),
+                new Category(localPasswordDto.category(), localPasswordDto.category(), "", null, null, null),
+                null,
+                localPasswordDto.domainDetails() == null ? null : localPasswordDto.domainDetails().domain(),
+                "No title",
+                localPasswordDto.description(),
+                localPasswordDto.isFavourite(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                localPasswordDto.requiresMasterPassword(),
+                false
+
+        );
+
+        Password password = new Password(
+                localPasswordDto.id(),
+                localPasswordDto.username(),
+                localPasswordDto.password(),
+                secureDetails,
+                Action.NEW
+        );
+        return password;
     }
 
 }

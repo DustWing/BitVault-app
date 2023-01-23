@@ -30,7 +30,9 @@ class SecureItemControllerTest {
     @BeforeAll
     public static void init() {
 
-        ImportCache importCache = ImportCache.create();
+        ImportCache importCache = ImportCache.createDefault(
+                System.out::println
+        );
 
         secureItemController = new SecureItemController(importCache);
     }

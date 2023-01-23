@@ -1,7 +1,6 @@
 package com.bitvault.server.http;
 
 import com.bitvault.server.endpoints.EndpointResolver;
-import com.bitvault.server.endpoints.SecureItemController;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

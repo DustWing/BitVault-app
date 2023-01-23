@@ -1,23 +1,28 @@
 package com.bitvault.server.cache;
 
 import com.bitvault.algos.AES;
-import com.bitvault.ui.model.Password;
+import com.bitvault.server.dto.SecureItemRqDto.LocalPasswordDto;
 
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
 
-public class ImportCache {
+public final class ImportCache {
 
-    private final ConcurrentLinkedQueue<Password> cache;
-
+    private final ConcurrentLinkedQueue<LocalPasswordDto> cache;
+    private Consumer<LocalPasswordDto> onAddPassword;
 
     private final SecretKey secretKey;
     private final byte[] IV;
 
 
-    public static ImportCache create() {
+    /**
+     * @param onAddPassword consumer when adding new password
+     * @return new ImportCache with random secret key
+     */
+    public static ImportCache createDefault(Consumer<LocalPasswordDto> onAddPassword) {
 
         SecretKey secretKey;
         try {
@@ -29,24 +34,27 @@ public class ImportCache {
 
         byte[] iv = AES.generateIv();
 
-        return new ImportCache(new ConcurrentLinkedQueue<>(), secretKey, iv);
+        return new ImportCache(new ConcurrentLinkedQueue<>(), secretKey, iv, onAddPassword);
     }
 
-    private ImportCache(ConcurrentLinkedQueue<Password> cache, SecretKey secretKey, byte[] iv) {
+    public ImportCache(ConcurrentLinkedQueue<LocalPasswordDto> cache, SecretKey secretKey, byte[] iv, Consumer<LocalPasswordDto> onAddPassword) {
         this.cache = cache;
         this.secretKey = secretKey;
         this.IV = iv;
+        this.onAddPassword = onAddPassword;
     }
 
-    public List<Password> getCache() {
+
+    public List<LocalPasswordDto> getCache() {
         return cache.stream().toList();
     }
 
-    public void add(Password password) {
+    public void add(LocalPasswordDto password) {
         cache.add(password);
+        onAddPassword.accept(password);
     }
 
-    public void remove(Password password) {
+    public void remove(LocalPasswordDto password) {
         cache.remove(password);
     }
 

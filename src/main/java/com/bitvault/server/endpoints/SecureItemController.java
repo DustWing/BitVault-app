@@ -1,18 +1,13 @@
 package com.bitvault.server.endpoints;
 
 import com.bitvault.algos.AES;
-import com.bitvault.enums.Action;
 import com.bitvault.server.cache.ImportCache;
 import com.bitvault.server.dto.KeyDto;
 import com.bitvault.server.dto.ResultRsDto;
 import com.bitvault.server.dto.SecureItemRqDto;
-import com.bitvault.ui.model.Category;
-import com.bitvault.ui.model.Password;
-import com.bitvault.ui.model.SecureDetails;
 import com.bitvault.util.Json;
 import com.bitvault.util.Result;
 
-import java.time.LocalDateTime;
 import java.util.Base64;
 
 public class SecureItemController implements IGetEndpoint<KeyDto>, IPostEndpoint<ResultRsDto> {
@@ -70,32 +65,9 @@ public class SecureItemController implements IGetEndpoint<KeyDto>, IPostEndpoint
         }
 
         SecureItemRqDto.LocalPasswordDto localPasswordDto = deserialize.get();
-        SecureDetails secureDetails = new SecureDetails(
-                localPasswordDto.id(),
-                new Category(localPasswordDto.category(), localPasswordDto.category(), "", null, null, null),
-                null,
-                localPasswordDto.domainDetails() == null ? null : localPasswordDto.domainDetails().domain(),
-                "No title",
-                localPasswordDto.description(),
-                localPasswordDto.isFavourite(),
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                localPasswordDto.requiresMasterPassword(),
-                false
 
-        );
 
-        Password password = new Password(
-                localPasswordDto.id(),
-                localPasswordDto.username(),
-                localPasswordDto.password(),
-                secureDetails,
-                Action.NEW
-        );
-
-        importCache.add(password);
+        importCache.add(localPasswordDto);
 
         return Result.Success;
     }

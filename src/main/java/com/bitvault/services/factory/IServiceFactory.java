@@ -6,7 +6,6 @@ import com.bitvault.services.interfaces.IProfileService;
 import com.bitvault.services.interfaces.IUserService;
 
 public interface IServiceFactory {
-    String getLocation();
 
     IPasswordService getPasswordService();
 

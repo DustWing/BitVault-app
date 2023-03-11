@@ -1,8 +1,6 @@
 package com.bitvault.database.models;
 
-import com.bitvault.enums.Action;
 import com.bitvault.ui.model.Password;
-import com.bitvault.ui.model.SecureDetails;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,33 +22,15 @@ public record PasswordDM(
         );
     }
 
-    public static PasswordDM createNew(final String id, final Password password) {
-
-        return new PasswordDM(
-                id,
-                password.username(),
-                password.password(),
-                id
-        );
-    }
 
     public static PasswordDM convert(final Password password) {
 
         return new PasswordDM(
-                password.id(),
-                password.username(),
-                password.password(),
-                password.secureDetails().id()
+                password.getId(),
+                password.getUsername(),
+                password.getPassword(),
+                password.getSecureDetails().getId()
         );
     }
 
-    public static Password convert(final PasswordDM passwordDM, final SecureDetails secureDetails, final Action action) {
-        return new Password(
-                passwordDM.id(),
-                passwordDM.username(),
-                passwordDM.password(),
-                secureDetails,
-                action
-        );
-    }
 }

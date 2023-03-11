@@ -9,6 +9,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Arrays;
 
 public class AES {
 
@@ -64,6 +65,18 @@ public class AES {
         return cipher.doFinal(value);
     }
 
+    public static byte[] encryptIvIncluded(final byte[] value, final SecretKey key, final byte[] iv)
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
+            InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+
+        byte[] encrypted = encrypt(value, key, iv);
+        byte[] combined = new byte[iv.length + encrypted.length];
+        System.arraycopy(iv, 0, combined, 0, iv.length);
+        System.arraycopy(encrypted, 0, combined, iv.length, encrypted.length);
+
+        return combined;
+    }
+
     public static byte[] decrypt(final byte[] value, final SecretKey key, final byte[] iv)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
             InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
@@ -81,6 +94,16 @@ public class AES {
 
         // Perform Decryption
         return cipher.doFinal(value);
+    }
+
+
+    public static byte[] decryptIvIncluded(final byte[] value, final SecretKey key)
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
+            InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        byte[] iv = Arrays.copyOf(value, 12);
+        byte[] encrypted = Arrays.copyOfRange(value, 12, value.length);
+
+        return decrypt(encrypted, key, iv);
     }
 
 }

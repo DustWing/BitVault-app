@@ -8,6 +8,7 @@ import com.bitvault.server.http.HttpServer;
 import com.bitvault.server.http.ServerListener;
 import com.bitvault.ui.components.BitVaultFlatButton;
 import com.bitvault.ui.components.BitVaultVBox;
+import com.bitvault.ui.exceptions.ViewLoadException;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.LocalServerInfo;
 import com.bitvault.ui.model.Password;
@@ -37,27 +38,9 @@ public class ServerView extends BitVaultVBox {
 
     public ServerView() {
 
-        BitVaultFlatButton start = new BitVaultFlatButton(Labels.i18n("start"));
-        start.setOnAction(event -> start());
-        start.setDefaultButton(true);
-
-        BitVaultFlatButton stop = new BitVaultFlatButton(Labels.i18n("stop"));
-        stop.setOnAction(event -> stop());
-        stop.setDefaultButton(false);
-
-        BitVaultFlatButton clearLog = new BitVaultFlatButton(Labels.i18n("clear"));
-        clearLog.setOnAction(event -> clear());
-        clearLog.setDefaultButton(false);
-
-        BitVaultFlatButton showCache = new BitVaultFlatButton("Show Cache");
-        showCache.setOnAction(event -> showCache());
-        showCache.setDefaultButton(false);
-
-        ButtonBar buttonBar = new ButtonBar();
-        buttonBar.getButtons().addAll(start, stop, clearLog, showCache);
+        ButtonBar buttonBar = createButtonBar();
 
         textArea = new TextArea();
-
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(textArea);
         scrollPane.setFitToWidth(true);
@@ -75,7 +58,7 @@ public class ServerView extends BitVaultVBox {
         Result<String> res = Json.serialize(localServerInfo);
 
         if (res.isFail()) {
-            //TODO handle error
+            throw new ViewLoadException(res.getError());
         }
         String serialize = res.get();
 
@@ -84,7 +67,7 @@ public class ServerView extends BitVaultVBox {
         final Result<BufferedImage> bufferedImageResult = QrUtils.generateQRCode(serialize, 200, 200);
 
         if (bufferedImageResult.isFail()) {
-            //TODO handle error
+            throw new ViewLoadException(res.getError());
         }
 
         final BufferedImage bufferedImage = bufferedImageResult.get();
@@ -92,7 +75,7 @@ public class ServerView extends BitVaultVBox {
         final Result<Image> imageResult = QrUtils.createImage(bufferedImage);
 
         if (imageResult.isFail()) {
-            //TODO handle error
+            throw new ViewLoadException(res.getError());
         }
 
         final Image image = imageResult.get();
@@ -108,6 +91,30 @@ public class ServerView extends BitVaultVBox {
         setAlignment(Pos.CENTER);
         vGrowAlways();
 
+    }
+
+    private ButtonBar createButtonBar() {
+        BitVaultFlatButton start = new BitVaultFlatButton(Labels.i18n("start"));
+        start.setOnAction(event -> start());
+        start.setDefaultButton(true);
+
+        BitVaultFlatButton stop = new BitVaultFlatButton(Labels.i18n("stop"));
+        stop.setOnAction(event -> stop());
+        stop.setDefaultButton(false);
+
+        BitVaultFlatButton clearLog = new BitVaultFlatButton(Labels.i18n("clear"));
+        clearLog.setOnAction(event -> clear());
+        clearLog.setDefaultButton(false);
+
+        BitVaultFlatButton showCache = new BitVaultFlatButton("Show Cache");
+        showCache.setOnAction(event -> showCache());
+        showCache.setDefaultButton(false);
+
+        ButtonBar buttonBar = new ButtonBar();
+        buttonBar.getButtons()
+                .addAll(start, stop, clearLog, showCache);
+
+        return buttonBar;
     }
 
     private InetAddress getLocalHost() {

@@ -34,15 +34,15 @@ public class BitVaultFlatButton extends Button {
     }
 
     private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
+//        getStyleClass().add(STYLE_CLASS);
         this.setPrefWidth(BvWidths.LARGE);
         this.setMaxWidth(BvWidths.LARGE);
         this.setMinHeight(BvHeights.MEDIUM);
         this.setMaxHeight(BvHeights.MEDIUM);
     }
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLE_SHEET;
-    }
+//    @Override
+//    public String getUserAgentStylesheet() {
+//        return STYLE_SHEET;
+//    }
 }

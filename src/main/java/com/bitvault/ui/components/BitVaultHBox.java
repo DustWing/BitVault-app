@@ -27,8 +27,13 @@ public class BitVaultHBox extends HBox {
         initialize();
     }
 
+    public BitVaultHBox maxH(double maxHeight) {
+        super.setMaxHeight( maxHeight);
+        return this;
+    }
+
     private void initialize() {
-        this.getStyleClass().add(STYLE_CLASS);
+//        this.getStyleClass().add(STYLE_CLASS);
 
         this.getChildren().forEach(
                 node -> HBox.setHgrow(node, Priority.ALWAYS)

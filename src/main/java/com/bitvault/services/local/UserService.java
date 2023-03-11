@@ -41,9 +41,7 @@ public class UserService implements IUserService {
         try (Connection connection = connectionProvider.connect()) {
             final IUserDao userDao = new UserDao(connection);
             userDao.create(
-                    UserDM.convert(
-                            user.copy(newCred)
-                    )
+                    UserDM.convert(user.copy(newCred))
             );
 
             //create default category - must always have one
@@ -102,8 +100,6 @@ public class UserService implements IUserService {
                     new RuntimeException("Invalid user")
             );
         }
-        return Result.ok(
-                UserDM.convert(dbUser)
-        );
+        return Result.ok(UserDM.convert(dbUser));
     }
 }

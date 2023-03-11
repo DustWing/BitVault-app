@@ -24,9 +24,13 @@ module com.bitvault {
     requires io.netty.codec;
     requires io.netty.common;
 
-//    opens com.bitvault to javafx.fxml;
-//    opens com.bitvault.ui.views to javafx.fxml;
-//    opens com.bitvault.ui.components to javafx.fxml;
+    requires atlantafx.base;
+
+    opens com.bitvault to javafx.fxml;
+    opens com.bitvault.ui.views to javafx.fxml;
+    opens com.bitvault.ui.components to javafx.fxml;
+    opens com.bitvault.ui.controller to javafx.fxml;
+
     opens com.bitvault.ui.model to com.fasterxml.jackson.databind;
     opens com.bitvault.server.dto to com.fasterxml.jackson.databind;
 
@@ -38,6 +42,8 @@ module com.bitvault {
     exports com.bitvault.ui.views.factory;
     exports com.bitvault.enums;
     exports com.bitvault.algos;
+    exports com.bitvault.ui.controller;
+
 
     exports com.bitvault.database.daos;
     exports com.bitvault.database.utils;
@@ -48,11 +54,22 @@ module com.bitvault {
     exports com.bitvault.services.factory;
     exports com.bitvault.services.interfaces;
     exports com.bitvault.services.local;
+
+    exports com.bitvault.security;
+
     exports com.bitvault.ui.utils;
     exports com.bitvault.ui.components;
     exports com.bitvault.ui.model;
     exports com.bitvault.ui.toggle;
 
     exports com.bitvault.server.dto;
+    exports com.bitvault.ui.views.login;
+    opens com.bitvault.ui.views.login to javafx.fxml;
+    exports com.bitvault.ui.components.textfield;
+    opens com.bitvault.ui.components.textfield to javafx.fxml;
+    exports com.bitvault.ui.components.validation;
+    opens com.bitvault.ui.components.validation to javafx.fxml;
+    exports com.bitvault.ui.views.password;
+    opens com.bitvault.ui.views.password to javafx.fxml;
 
 }

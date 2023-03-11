@@ -1,10 +1,12 @@
-package com.bitvault.ui.viewmodel;
+package com.bitvault.ui.views.password;
 
+import com.bitvault.security.UserSession;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
+import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Result;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +16,7 @@ import java.util.List;
 
 public class PasswordVM {
 
+    private final UserSession userSession;
     private final ObservableList<Password> passwords;
     private final IPasswordService passwordService;
     private final ICategoryService categoryService;
@@ -23,10 +26,12 @@ public class PasswordVM {
     private final List<Category> categories;
 
     public PasswordVM(
+            final UserSession userSession,
             final IPasswordService passwordService,
             final ICategoryService categoryService,
             final Profile profile
     ) {
+        this.userSession = userSession;
         this.passwordService = passwordService;
         this.categoryService = categoryService;
         this.profile = profile;
@@ -58,21 +63,27 @@ public class PasswordVM {
     }
 
     public void create(Password password) {
-        passwordService.create(password);
-        passwords.add(password);
+        Result<Password> passwordResult = passwordService.create(password);
+
+        if(passwordResult.isFail()){
+            //TODO handle exception
+            return;
+        }
+
+        passwords.add(passwordResult.get());
     }
 
     public void delete(Password password) {
         passwordService.delete(password);
         passwords.removeIf(
-                oldPass -> oldPass.id().equals(password.id())
+                oldPass -> oldPass.getId().equals(password.getId())
         );
     }
 
     public void update(Password password) {
         passwordService.update(password);
         passwords.replaceAll(oldPass -> {
-            if (oldPass.id().equals(password.id())) {
+            if (oldPass.getId().equals(password.getId())) {
                 return password;
             }
             return oldPass;
@@ -81,6 +92,16 @@ public class PasswordVM {
 
     public void reload() {
 
+    }
+
+    public void onTimeEnd() {
+        JavaFxUtil.clearClipBoard();
+    }
+    public boolean copyPassword(Password selectedItem){
+        if (selectedItem == null) return false;
+        final String decrypt = userSession.decrypt(selectedItem.getPassword());
+        JavaFxUtil.copyToClipBoard(decrypt);
+        return true;
     }
 
     public ObservableList<Password> getPasswords() {

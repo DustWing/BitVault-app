@@ -1,4 +1,4 @@
-package com.bitvault.util;
+package com.bitvault.ui.utils;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Transition;
@@ -6,12 +6,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Pane;
 import javafx.stage.*;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 
 public class JavaFxUtil {
@@ -28,6 +30,7 @@ public class JavaFxUtil {
 
         return stage;
     }
+
 
     public static File chooseFile(final Window owner, final String title) {
         FileChooser chooser = new FileChooser();
@@ -62,10 +65,32 @@ public class JavaFxUtil {
     }
 
     public static void copyToClipBoard(final String value) {
-        final Clipboard clipboard = Clipboard.getSystemClipboard();
-        final ClipboardContent content = new ClipboardContent();
-        content.putString(value);
-        clipboard.setContent(content);
+        try {
+            System.out.println(value);
+            StringSelection selection = new StringSelection(value);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(selection, selection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
+    public static void clearClipBoard() {
+
+        try {
+
+            StringSelection stringSelection = new StringSelection("");
+            Toolkit.getDefaultToolkit().getSystemClipboard()
+                    .setContents(stringSelection, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void focus(Node node) {
+        if (!node.isFocused()) {
+            node.requestFocus();
+        }
+    }
 }

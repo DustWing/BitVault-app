@@ -6,7 +6,6 @@ public record User(
         String credentials
 ) {
 
-
     public User copy(final String credentials) {
         return new User(
                 this.id,

@@ -30,9 +30,7 @@ public class ProfileService implements IProfileService {
 
             return Result.ok(
                     profiles.stream()
-                            .map(
-                                    ProfileDM::convert
-                            )
+                            .map(ProfileDM::convert)
                             .toList()
             );
         } catch (SQLException e) {

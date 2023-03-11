@@ -2,11 +2,11 @@ package com.bitvault.ui.views;
 
 import com.bitvault.ui.components.BitVaultFlatButton;
 import com.bitvault.ui.components.BitVaultVBox;
-import com.bitvault.ui.components.WrappedTextField;
+import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.utils.BvInsets;
+import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.viewmodel.NewAccountVM;
 import com.bitvault.ui.views.factory.ViewFactory;
-import com.bitvault.util.JavaFxUtil;
 import com.bitvault.util.Labels;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,24 +28,24 @@ public class NewAccountView extends BitVaultVBox {
         super();
         this.newAccountVM = newAccountVM;
 
-        WrappedTextField username = new WrappedTextField()
+        BvTextField username = new BvTextField()
                 .withBinding(newAccountVM.usernameProperty())
-                .withPlaceholder(Labels.i18n("username"))
-                .required(true);
+                .withPromptText(Labels.i18n("username"))
+                .isRequired(true);
 
-        WrappedTextField password = new WrappedTextField()
+        BvTextField password = new BvTextField()
                 .withBinding(newAccountVM.passwordProperty())
-                .withPlaceholder(Labels.i18n("password"))
-                .required(true);
+                .withPromptText(Labels.i18n("password"))
+                .isRequired(true);
 
-        WrappedTextField fileName = new WrappedTextField()
+        BvTextField fileName = new BvTextField()
                 .withBinding(newAccountVM.fileNameProperty())
-                .withPlaceholder(Labels.i18n("file.name"))
-                .required(true);
+                .withPromptText(Labels.i18n("file.name"))
+                .isRequired(true);
 
         BitVaultFlatButton chooseFileBtn = new BitVaultFlatButton(Labels.i18n("choose.file"));
         chooseFileBtn.setOnAction(event -> chooseFileAction());
-        chooseFileBtn.setDefaultButton(true);
+
 
         BitVaultFlatButton loginButton = new BitVaultFlatButton(Labels.i18n("create"));
         loginButton.setOnAction(event -> createBtnAction());
@@ -53,13 +53,12 @@ public class NewAccountView extends BitVaultVBox {
 
         BitVaultFlatButton backButton = new BitVaultFlatButton(Labels.i18n("back"));
         backButton.setOnAction(event -> onBack.accept(this));
-        backButton.setDefaultButton(true);
 
-        newAccountVM.getValidatedForm().addAll(
-                username,
-                password,
-                fileName
-        );
+//        newAccountVM.getValidatedForm().addAll(
+//                username,
+//                password,
+//                fileName
+//        );
 
         this.getChildren().addAll(
                 username,

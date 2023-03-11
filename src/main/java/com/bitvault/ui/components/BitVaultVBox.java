@@ -30,7 +30,7 @@ public class BitVaultVBox extends VBox {
     }
 
     private void initialize() {
-        this.getStyleClass().add(STYLE_CLASS);
+//        this.getStyleClass().add(STYLE_CLASS);
     }
 
     protected void vGrowAlways() {

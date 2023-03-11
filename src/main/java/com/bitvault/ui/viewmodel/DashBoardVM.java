@@ -1,8 +1,10 @@
 package com.bitvault.ui.viewmodel;
 
+import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.IServiceFactory;
 import com.bitvault.ui.model.Profile;
-import com.bitvault.ui.views.PasswordView;
+import com.bitvault.ui.views.password.PasswordView;
+import com.bitvault.ui.views.password.PasswordVM;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -11,12 +13,15 @@ import java.util.List;
 
 public final class DashBoardVM {
 
+
+    private final UserSession userSession;
     private final IServiceFactory serviceFactory;
     private List<Profile> profiles;
     private final SimpleObjectProperty<Profile> selectedProfile;
 
 
-    public DashBoardVM(final IServiceFactory serviceFactory) {
+    public DashBoardVM(UserSession userSession, final IServiceFactory serviceFactory) {
+        this.userSession = userSession;
         this.serviceFactory = serviceFactory;
         this.selectedProfile = new SimpleObjectProperty<>();
         this.profiles = new ArrayList<>();
@@ -49,6 +54,7 @@ public final class DashBoardVM {
     public PasswordView getPasswordView() {
 
         final PasswordVM passwordVM = new PasswordVM(
+                userSession,
                 serviceFactory.getPasswordService(),
                 serviceFactory.getCategoryService(),
                 getSelectedProfile()

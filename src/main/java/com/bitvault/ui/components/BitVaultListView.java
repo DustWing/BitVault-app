@@ -25,14 +25,14 @@ public class BitVaultListView<T> extends ListView<T> {
 
     private void initialize() {
 //        this.setSelectionModel(new DisabledSelectionModel<>());
-        getStyleClass().add(STYLE_CLASS);
+//        getStyleClass().add(STYLE_CLASS);
 
     }
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLE_SHEET;
-    }
+//    @Override
+//    public String getUserAgentStylesheet() {
+//        return STYLE_SHEET;
+//    }
 
 
     private static class DisabledSelectionModel<T> extends MultipleSelectionModel<T> {

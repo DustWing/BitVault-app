@@ -46,36 +46,36 @@ public record SecureDetailsDM(
     public static SecureDetailsDM createNew(final String id,final SecureDetails secureDetails) {
         return new SecureDetailsDM(
                 id,
-                secureDetails.category().id(),
-                secureDetails.profile().id(),
-                secureDetails.domain(),
-                secureDetails.title(),
-                secureDetails.description(),
-                secureDetails.favourite(),
-                DateTimeUtils.format(secureDetails.createdOn()),
-                DateTimeUtils.format(secureDetails.modifiedOn()),
-                DateTimeUtils.format(secureDetails.expiresOn()),
-                DateTimeUtils.format(secureDetails.importedOn()),
-                secureDetails.requiresMp(),
-                secureDetails.shared()
+                secureDetails.getCategory().id(),
+                secureDetails.getProfile().id(),
+                secureDetails.getDomain(),
+                secureDetails.getTitle(),
+                secureDetails.getDescription(),
+                secureDetails.isFavourite(),
+                DateTimeUtils.format(secureDetails.getCreatedOn()),
+                DateTimeUtils.format(secureDetails.getModifiedOn()),
+                DateTimeUtils.format(secureDetails.getExpiresOn()),
+                DateTimeUtils.format(secureDetails.getImportedOn()),
+                secureDetails.isRequiresMp(),
+                secureDetails.isShared()
         );
     }
 
     public static SecureDetailsDM convert(final SecureDetails secureDetails) {
         return new SecureDetailsDM(
-                secureDetails.id(),
-                secureDetails.category().id(),
-                secureDetails.profile().id(),
-                secureDetails.domain(),
-                secureDetails.title(),
-                secureDetails.description(),
-                secureDetails.favourite(),
-                DateTimeUtils.format(secureDetails.createdOn()),
-                DateTimeUtils.format(secureDetails.modifiedOn()),
-                DateTimeUtils.format(secureDetails.expiresOn()),
-                DateTimeUtils.format(secureDetails.importedOn()),
-                secureDetails.requiresMp(),
-                secureDetails.shared()
+                secureDetails.getId(),
+                secureDetails.getCategory().id(),
+                secureDetails.getProfile().id(),
+                secureDetails.getDomain(),
+                secureDetails.getTitle(),
+                secureDetails.getDescription(),
+                secureDetails.isFavourite(),
+                DateTimeUtils.format(secureDetails.getCreatedOn()),
+                DateTimeUtils.format(secureDetails.getModifiedOn()),
+                DateTimeUtils.format(secureDetails.getExpiresOn()),
+                DateTimeUtils.format(secureDetails.getImportedOn()),
+                secureDetails.isRequiresMp(),
+                secureDetails.isShared()
         );
     }
 

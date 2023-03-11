@@ -1,7 +1,7 @@
 package com.bitvault.ui.viewmodel;
 
 import com.bitvault.enums.Action;
-import com.bitvault.ui.components.ValidatedForm;
+import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
@@ -22,7 +22,7 @@ public class PasswordDetailsVM {
     private final List<Category> categories;
     private final Profile profile;
     private final Consumer<Password> onAction;
-    private final ValidatedForm validatedForm;
+    private final ValidateForm validatedForm;
     private final SimpleStringProperty userNameProperty = new SimpleStringProperty();
     private final SimpleStringProperty passwordProperty = new SimpleStringProperty();
     private final SimpleStringProperty domainProperty = new SimpleStringProperty();
@@ -37,14 +37,14 @@ public class PasswordDetailsVM {
             Profile profile,
             Action action,
             Consumer<Password> onAction,
-            ValidatedForm validatedForm
+            ValidateForm validateForm
     ) {
         this.password = password;
         this.categories = categories;
         this.profile = profile;
         this.action = action;
         this.onAction = onAction;
-        this.validatedForm = validatedForm;
+        this.validatedForm = validateForm;
 
         if (Action.EDIT.equals(action)) {
             editSetUp();
@@ -52,12 +52,12 @@ public class PasswordDetailsVM {
     }
 
     private void editSetUp() {
-        userNameProperty.set(password.username());
-        passwordProperty.set(password.password());
-        domainProperty.set(password.secureDetails().domain());
-        descriptionProperty.set(password.secureDetails().description());
-        expiresOn.set(password.secureDetails().expiresOn().toLocalDate());
-        selectedCat.set(password.secureDetails().category());
+        userNameProperty.set(password.getUsername());
+        passwordProperty.set(password.getPassword());
+        domainProperty.set(password.getSecureDetails().getDomain());
+        descriptionProperty.set(password.getSecureDetails().getDescription());
+        expiresOn.set(password.getSecureDetails().getExpiresOn().toLocalDate());
+        selectedCat.set(password.getSecureDetails().getCategory());
     }
 
 
@@ -70,7 +70,7 @@ public class PasswordDetailsVM {
         final LocalDateTime now = LocalDateTime.now();
 
         final String id = Action.EDIT.equals(action)
-                ? password.id() : UUID.randomUUID().toString();
+                ? password.getId() : UUID.randomUUID().toString();
 
         final LocalDateTime modifiedOn = Action.EDIT.equals(action) ? now : null;
 
@@ -111,7 +111,7 @@ public class PasswordDetailsVM {
         return categories;
     }
 
-    public ValidatedForm getValidatedForm() {
+    public ValidateForm getValidatedForm() {
         return validatedForm;
     }
 

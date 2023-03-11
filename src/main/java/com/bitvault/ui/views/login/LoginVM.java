@@ -1,6 +1,6 @@
-package com.bitvault.ui.viewmodel;
+package com.bitvault.ui.views.login;
 
-import com.bitvault.ui.components.ValidatedForm;
+import com.bitvault.ui.components.validation.ValidateForm;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -10,23 +10,21 @@ public class LoginVM {
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
     private final SimpleStringProperty location = new SimpleStringProperty();
-    private final ValidatedForm validatedForm = new ValidatedForm();
+    private final ValidateForm validateForm = new ValidateForm();
 
     public LoginVM() {
     }
 
-    public boolean login() {
-
-
-        return validatedForm.validate();
+    public boolean validate() {
+        return validateForm.validate();
     }
 
     public boolean isOffline() {
         return offline.get();
     }
 
-    public ValidatedForm getValidatedForm() {
-        return validatedForm;
+    public ValidateForm getValidatedForm() {
+        return validateForm;
     }
 
     public SimpleBooleanProperty offlineProperty() {

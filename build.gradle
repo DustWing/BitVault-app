@@ -66,6 +66,9 @@ dependencies {
     implementation group: 'io.projectreactor.tools', name: 'blockhound', version: '1.0.6.RELEASE'
 
 
+    //ccs
+    implementation 'io.github.mkpaz:atlantafx-base:1.2.0'
+
 //    // QR code
 //    implementation 'com.google.zxing:core:3.5.0'
 //    implementation 'com.google.zxing:javase:3.5.0'

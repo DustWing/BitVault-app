@@ -1,10 +1,11 @@
 package com.bitvault.ui.views;
 
 import com.bitvault.ui.components.BitVaultVBox;
-import com.bitvault.ui.viewmodel.LoginVM;
+import com.bitvault.ui.views.login.LoginVM;
 import com.bitvault.ui.viewmodel.NewAccountVM;
+import com.bitvault.ui.views.login.LoginView;
 
-import static com.bitvault.util.JavaFxUtil.changeScene;
+import static com.bitvault.ui.utils.JavaFxUtil.changeScene;
 
 public class WelcomeView extends BitVaultVBox {
 

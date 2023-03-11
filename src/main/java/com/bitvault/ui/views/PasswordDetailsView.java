@@ -2,6 +2,8 @@ package com.bitvault.ui.views;
 
 import com.bitvault.enums.Action;
 import com.bitvault.ui.components.*;
+import com.bitvault.ui.components.textfield.BvTextField;
+import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
@@ -21,35 +23,39 @@ public class PasswordDetailsView extends BitVaultVBox {
 
 
     public static PasswordDetailsView edit(Password password, List<Category> categories, Profile profile, Consumer<Password> consumer) {
-        final PasswordDetailsVM vm = new PasswordDetailsVM(password, categories, profile, Action.EDIT, consumer, new ValidatedForm());
+        final PasswordDetailsVM vm = new PasswordDetailsVM(password, categories, profile, Action.EDIT, consumer, new ValidateForm());
         return new PasswordDetailsView(vm);
     }
 
     public static PasswordDetailsView create(List<Category> categories, Profile profile, Consumer<Password> consumer) {
-        final PasswordDetailsVM vm = new PasswordDetailsVM(null, categories, profile, Action.NEW, consumer, new ValidatedForm());
+        final PasswordDetailsVM vm = new PasswordDetailsVM(null, categories, profile, Action.NEW, consumer, new ValidateForm());
         return new PasswordDetailsView(vm);
     }
 
     public PasswordDetailsView(PasswordDetailsVM passwordDetailsVM) {
         this.passwordDetailsVM = passwordDetailsVM;
 
-        final WrappedTextField usernameTf = new WrappedTextField()
+        final BvTextField usernameTf = new BvTextField()
                 .withBinding(passwordDetailsVM.userNamePropertyProperty())
-                .required(true)
-                .withPlaceholder(Labels.i18n("username"));
+                .isRequired(true)
+                .withDefaultSize()
+                .withPromptText(Labels.i18n("username"));
 
-        final WrappedTextField passwordTf = new WrappedTextField()
+        final BvTextField passwordTf = new BvTextField()
                 .withBinding(passwordDetailsVM.passwordPropertyProperty())
-                .required(true)
-                .withPlaceholder(Labels.i18n("password"));
+                .isRequired(true)
+                .withDefaultSize()
+                .withPromptText(Labels.i18n("password"));
 
-        final WrappedTextField domainTf = new WrappedTextField()
+        final BvTextField domainTf = new BvTextField()
                 .withBinding(passwordDetailsVM.domainPropertyProperty())
-                .withPlaceholder(Labels.i18n("domain"));
+                .withDefaultSize()
+                .withPromptText(Labels.i18n("domain"));
 
-        final WrappedTextField descriptionTf = new WrappedTextField()
+        final BvTextField descriptionTf = new BvTextField()
                 .withBinding(passwordDetailsVM.descriptionPropertyProperty())
-                .withPlaceholder(Labels.i18n("description"));
+                .withDefaultSize()
+                .withPromptText(Labels.i18n("description"));
 
         final BitVaultFlatButton okButton = new BitVaultFlatButton(Labels.i18n("ok"));
         okButton.setOnAction(event -> saveBtnAction());
@@ -66,8 +72,8 @@ public class PasswordDetailsView extends BitVaultVBox {
         categoriesDd.valueProperty().bindBidirectional(passwordDetailsVM.selectedCatProperty());
 
 
-        passwordDetailsVM.getValidatedForm().add(usernameTf);
-        passwordDetailsVM.getValidatedForm().add(passwordTf);
+//        passwordDetailsVM.getValidatedForm().add(usernameTf);
+//        passwordDetailsVM.getValidatedForm().add(passwordTf);
 
         this.getChildren().addAll(
                 usernameTf,

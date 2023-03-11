@@ -1,12 +1,14 @@
 package com.bitvault.ui.viewmodel;
 
 import com.bitvault.services.factory.LocalServiceFactory;
-import com.bitvault.ui.components.ValidatedForm;
+import com.bitvault.security.UserSession;
+import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.model.User;
 import com.bitvault.ui.views.factory.ViewFactory;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.Alert;
 
 import java.util.UUID;
 
@@ -17,7 +19,7 @@ public class NewAccountVM {
     private final SimpleStringProperty password = new SimpleStringProperty();
     private final SimpleStringProperty fileName = new SimpleStringProperty();
     private final SimpleStringProperty location = new SimpleStringProperty();
-    private final ValidatedForm validatedForm = new ValidatedForm();
+    private final ValidateForm validatedForm = new ValidateForm();
 
     public NewAccountVM() {
     }
@@ -35,20 +37,28 @@ public class NewAccountVM {
                 getPassword()
         );
 
-        final LocalServiceFactory localServiceFactory = new LocalServiceFactory(getLocation() + "/" + getFileName() + ".vault");
+        String location = getLocation() + "/" + getFileName() + ".vault";
 
+        final UserSession userSession = UserSession.newSession(location, getUsername(), getPassword());
+
+
+        final LocalServiceFactory localServiceFactory = new LocalServiceFactory(location, userSession);
 
         Result<User> userResult = localServiceFactory.getUserService()
                 .register(user);
 
         if (userResult.isFail()) {
-        //TODO handle
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error?");
+            alert.setContentText(userResult.getError().getMessage());
+            alert.showAndWait();
+            //
         }
 
         User registeredUser = userResult.get();
 
 
-        return new ViewFactory(localServiceFactory);
+        return new ViewFactory(userSession, localServiceFactory);
     }
 
 
@@ -92,7 +102,7 @@ public class NewAccountVM {
         return location;
     }
 
-    public ValidatedForm getValidatedForm() {
+    public ValidateForm getValidatedForm() {
         return validatedForm;
     }
 }

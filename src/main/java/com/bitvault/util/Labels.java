@@ -10,6 +10,10 @@ public class Labels {
             ResourceBundle.getBundle("i18n/Labels");
 
     public static String i18n(String key) {
+
+        if (!resourceBundle.containsKey(key)) {
+            return key;
+        }
         return resourceBundle.getString(key);
     }
 

@@ -27,7 +27,7 @@ public class PasswordCardView extends BitVaultCard {
         this.passwordCardVM = passwordCardVM;
         this.onEdit = onEdit;
         this.onDelete = onDelete;
-        this.setId(passwordCardVM.getPassword().id());
+        this.setId(passwordCardVM.getPassword().getId());
         init();
     }
 
@@ -36,16 +36,12 @@ public class PasswordCardView extends BitVaultCard {
 
         final Password password = passwordCardVM.getPassword();
 
-        var editIc = new FontIcon(FILE_DOCUMENT_EDIT);
+        FontIcon editIc = new FontIcon(FILE_DOCUMENT_EDIT);
         editIc.setIconSize(20);
-        var editBtn = new BitVaultFlatButton(
-                Labels.i18n("edit"),
-                editIc);
-        editBtn.setOnAction(
-                event -> onEdit.accept(password)
-        );
+        var editBtn = new BitVaultFlatButton(Labels.i18n("edit"), editIc);
+        editBtn.setOnAction(event -> onEdit.accept(password));
 
-        var deleteIc = new FontIcon(DELETE_FOREVER);
+        FontIcon deleteIc = new FontIcon(DELETE_FOREVER);
         deleteIc.setIconSize(20);
         var deleteBtn = new BitVaultFlatButton(
                 Labels.i18n("delete"),
@@ -58,11 +54,11 @@ public class PasswordCardView extends BitVaultCard {
         final GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.addRow(0,
-                new Label(Labels.i18n("username")), new Label(password.username()));
+                new Label(Labels.i18n("username")), new Label(password.getUsername()));
         gridPane.addRow(2,
-                new Label(Labels.i18n("domain")), new Label(password.secureDetails().domain()));
+                new Label(Labels.i18n("domain")), new Label(password.getSecureDetails().getDomain()));
         gridPane.addRow(3,
-                new Label(Labels.i18n("description")), new Label(password.secureDetails().description()));
+                new Label(Labels.i18n("description")), new Label(password.getSecureDetails().getDescription()));
         gridPane.addRow(4, editBtn, deleteBtn);
 
 

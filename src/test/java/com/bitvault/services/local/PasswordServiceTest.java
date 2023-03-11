@@ -7,6 +7,7 @@ import com.bitvault.enums.Action;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.services.interfaces.IProfileService;
+import com.bitvault.security.UserSession;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
@@ -36,8 +37,11 @@ class PasswordServiceTest {
             throw new RuntimeException("Set up location for test file");
         }
 
+        final UserSession userSession = UserSession.newSession(location, "username", "password");
+
+
         final ConnectionProvider connectionProvider = new LocalDB(location);
-        passwordService = new PasswordService(connectionProvider);
+        passwordService = new PasswordService(connectionProvider, userSession);
         categoryService = new CategoryService(connectionProvider);
         profileService = new ProfileService(connectionProvider);
 
@@ -98,7 +102,7 @@ class PasswordServiceTest {
 
         Password password1 = passwordResult.get();
 
-        assertEquals(password1.password(), password.password());
+        assertEquals(password1.getPassword(), password.getPassword());
 
     }
 
@@ -131,14 +135,14 @@ class PasswordServiceTest {
         Password password = passwordList.get(0);
 
         final SecureDetails secureDetails = new SecureDetails(
-                password.secureDetails().id(),
-                password.secureDetails().category(),
-                password.secureDetails().profile(),
+                password.getSecureDetails().getId(),
+                password.getSecureDetails().getCategory(),
+                password.getSecureDetails().getProfile(),
                 "DomainUpdated.com",
                 "titleUpdated",
                 "descriptionUpdated",
                 true,
-                password.secureDetails().createdOn(),
+                password.getSecureDetails().getCreatedOn(),
                 LocalDateTime.now(),
                 LocalDateTime.now().plusYears(10),
                 null,
@@ -147,11 +151,11 @@ class PasswordServiceTest {
         );
 
         final Password passwordUpdated = new Password(
-                password.id(),
-                password.username() + "updated",
-                password.password() + "updated",
+                password.getId(),
+                password.getUsername() + "updated",
+                password.getPassword() + "updated",
                 secureDetails,
-                password.action()
+                password.getAction()
         );
 
         Result<Boolean> updateResult = passwordService.update(passwordUpdated);

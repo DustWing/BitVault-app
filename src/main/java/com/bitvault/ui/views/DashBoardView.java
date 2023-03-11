@@ -36,7 +36,6 @@ public final class DashBoardView extends BitVaultVBox {
 
             final WelcomeView view = new WelcomeView();
             final Scene scene = new Scene(view, 640, 400);
-            scene.getStylesheets().add(ResourceLoader.loadURL(DARK).toExternalForm());
             stage.setScene(scene);
         });
 

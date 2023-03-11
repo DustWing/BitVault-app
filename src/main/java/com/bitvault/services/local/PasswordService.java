@@ -7,6 +7,7 @@ import com.bitvault.database.models.ProfileDM;
 import com.bitvault.database.models.SecureDetailsDM;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.enums.Action;
+import com.bitvault.security.EncryptionProvider;
 import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
@@ -26,8 +27,11 @@ public class PasswordService implements IPasswordService {
 
     private final ConnectionProvider connectionProvider;
 
-    public PasswordService(final ConnectionProvider connectionProvider) {
+    private final EncryptionProvider encryptionProvider;
+
+    public PasswordService(final ConnectionProvider connectionProvider, EncryptionProvider encryptionProvider) {
         this.connectionProvider = connectionProvider;
+        this.encryptionProvider = encryptionProvider;
     }
 
     @Override
@@ -47,10 +51,10 @@ public class PasswordService implements IPasswordService {
             final IProfileDao profileDao = new ProfileDao(connection);
             final List<ProfileDM> profileList = profileDao.get();
 
-            return Result.ok(
-                    convert(passwords, categories, secureDetailsList, profileList)
-            );
-        } catch (SQLException e) {
+            final List<Password> results = convert(passwords, categories, secureDetailsList, profileList);
+
+            return Result.ok(results);
+        } catch (Exception e) {
             return Result.error(e);
         }
     }
@@ -64,49 +68,35 @@ public class PasswordService implements IPasswordService {
 
             try {
 
-                final ProfileDM profileDM = new ProfileDao(connection)
-                        .get(
-                                password.secureDetails().profile().id()
-                        );
-                if (profileDM == null) {
-                    //Applicable only if file was edited by hand or error in code
-                    throw new RuntimeException("No Profile found");
-                }
+                checkProfile(connection, password.getSecureDetails().getProfile().id());
 
-                final CategoryDM categoryDM = new CategoryDao(connection)
-                        .get(
-                                password.secureDetails().category().id()
-                        );
-                if (categoryDM == null) {
-                    //Applicable only if file was edited by hand or error in code
-                    throw new RuntimeException("No category found");
-                }
+                checkCategory(connection, password.getSecureDetails().getCategory().id());
 
                 final String id = UUID.randomUUID().toString();
 
-                final SecureDetailsDM secureDetailsDM = SecureDetailsDM.createNew(id, password.secureDetails());
-                final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
-                secureDetailsDao.create(secureDetailsDM);
+                //save details
+                final SecureDetailsDM secureDetailsDM = saveSecureDetails(connection, id, password.getSecureDetails());
 
-                final PasswordDM passwordDM = PasswordDM.createNew(id, password);
-                final IPasswordDao passwordDao = new PasswordDao(connection);
-                passwordDao.create(passwordDM);
+                //save pass
+                final PasswordDM passwordDM = savePasswordDM(connection, id, password);
 
                 connection.commit();
 
                 final SecureDetails secureDetails = SecureDetailsDM.convert(
                         secureDetailsDM,
-                        password.secureDetails().category(),
-                        password.secureDetails().profile()
+                        password.getSecureDetails().getCategory(),
+                        password.getSecureDetails().getProfile()
                 );
 
-                return Result.ok(
-                        PasswordDM.convert(
-                                passwordDM,
-                                secureDetails,
-                                Action.DEFAULT
-                        )
+                final Password passwordResult = new Password(
+                        passwordDM.id(),
+                        password.getUsername(),
+                        passwordDM.password(),
+                        secureDetails,
+                        Action.DEFAULT
                 );
+
+                return Result.ok(passwordResult);
 
             } catch (SQLException e) {
                 connection.rollback();
@@ -114,9 +104,50 @@ public class PasswordService implements IPasswordService {
             }
 
         } catch (SQLException e) {
+
             return Result.error(e);
         }
 
+    }
+
+    private void checkProfile(Connection connection, String id) {
+
+        final ProfileDM profileDM = new ProfileDao(connection)
+                .get(id);
+
+        if (profileDM == null) {
+            //Applicable only if file was edited by hand or error in code
+            throw new IllegalArgumentException("No Profile found");
+        }
+    }
+
+    private void checkCategory(Connection connection, String id) {
+        final CategoryDM categoryDM = new CategoryDao(connection)
+                .get(id);
+
+        if (categoryDM == null) {
+            //Applicable only if file was edited by hand or error in code
+            throw new IllegalArgumentException("No category found");
+        }
+    }
+
+    private SecureDetailsDM saveSecureDetails(Connection connection, String id, SecureDetails secureDetails) {
+        final SecureDetailsDM secureDetailsDM = SecureDetailsDM.createNew(id, secureDetails);
+        final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
+        secureDetailsDao.create(secureDetailsDM);
+
+        return secureDetailsDM;
+    }
+
+    private PasswordDM savePasswordDM(Connection connection, String id, Password password) {
+
+        final String encryptUsername = encryptionProvider.encrypt(password.getUsername());
+        final String encryptPassword = encryptionProvider.encrypt(password.getPassword());
+
+        final PasswordDM passwordDM = new PasswordDM(id, encryptUsername, encryptPassword, id);
+        final IPasswordDao passwordDao = new PasswordDao(connection);
+        passwordDao.create(passwordDM);
+        return passwordDM;
     }
 
     @Override
@@ -127,7 +158,7 @@ public class PasswordService implements IPasswordService {
 
             try {
 
-                final SecureDetailsDM secureDetailsDM = SecureDetailsDM.convert(password.secureDetails());
+                final SecureDetailsDM secureDetailsDM = SecureDetailsDM.convert(password.getSecureDetails());
 
                 final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
                 secureDetailsDao.update(secureDetailsDM);
@@ -158,10 +189,10 @@ public class PasswordService implements IPasswordService {
 
 
             final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
-            secureDetailsDao.delete(password.secureDetails().id());
+            secureDetailsDao.delete(password.getSecureDetails().getId());
 
             final IPasswordDao passwordDao = new PasswordDao(connection);
-            passwordDao.delete(password.id());
+            passwordDao.delete(password.getId());
 
             return Result.Success;
 
@@ -180,27 +211,15 @@ public class PasswordService implements IPasswordService {
 
         final Map<String, SecureDetailsDM> detailsMap = secureDetailsList
                 .stream()
-                .collect(
-                        Collectors.toMap(
-                                SecureDetailsDM::id, Function.identity()
-                        )
-                );
+                .collect(Collectors.toMap(SecureDetailsDM::id, Function.identity()));
 
         final Map<String, CategoryDM> catMap = categories
                 .stream()
-                .collect(
-                        Collectors.toMap(
-                                CategoryDM::id, Function.identity()
-                        )
-                );
+                .collect(Collectors.toMap(CategoryDM::id, Function.identity()));
 
         final Map<String, ProfileDM> profileMap = profileList
                 .stream()
-                .collect(
-                        Collectors.toMap(
-                                ProfileDM::id, Function.identity()
-                        )
-                );
+                .collect(Collectors.toMap(ProfileDM::id, Function.identity()));
 
 
         return passwords.stream().map(
@@ -214,9 +233,12 @@ public class PasswordService implements IPasswordService {
 
                     final SecureDetails secureDetails = SecureDetailsDM.convert(details, category, profile);
 
-                    return PasswordDM.convert(passwordDM, secureDetails, Action.DEFAULT);
+                    final String decryptUserName = encryptionProvider.decrypt(passwordDM.username());
+
+                    return new Password(passwordDM.id(), decryptUserName, passwordDM.password(), secureDetails,
+                            Action.DEFAULT);
                 }
         ).toList();
-
     }
+
 }

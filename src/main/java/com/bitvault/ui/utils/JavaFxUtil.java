@@ -15,6 +15,9 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class JavaFxUtil {
 
@@ -93,4 +96,25 @@ public class JavaFxUtil {
             node.requestFocus();
         }
     }
+
+    public static void openBrowser(String url) {
+
+        if (!Desktop.isDesktopSupported()) {
+            return;
+        }
+
+        Desktop desktop = Desktop.getDesktop();
+
+        if (!desktop.isSupported(Desktop.Action.BROWSE)) {
+            return;
+        }
+
+        try {
+            desktop.browse(new URI(url));
+        } catch (IOException | URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }

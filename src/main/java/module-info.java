@@ -71,5 +71,6 @@ module com.bitvault {
     opens com.bitvault.ui.components.validation to javafx.fxml;
     exports com.bitvault.ui.views.password;
     opens com.bitvault.ui.views.password to javafx.fxml;
+    exports com.bitvault.ui.hyperlink;
 
 }

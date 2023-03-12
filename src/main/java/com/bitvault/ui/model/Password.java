@@ -1,10 +1,11 @@
 package com.bitvault.ui.model;
 
 import com.bitvault.enums.Action;
+import com.bitvault.ui.hyperlink.IWebLocation;
 
 import java.util.Objects;
 
-public final class Password implements Identifiable {
+public final class Password implements IWebLocation {
     private final String id;
     private final String username;
     private final String password;
@@ -36,7 +37,6 @@ public final class Password implements Identifiable {
         );
     }
 
-    @Override
     public String getId() {
         return this.id;
     }
@@ -49,7 +49,10 @@ public final class Password implements Identifiable {
         return password;
     }
 
-
+    @Override
+    public String getUrl() {
+        return this.secureDetails.getDomain();
+    }
 
     public SecureDetails getSecureDetails() {
         return secureDetails;

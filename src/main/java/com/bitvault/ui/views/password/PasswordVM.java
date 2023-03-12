@@ -45,6 +45,7 @@ public class PasswordVM {
         Result<List<Password>> passwordsRes = passwordService.getPasswords();
         if (passwordsRes.isFail()) {
             //TODO handle exception
+            passwordsRes.getError().printStackTrace();
             return;
         }
 
@@ -55,6 +56,7 @@ public class PasswordVM {
 
         if (categoriesResult.isFail()) {
             //TODO handle exception
+            passwordsRes.getError().printStackTrace();
             return;
         }
         categories.addAll(categoriesResult.get());
@@ -88,10 +90,6 @@ public class PasswordVM {
             }
             return oldPass;
         });
-    }
-
-    public void reload() {
-
     }
 
     public void onTimeEnd() {

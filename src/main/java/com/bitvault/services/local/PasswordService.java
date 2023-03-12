@@ -163,8 +163,9 @@ public class PasswordService implements IPasswordService {
                 final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
                 secureDetailsDao.update(secureDetailsDM);
 
-                final PasswordDM passwordDM = PasswordDM.convert(password);
-
+                final String encryptUsername = encryptionProvider.encrypt(password.getUsername());
+                final PasswordDM passwordDM = new PasswordDM(password.getId(), encryptUsername, password.getPassword(), password.getId());
+                
                 final IPasswordDao passwordDao = new PasswordDao(connection);
                 passwordDao.update(passwordDM);
 

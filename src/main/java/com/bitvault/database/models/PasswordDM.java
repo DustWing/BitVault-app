@@ -22,15 +22,4 @@ public record PasswordDM(
         );
     }
 
-
-    public static PasswordDM convert(final Password password) {
-
-        return new PasswordDM(
-                password.getId(),
-                password.getUsername(),
-                password.getPassword(),
-                password.getSecureDetails().getId()
-        );
-    }
-
 }

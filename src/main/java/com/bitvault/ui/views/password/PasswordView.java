@@ -1,13 +1,16 @@
 package com.bitvault.ui.views.password;
 
-import com.bitvault.ui.components.*;
+import com.bitvault.ui.components.BitVaultFlatButton;
+import com.bitvault.ui.components.BitVaultHBox;
+import com.bitvault.ui.components.BitVaultVBox;
+import com.bitvault.ui.components.TimerBar;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.utils.BvInsets;
+import com.bitvault.ui.hyperlink.HyperLinkCell;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.utils.KeyCombinationConst;
 import com.bitvault.ui.views.PasswordDetailsView;
-import com.bitvault.ui.views.password.PasswordVM;
 import com.bitvault.util.Labels;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -45,12 +48,9 @@ public class PasswordView extends BitVaultVBox {
         this.timerBar = new TimerBar(new ProgressBar(), passwordVM::onTimeEnd);
         timerBar.getProgressBar().setVisible(false);
 
-        final BitVaultFlatButton reloadBtn = new BitVaultFlatButton(Labels.i18n("reload"))
-                .action(event -> passwordVM.reload());
 
         final BitVaultHBox topHBox = new BitVaultHBox(
                 addNewBtn,
-                reloadBtn,
                 searchTf
 
         ).maxH(100);
@@ -86,18 +86,23 @@ public class PasswordView extends BitVaultVBox {
         TableView<Password> tableView = new TableView<>(passwords);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        final TableColumn<Password, String> userNameC = new TableColumn<>("User Name");
+        final TableColumn<Password, String> titleC = new TableColumn<>("Title");
+        titleC.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getSecureDetails().getTitle()));
 
+        final TableColumn<Password, String> userNameC = new TableColumn<>("User Name");
         userNameC.setCellValueFactory(new PropertyValueFactory<>("username"));
 
-        final TableColumn<Password, String> passwordC = new TableColumn<>("Description");
+        final TableColumn<Password, String> descriptionC = new TableColumn<>("Description");
+        descriptionC.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getSecureDetails().getDescription()));
 
-        passwordC.setCellValueFactory(new PropertyValueFactory<>("secureDetails.description"));
-        passwordC.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getSecureDetails().getDescription()));
+        final TableColumn<Password, String> domainC = new TableColumn<>("Domain");
+        domainC.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getUrl()));
+        domainC.setCellFactory(new HyperLinkCell<>());
 
-
+        tableView.getColumns().add(titleC);
         tableView.getColumns().add(userNameC);
-        tableView.getColumns().add(passwordC);
+        tableView.getColumns().add(descriptionC);
+        tableView.getColumns().add(domainC);
 
         setContextMenu(tableView);
 
@@ -185,7 +190,7 @@ public class PasswordView extends BitVaultVBox {
     private void copyPassword(TableView<Password> tableView) {
         final Password selectedItem = tableView.getSelectionModel().getSelectedItem();
         final boolean copied = passwordVM.copyPassword(selectedItem);
-        if(copied)
+        if (copied)
             this.timerBar.start(30);
     }
 }

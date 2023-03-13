@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignD.DELETE_FOREVER;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FILE_DOCUMENT_EDIT;
 
+@Deprecated
 public class PasswordCardView extends BitVaultCard {
 
     private final PasswordCardVM passwordCardVM;

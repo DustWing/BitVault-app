@@ -172,8 +172,11 @@ public class PasswordView extends BitVaultVBox {
 
 
     public void showEditPopUp(Password oldPass) {
+
+        final Password password = passwordVM.prepareForEdit(oldPass);
+
         final PasswordDetailsView view = PasswordDetailsView.edit(
-                oldPass,
+                password,
                 passwordVM.getCategories(),
                 passwordVM.getProfile(),
                 passwordVM::update

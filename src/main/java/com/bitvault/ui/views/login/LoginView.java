@@ -1,28 +1,31 @@
 package com.bitvault.ui.views.login;
 
+import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.IServiceFactory;
 import com.bitvault.services.factory.LocalServiceFactory;
-import com.bitvault.security.UserSession;
 import com.bitvault.ui.components.BitVaultFlatButton;
-import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.components.BitVaultVBox;
+import com.bitvault.ui.components.textfield.BvPasswordField;
+import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.model.User;
 import com.bitvault.ui.utils.BvInsets;
+import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.views.DashBoardView;
 import com.bitvault.ui.views.factory.ViewFactory;
-import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
 
-import static org.kordamp.ikonli.materialdesign2.MaterialDesignE.*;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignE.EYE;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignE.EYE_OFF;
 
 
 public class LoginView extends BitVaultVBox {
@@ -45,29 +48,7 @@ public class LoginView extends BitVaultVBox {
                 .withText("a")
                 .isRequired(true);
 
-
-        FontIcon eyeOn = new FontIcon(EYE);
-        Button eyeOnBtn = new Button("", eyeOn);
-
-        FontIcon eyeOff = new FontIcon(EYE_OFF);
-        Button eyeOffBtn = new Button("", eyeOff);
-
-        BvTextField password = new BvTextField()
-                .withBinding(loginVM.passwordProperty())
-                .withText("a")
-                .withDefaultSize()
-                .withPromptText(Labels.i18n("password"))
-                .withRight(eyeOnBtn);
-
-        eyeOnBtn.setOnAction(event -> {
-            password.setRight(eyeOffBtn);
-            JavaFxUtil.focus(password);
-        });
-        eyeOffBtn.setOnAction(event -> {
-            password.setRight(eyeOnBtn);
-            JavaFxUtil.focus(password);
-        });
-
+        StackPane passwordSp = createPasswordField();
 
         BvTextField location = new BvTextField()
                 .withBinding(loginVM.locationProperty())
@@ -95,7 +76,7 @@ public class LoginView extends BitVaultVBox {
 
         this.getChildren().addAll(
                 username,
-                password,
+                passwordSp,
                 location,
                 chooseFileBtn,
                 loginButton,
@@ -107,6 +88,52 @@ public class LoginView extends BitVaultVBox {
         this.setPadding(BvInsets.all10);
 
 //        super.vGrowAlways();
+    }
+
+    private StackPane createPasswordField(){
+
+        FontIcon eyeOn = new FontIcon(EYE);
+        Button eyeOnBtn = new Button("", eyeOn);
+        eyeOnBtn.setFocusTraversable(false);
+
+        FontIcon eyeOff = new FontIcon(EYE_OFF);
+        Button eyeOffBtn = new Button("", eyeOff);
+        eyeOffBtn.setFocusTraversable(false);
+
+
+        final BvTextField passwordTf = new BvTextField()
+                .withBinding(loginVM.passwordProperty())
+                .withText("a")
+                .withDefaultSize()
+                .withPromptText(Labels.i18n("password"))
+                .withRight(eyeOnBtn);
+        passwordTf.setVisible(false);
+
+        final BvPasswordField passwordPf = new BvPasswordField()
+                .withBinding(loginVM.passwordProperty())
+                .withText("a")
+                .withDefaultSize()
+                .withPromptText(Labels.i18n("password"))
+                .withRight(eyeOffBtn);
+
+        passwordPf.setVisible(true);
+
+        eyeOnBtn.setOnAction(event -> {
+            passwordTf.setVisible(false);
+            passwordPf.setVisible(true);
+            JavaFxUtil.focus(passwordPf);
+        });
+
+        eyeOffBtn.setOnAction(event -> {
+            passwordTf.setVisible(true);
+            passwordPf.setVisible(false);
+
+            JavaFxUtil.focus(passwordTf);
+        });
+
+        StackPane passwordSp = new StackPane(passwordTf, passwordPf);
+
+        return passwordSp;
     }
 
     private void chooseFileAction() {

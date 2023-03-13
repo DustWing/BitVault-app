@@ -1,5 +1,6 @@
 package com.bitvault.ui.views.password;
 
+import com.bitvault.enums.Action;
 import com.bitvault.security.UserSession;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.services.interfaces.IPasswordService;
@@ -20,9 +21,7 @@ public class PasswordVM {
     private final ObservableList<Password> passwords;
     private final IPasswordService passwordService;
     private final ICategoryService categoryService;
-
     private final Profile profile;
-
     private final List<Category> categories;
 
     public PasswordVM(
@@ -100,6 +99,19 @@ public class PasswordVM {
         final String decrypt = userSession.decrypt(selectedItem.getPassword());
         JavaFxUtil.copyToClipBoard(decrypt);
         return true;
+    }
+
+    public Password prepareForEdit(Password oldPass){
+        final String decrypt = userSession.decrypt(oldPass.getPassword());
+
+        return new Password(
+                oldPass.getId(),
+                oldPass.getUsername(),
+                decrypt,
+                oldPass.getSecureDetails(),
+                Action.EDIT
+        );
+
     }
 
     public ObservableList<Password> getPasswords() {

@@ -2,6 +2,7 @@ package com.bitvault.ui.viewmodel;
 
 import com.bitvault.ui.model.Password;
 
+@Deprecated
 public class PasswordCardVM {
 
     private final Password password;

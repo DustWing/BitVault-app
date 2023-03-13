@@ -1,4 +1,4 @@
-package com.bitvault.ui.skins;
+package com.bitvault.ui.components.textfield;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.css.PseudoClass;

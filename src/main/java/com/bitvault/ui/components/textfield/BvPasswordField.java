@@ -8,13 +8,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.Node;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.Skin;
-import javafx.scene.control.TextField;
 import javafx.util.Duration;
 
 import java.util.function.BiFunction;
 
-public class BvTextField extends TextField {
+public class BvPasswordField extends PasswordField {
 
 //    private final static String STYLE_SHEET = ResourceLoader.load("/com.bitvault/css/bitVaultTextField.css");
 //    @Override
@@ -27,27 +27,27 @@ public class BvTextField extends TextField {
     /**
      * Instantiates a default CustomTextField.
      */
-    public BvTextField() {
+    public BvPasswordField() {
         getStyleClass().add("custom-text-field");
     }
 
 
-    public BvTextField withText(String text) {
+    public BvPasswordField withText(String text) {
         this.setText(text);
         return this;
     }
 
-    public BvTextField withPromptText(final String promptText) {
+    public BvPasswordField withPromptText(final String promptText) {
         this.setPromptText(promptText);
         return this;
     }
 
-    public BvTextField withRight(final Node node) {
+    public BvPasswordField withRight(final Node node) {
         this.setRight(node);
         return this;
     }
 
-    public BvTextField withDefaultSize() {
+    public BvPasswordField withDefaultSize() {
         this.setMaxWidth(BvWidths.LARGE);
         this.setPrefWidth(BvWidths.LARGE);
         this.setPrefHeight(BvHeights.MEDIUM);
@@ -55,17 +55,17 @@ public class BvTextField extends TextField {
         return this;
     }
 
-    public BvTextField withBinding(final SimpleStringProperty property) {
+    public BvPasswordField withBinding(final SimpleStringProperty property) {
         this.textProperty().bindBidirectional(property);
         return this;
     }
 
-    public BvTextField isRequired(boolean required) {
+    public BvPasswordField isRequired(boolean required) {
         this.required = required;
         return this;
     }
 
-    public <E> BvTextField filter(FilteredList<E> filteredList, BiFunction<E, String, Boolean> onFilter) {
+    public <E> BvPasswordField filter(FilteredList<E> filteredList, BiFunction<E, String, Boolean> onFilter) {
         PauseTransition delay = new PauseTransition(Duration.millis(200));
         TextFieldFilterListener<E> listener = new TextFieldFilterListener<>(delay, filteredList, onFilter);
         this.textProperty().addListener(listener);
@@ -135,12 +135,12 @@ public class BvTextField extends TextField {
         return new BvTextFieldSkin(this) {
             @Override
             public ObjectProperty<Node> leftProperty() {
-                return BvTextField.this.leftProperty();
+                return BvPasswordField.this.leftProperty();
             }
 
             @Override
             public ObjectProperty<Node> rightProperty() {
-                return BvTextField.this.rightProperty();
+                return BvPasswordField.this.rightProperty();
             }
         };
     }

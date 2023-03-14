@@ -2,8 +2,8 @@ package com.bitvault.ui.views.factory;
 
 import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.IServiceFactory;
-import com.bitvault.ui.viewmodel.DashBoardVM;
-import com.bitvault.ui.views.DashBoardView;
+import com.bitvault.ui.views.dashboard.DashBoardVM;
+import com.bitvault.ui.views.dashboard.DashBoardView;
 
 public class ViewFactory {
 

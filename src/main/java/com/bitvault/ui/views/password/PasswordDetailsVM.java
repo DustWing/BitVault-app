@@ -1,4 +1,4 @@
-package com.bitvault.ui.viewmodel;
+package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
 import com.bitvault.ui.components.validation.ValidateForm;
@@ -45,6 +45,17 @@ public class PasswordDetailsVM {
         this.action = action;
         this.onAction = onAction;
         this.validatedForm = validateForm;
+
+
+        Category newCat = new Category("EMPTY", "New Category", "#FFFFFF", LocalDateTime.now(), LocalDateTime.now(), "Password");
+        this.categories.add(newCat);
+
+        selectedCat.addListener((observable, oldValue, newValue) -> {
+
+                System.out.println(newValue);
+
+        });
+
 
         if (Action.EDIT.equals(action)) {
             editSetUp();
@@ -108,6 +119,7 @@ public class PasswordDetailsVM {
     }
 
     public List<Category> getCategories() {
+
         return categories;
     }
 

@@ -59,6 +59,7 @@ module com.bitvault {
 
     exports com.bitvault.ui.utils;
     exports com.bitvault.ui.components;
+    exports com.bitvault.ui.listcell;
     exports com.bitvault.ui.model;
     exports com.bitvault.ui.toggle;
 
@@ -72,5 +73,9 @@ module com.bitvault {
     exports com.bitvault.ui.views.password;
     opens com.bitvault.ui.views.password to javafx.fxml;
     exports com.bitvault.ui.hyperlink;
+    exports com.bitvault.ui.views.dashboard;
+    opens com.bitvault.ui.views.dashboard to javafx.fxml;
+    exports com.bitvault.ui.views.newaccount;
+    opens com.bitvault.ui.views.newaccount to javafx.fxml;
 
 }

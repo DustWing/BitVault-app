@@ -1,4 +1,4 @@
-package com.bitvault.ui.views;
+package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
 import com.bitvault.ui.components.*;
@@ -8,9 +8,9 @@ import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.utils.BvInsets;
-import com.bitvault.ui.viewmodel.PasswordDetailsVM;
 import com.bitvault.util.Labels;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.DatePicker;
 
@@ -64,11 +64,8 @@ public class PasswordDetailsView extends BitVaultVBox {
         final DatePicker expiresOn = new DatePicker();
         expiresOn.valueProperty().bindBidirectional(passwordDetailsVM.expiresOnProperty());
 
-        final TextColorComboBox<Category> categoriesDd = new TextColorComboBox<>(
-                FXCollections.observableArrayList(
-                        passwordDetailsVM.getCategories()
-                )
-        );
+        ObservableList<Category> categories = FXCollections.observableArrayList(passwordDetailsVM.getCategories());
+        final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withRectangle(categories);
         categoriesDd.valueProperty().bindBidirectional(passwordDetailsVM.selectedCatProperty());
 
 

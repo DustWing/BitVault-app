@@ -1,4 +1,4 @@
-package com.bitvault.ui.viewmodel;
+package com.bitvault.ui.views.dashboard;
 
 import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.IServiceFactory;

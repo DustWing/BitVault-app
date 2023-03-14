@@ -1,11 +1,11 @@
-package com.bitvault.ui.views;
+package com.bitvault.ui.views.newaccount;
 
 import com.bitvault.ui.components.BitVaultFlatButton;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.JavaFxUtil;
-import com.bitvault.ui.viewmodel.NewAccountVM;
+import com.bitvault.ui.views.dashboard.DashBoardView;
 import com.bitvault.ui.views.factory.ViewFactory;
 import com.bitvault.util.Labels;
 import javafx.geometry.Pos;

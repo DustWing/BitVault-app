@@ -5,24 +5,28 @@ import com.bitvault.ui.listcell.TextColorButtonCell;
 import com.bitvault.ui.listcell.TextColorListCell;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+
+import java.util.function.Supplier;
 
 public class TextColorComboBox<T extends ITextColorCell> extends ComboBox<T> {
 
-    public TextColorComboBox() {
-        super();
-        init();
+    public static <T extends ITextColorCell> TextColorComboBox<T> withRectangle(ObservableList<T> items) {
+
+        Supplier<Shape> rectangle = () -> new Rectangle(20, 20);
+
+        return new TextColorComboBox<>(items, rectangle);
     }
 
-    public TextColorComboBox(ObservableList<T> items) {
+    public TextColorComboBox(ObservableList<T> items, Supplier<Shape> shape) {
         super(items);
-        init();
-    }
-
-    private void init() {
         this.setCellFactory(
-                param -> new TextColorListCell<>()
+                param -> new TextColorListCell<>(shape.get())
         );
 
         this.setButtonCell(new TextColorButtonCell<>());
     }
+
+
 }

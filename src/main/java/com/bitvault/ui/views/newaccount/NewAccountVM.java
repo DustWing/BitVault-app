@@ -1,4 +1,4 @@
-package com.bitvault.ui.viewmodel;
+package com.bitvault.ui.views.newaccount;
 
 import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.security.UserSession;

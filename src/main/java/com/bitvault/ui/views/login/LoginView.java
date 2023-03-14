@@ -10,7 +10,7 @@ import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.model.User;
 import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.JavaFxUtil;
-import com.bitvault.ui.views.DashBoardView;
+import com.bitvault.ui.views.dashboard.DashBoardView;
 import com.bitvault.ui.views.factory.ViewFactory;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
@@ -83,6 +83,7 @@ public class LoginView extends BitVaultVBox {
                 newAccountBtn
         );
 
+        this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
         this.setFillWidth(true);
         this.setPadding(BvInsets.all10);

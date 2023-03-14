@@ -10,7 +10,6 @@ import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.hyperlink.HyperLinkCell;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.utils.KeyCombinationConst;
-import com.bitvault.ui.views.PasswordDetailsView;
 import com.bitvault.util.Labels;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -18,12 +17,19 @@ import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 
 public class PasswordView extends BitVaultVBox {
 
     private final PasswordVM passwordVM;
+
+    private final BitVaultFlatButton addNewBtn;
+    private final BvTextField searchTf;
+
+    private final TableView<Password> tableView;
 
     private final TimerBar timerBar;
 
@@ -33,35 +39,26 @@ public class PasswordView extends BitVaultVBox {
         ObservableList<Password> passwords = passwordVM.getPasswords();
 
         final FilteredList<Password> filteredList = new FilteredList<>(passwords, s -> true);
-
-        TableView<Password> tableView = createTable(filteredList);
-
-
-        BvTextField searchTf = createSearchTf(filteredList);
+        this.tableView = createTable(filteredList);
+        this.searchTf = createSearchTf(filteredList);
         VBox.setMargin(searchTf, BvInsets.right15);
 
 
-        final BitVaultFlatButton addNewBtn = new BitVaultFlatButton(Labels.i18n("add.new"))
+        this.addNewBtn = new BitVaultFlatButton(Labels.i18n("add.new"))
                 .action(event -> showNewPassPopUp());
 
 
         this.timerBar = new TimerBar(new ProgressBar(), passwordVM::onTimeEnd);
         timerBar.getProgressBar().setVisible(false);
-
-
-        final BitVaultHBox topHBox = new BitVaultHBox(
-                addNewBtn,
-                searchTf
-
-        ).maxH(100);
-
         final BitVaultHBox bottomHBox = new BitVaultHBox(
                 timerBar.getProgressBar()
         ).maxH(20);
 
 
+        HBox hBox = topBar();
+
         this.getChildren().addAll(
-                topHBox,
+                hBox,
                 tableView,
                 bottomHBox
         );
@@ -80,6 +77,14 @@ public class PasswordView extends BitVaultVBox {
 
     }
 
+    private HBox topBar() {
+        BitVaultHBox rightBox = new BitVaultHBox(addNewBtn);
+        rightBox.setAlignment(Pos.CENTER_LEFT);
+        BitVaultHBox leftBox = new BitVaultHBox(searchTf);
+        leftBox.setAlignment(Pos.CENTER_RIGHT);
+        final BitVaultHBox topHBox = new BitVaultHBox(rightBox, leftBox).maxH(100);
+        return topHBox;
+    }
 
     private TableView<Password> createTable(ObservableList<Password> passwords) {
 
@@ -150,6 +155,7 @@ public class PasswordView extends BitVaultVBox {
 
         return new BvTextField()
                 .withPromptText(Labels.i18n("search"))
+                .withDefaultSize()
                 .filter(filteredList, (password, s) -> {
                             var toLower = s.toLowerCase();
                             return password.getUsername().toLowerCase().contains(toLower)

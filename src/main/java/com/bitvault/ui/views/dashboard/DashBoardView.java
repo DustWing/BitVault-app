@@ -1,16 +1,16 @@
-package com.bitvault.ui.views;
+package com.bitvault.ui.views.dashboard;
 
-import com.bitvault.ui.components.BitVaultFlatButton;
 import com.bitvault.ui.components.BitVaultVBox;
-import com.bitvault.ui.viewmodel.DashBoardVM;
+import com.bitvault.ui.views.WelcomeView;
 import com.bitvault.util.Labels;
-import com.bitvault.util.ResourceLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import org.kordamp.ikonli.javafx.FontIcon;
 
-import static com.bitvault.util.Theme.DARK;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignL.LOGOUT;
 
 public final class DashBoardView extends BitVaultVBox {
 
@@ -26,7 +26,10 @@ public final class DashBoardView extends BitVaultVBox {
 
     private void init() {
 
-        final BitVaultFlatButton logout = new BitVaultFlatButton(Labels.i18n("logout"));
+        FontIcon logOutIcon = new FontIcon(LOGOUT);
+
+        final Button logout = new Button("", logOutIcon);
+        logout.setAccessibleText(Labels.i18n("logout"));
         logout.setOnAction(event -> {
 
             final Stage stage = (Stage) this.getScene().getWindow();

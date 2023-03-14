@@ -18,7 +18,7 @@ import java.util.List;
 public class PasswordVM {
 
     private final UserSession userSession;
-    private final ObservableList<Password> passwords;
+    private final ObservableList<Password> passwords  = FXCollections.observableArrayList();
     private final IPasswordService passwordService;
     private final ICategoryService categoryService;
     private final Profile profile;
@@ -34,7 +34,6 @@ public class PasswordVM {
         this.passwordService = passwordService;
         this.categoryService = categoryService;
         this.profile = profile;
-        this.passwords = FXCollections.observableArrayList();
         this.categories = new ArrayList<>();
         this.init();
     }

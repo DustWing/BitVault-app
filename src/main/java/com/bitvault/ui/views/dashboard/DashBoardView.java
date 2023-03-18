@@ -1,6 +1,7 @@
 package com.bitvault.ui.views.dashboard;
 
 import com.bitvault.ui.components.BitVaultVBox;
+import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.views.WelcomeView;
 import com.bitvault.util.Labels;
 import javafx.scene.Scene;
@@ -56,7 +57,8 @@ public final class DashBoardView extends BitVaultVBox {
                 tabPane
         );
 
-        super.vGrowAlways();
+        JavaFxUtil.vGrowAlways(this);
+
     }
 
 

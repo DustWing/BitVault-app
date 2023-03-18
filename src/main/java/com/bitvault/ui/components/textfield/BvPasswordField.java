@@ -2,17 +2,12 @@ package com.bitvault.ui.components.textfield;
 
 import com.bitvault.ui.utils.BvHeights;
 import com.bitvault.ui.utils.BvWidths;
-import javafx.animation.PauseTransition;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.transformation.FilteredList;
 import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Skin;
-import javafx.util.Duration;
-
-import java.util.function.BiFunction;
 
 public class BvPasswordField extends PasswordField {
 
@@ -65,12 +60,6 @@ public class BvPasswordField extends PasswordField {
         return this;
     }
 
-    public <E> BvPasswordField filter(FilteredList<E> filteredList, BiFunction<E, String, Boolean> onFilter) {
-        PauseTransition delay = new PauseTransition(Duration.millis(200));
-        TextFieldFilterListener<E> listener = new TextFieldFilterListener<>(delay, filteredList, onFilter);
-        this.textProperty().addListener(listener);
-        return this;
-    }
 
     ///////////////////////////////////////////////////////////////////////////
     // Properties                                                            //

@@ -49,8 +49,10 @@ public class BvTextField extends TextField {
 
     public BvTextField withDefaultSize() {
         this.setMaxWidth(BvWidths.LARGE);
+        this.setMinWidth(BvWidths.LARGE);
         this.setPrefWidth(BvWidths.LARGE);
         this.setPrefHeight(BvHeights.MEDIUM);
+        this.minHeight(BvHeights.MEDIUM);
 
         return this;
     }
@@ -60,7 +62,7 @@ public class BvTextField extends TextField {
         return this;
     }
 
-    public BvTextField isRequired(boolean required) {
+    public BvTextField setRequired(boolean required) {
         this.required = required;
         return this;
     }

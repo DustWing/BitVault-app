@@ -6,8 +6,10 @@ import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.model.SecureDetails;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.paint.Color;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,6 +33,10 @@ public class PasswordDetailsVM {
     private final SimpleObjectProperty<LocalDate> expiresOn = new SimpleObjectProperty<>();
 
 
+    private final SimpleStringProperty newCategoryName = new SimpleStringProperty();
+    private final SimpleBooleanProperty showNewCat = new SimpleBooleanProperty();
+    private Color selectedColor;
+
     public PasswordDetailsVM(
             Password password,
             List<Category> categories,
@@ -45,16 +51,6 @@ public class PasswordDetailsVM {
         this.action = action;
         this.onAction = onAction;
         this.validatedForm = validateForm;
-
-
-        Category newCat = new Category("EMPTY", "New Category", "#FFFFFF", LocalDateTime.now(), LocalDateTime.now(), "Password");
-        this.categories.add(newCat);
-
-        selectedCat.addListener((observable, oldValue, newValue) -> {
-
-                System.out.println(newValue);
-
-        });
 
 
         if (Action.EDIT.equals(action)) {
@@ -173,5 +169,25 @@ public class PasswordDetailsVM {
 
     public SimpleObjectProperty<LocalDate> expiresOnProperty() {
         return expiresOn;
+    }
+
+    public String getNewCategoryName() {
+        return newCategoryName.get();
+    }
+
+    public SimpleStringProperty newCategoryNameProperty() {
+        return newCategoryName;
+    }
+
+    public boolean isShowNewCat() {
+        return showNewCat.get();
+    }
+
+    public SimpleBooleanProperty showNewCatProperty() {
+        return showNewCat;
+    }
+
+    public void setSelectedColor(Color selectedColor) {
+        this.selectedColor = selectedColor;
     }
 }

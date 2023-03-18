@@ -33,12 +33,6 @@ public class BitVaultVBox extends VBox {
 //        this.getStyleClass().add(STYLE_CLASS);
     }
 
-    protected void vGrowAlways() {
-        this.getChildren().forEach(
-                node -> VBox.setVgrow(node, Priority.ALWAYS)
-        );
-
-    }
 
     @Override
     public String getUserAgentStylesheet() {

@@ -5,9 +5,9 @@ import com.bitvault.ui.components.BitVaultHBox;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.TimerBar;
 import com.bitvault.ui.components.textfield.BvTextField;
+import com.bitvault.ui.hyperlink.HyperLinkCell;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.utils.BvInsets;
-import com.bitvault.ui.hyperlink.HyperLinkCell;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.utils.KeyCombinationConst;
 import com.bitvault.util.Labels;
@@ -18,8 +18,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
 
 
 public class PasswordView extends BitVaultVBox {
@@ -67,7 +68,8 @@ public class PasswordView extends BitVaultVBox {
         this.setAlignment(Pos.TOP_CENTER);
         this.setFillWidth(true);
         this.setPadding(BvInsets.all10);
-        super.vGrowAlways();
+        JavaFxUtil.vGrowAlways(this);
+
 
         this.setOnKeyPressed(event -> {
             if (KeyCombinationConst.ctrlC.match(event)) {
@@ -168,7 +170,7 @@ public class PasswordView extends BitVaultVBox {
     private void showNewPassPopUp() {
 
         final PasswordDetailsView view = PasswordDetailsView.create(
-                passwordVM.getCategories(),
+                new ArrayList<>(passwordVM.getCategories()),
                 passwordVM.getProfile(),
                 passwordVM::create
         );

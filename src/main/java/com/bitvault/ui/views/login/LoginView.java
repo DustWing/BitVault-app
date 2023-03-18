@@ -5,7 +5,7 @@ import com.bitvault.services.factory.IServiceFactory;
 import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.ui.components.BitVaultFlatButton;
 import com.bitvault.ui.components.BitVaultVBox;
-import com.bitvault.ui.components.textfield.BvPasswordField;
+import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.model.User;
 import com.bitvault.ui.utils.BvInsets;
@@ -17,15 +17,10 @@ import com.bitvault.util.Result;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
-
-import static org.kordamp.ikonli.materialdesign2.MaterialDesignE.EYE;
-import static org.kordamp.ikonli.materialdesign2.MaterialDesignE.EYE_OFF;
 
 
 public class LoginView extends BitVaultVBox {
@@ -41,19 +36,20 @@ public class LoginView extends BitVaultVBox {
         this.loginVM = loginVM;
 
 
-        BvTextField username = new BvTextField()
+        final BvTextField username = new BvTextField()
                 .withBinding(loginVM.usernameProperty())
                 .withPromptText(Labels.i18n("username"))
                 .withDefaultSize()
                 .withText("a")
-                .isRequired(true);
+                .setRequired(true);
 
-        StackPane passwordSp = createPasswordField();
+        loginVM.passwordProperty().set("a");//TODO for testing
+        final StackPane passwordSp = new BvPasswordInput(loginVM.passwordProperty());
 
         BvTextField location = new BvTextField()
                 .withBinding(loginVM.locationProperty())
                 .withPromptText(Labels.i18n("file.name"))
-                .isRequired(true)
+                .setRequired(true)
                 .withDefaultSize()
                 .withText("F:/Documents/TestFiles/test2.vault");
 
@@ -91,51 +87,6 @@ public class LoginView extends BitVaultVBox {
 //        super.vGrowAlways();
     }
 
-    private StackPane createPasswordField(){
-
-        FontIcon eyeOn = new FontIcon(EYE);
-        Button eyeOnBtn = new Button("", eyeOn);
-        eyeOnBtn.setFocusTraversable(false);
-
-        FontIcon eyeOff = new FontIcon(EYE_OFF);
-        Button eyeOffBtn = new Button("", eyeOff);
-        eyeOffBtn.setFocusTraversable(false);
-
-
-        final BvTextField passwordTf = new BvTextField()
-                .withBinding(loginVM.passwordProperty())
-                .withText("a")
-                .withDefaultSize()
-                .withPromptText(Labels.i18n("password"))
-                .withRight(eyeOnBtn);
-        passwordTf.setVisible(false);
-
-        final BvPasswordField passwordPf = new BvPasswordField()
-                .withBinding(loginVM.passwordProperty())
-                .withText("a")
-                .withDefaultSize()
-                .withPromptText(Labels.i18n("password"))
-                .withRight(eyeOffBtn);
-
-        passwordPf.setVisible(true);
-
-        eyeOnBtn.setOnAction(event -> {
-            passwordTf.setVisible(false);
-            passwordPf.setVisible(true);
-            JavaFxUtil.focus(passwordPf);
-        });
-
-        eyeOffBtn.setOnAction(event -> {
-            passwordTf.setVisible(true);
-            passwordPf.setVisible(false);
-
-            JavaFxUtil.focus(passwordTf);
-        });
-
-        StackPane passwordSp = new StackPane(passwordTf, passwordPf);
-
-        return passwordSp;
-    }
 
     private void chooseFileAction() {
 

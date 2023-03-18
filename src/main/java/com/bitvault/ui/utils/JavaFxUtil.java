@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.*;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -115,6 +117,12 @@ public class JavaFxUtil {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public static void vGrowAlways(Pane pane){
+        pane.getChildren().forEach(
+                node -> VBox.setVgrow(node, Priority.ALWAYS)
+        );
     }
 
 }

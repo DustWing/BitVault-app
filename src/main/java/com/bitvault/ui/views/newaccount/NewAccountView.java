@@ -31,17 +31,17 @@ public class NewAccountView extends BitVaultVBox {
         BvTextField username = new BvTextField()
                 .withBinding(newAccountVM.usernameProperty())
                 .withPromptText(Labels.i18n("username"))
-                .isRequired(true);
+                .setRequired(true);
 
         BvTextField password = new BvTextField()
                 .withBinding(newAccountVM.passwordProperty())
                 .withPromptText(Labels.i18n("password"))
-                .isRequired(true);
+                .setRequired(true);
 
         BvTextField fileName = new BvTextField()
                 .withBinding(newAccountVM.fileNameProperty())
                 .withPromptText(Labels.i18n("file.name"))
-                .isRequired(true);
+                .setRequired(true);
 
         BitVaultFlatButton chooseFileBtn = new BitVaultFlatButton(Labels.i18n("choose.file"));
         chooseFileBtn.setOnAction(event -> chooseFileAction());

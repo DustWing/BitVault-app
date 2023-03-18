@@ -13,6 +13,7 @@ import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.LocalServerInfo;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.SecureDetails;
+import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.ButtonBar;
@@ -89,7 +90,8 @@ public class ServerView extends BitVaultVBox {
         );
 
         setAlignment(Pos.CENTER);
-        vGrowAlways();
+        JavaFxUtil.vGrowAlways(this);
+
 
     }
 

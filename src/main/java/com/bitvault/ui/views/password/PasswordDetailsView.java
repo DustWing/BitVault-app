@@ -1,18 +1,33 @@
 package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
-import com.bitvault.ui.components.*;
+import com.bitvault.ui.components.BitVaultFlatButton;
+import com.bitvault.ui.components.BitVaultVBox;
+import com.bitvault.ui.components.BvScaffold;
+import com.bitvault.ui.components.TextColorComboBox;
+import com.bitvault.ui.components.category.BvCategoryDd;
+import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.utils.BvInsets;
+import com.bitvault.ui.utils.BvSpacing;
+import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,13 +37,13 @@ public class PasswordDetailsView extends BitVaultVBox {
     private final PasswordDetailsVM passwordDetailsVM;
 
 
-    public static PasswordDetailsView edit(Password password, List<Category> categories, Profile profile, Consumer<Password> consumer) {
-        final PasswordDetailsVM vm = new PasswordDetailsVM(password, categories, profile, Action.EDIT, consumer, new ValidateForm());
+    public static PasswordDetailsView edit(Password password, List<Category> categories, Profile profile, Consumer<Password> onAction) {
+        final PasswordDetailsVM vm = new PasswordDetailsVM(password, categories, profile, Action.EDIT, onAction, new ValidateForm());
         return new PasswordDetailsView(vm);
     }
 
-    public static PasswordDetailsView create(List<Category> categories, Profile profile, Consumer<Password> consumer) {
-        final PasswordDetailsVM vm = new PasswordDetailsVM(null, categories, profile, Action.NEW, consumer, new ValidateForm());
+    public static PasswordDetailsView create(List<Category> categories, Profile profile, Consumer<Password> onAction) {
+        final PasswordDetailsVM vm = new PasswordDetailsVM(null, categories, profile, Action.NEW, onAction, new ValidateForm());
         return new PasswordDetailsView(vm);
     }
 
@@ -37,15 +52,13 @@ public class PasswordDetailsView extends BitVaultVBox {
 
         final BvTextField usernameTf = new BvTextField()
                 .withBinding(passwordDetailsVM.userNamePropertyProperty())
-                .isRequired(true)
+                .setRequired(true)
                 .withDefaultSize()
                 .withPromptText(Labels.i18n("username"));
 
-        final BvTextField passwordTf = new BvTextField()
-                .withBinding(passwordDetailsVM.passwordPropertyProperty())
-                .isRequired(true)
-                .withDefaultSize()
-                .withPromptText(Labels.i18n("password"));
+
+        final BvPasswordInput bvPasswordInput = new BvPasswordInput(passwordDetailsVM.passwordPropertyProperty());
+
 
         final BvTextField domainTf = new BvTextField()
                 .withBinding(passwordDetailsVM.domainPropertyProperty())
@@ -64,28 +77,31 @@ public class PasswordDetailsView extends BitVaultVBox {
         final DatePicker expiresOn = new DatePicker();
         expiresOn.valueProperty().bindBidirectional(passwordDetailsVM.expiresOnProperty());
 
-        ObservableList<Category> categories = FXCollections.observableArrayList(passwordDetailsVM.getCategories());
-        final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withRectangle(categories);
-        categoriesDd.valueProperty().bindBidirectional(passwordDetailsVM.selectedCatProperty());
+
+        final BvCategoryDd bvCategoryDd = new BvCategoryDd(
+                passwordDetailsVM.getCategories(),
+                passwordDetailsVM.newCategoryNameProperty(),
+                passwordDetailsVM::setSelectedColor);
 
 
 //        passwordDetailsVM.getValidatedForm().add(usernameTf);
 //        passwordDetailsVM.getValidatedForm().add(passwordTf);
 
-        this.getChildren().addAll(
-                usernameTf,
-                passwordTf,
+        List<Node> list = List.of(usernameTf,
+                bvPasswordInput,
                 domainTf,
                 descriptionTf,
                 expiresOn,
-                categoriesDd,
-                okButton
+                bvCategoryDd
         );
+        BvScaffold bvScaffold = new BvScaffold(list, okButton);
+
+        this.getChildren().add(bvScaffold);
 
         this.setAlignment(Pos.TOP_CENTER);
         this.setFillWidth(true);
         this.setPadding(BvInsets.all10);
-//        super.vGrowAlways();
+        JavaFxUtil.vGrowAlways(this);
     }
 
 

@@ -3,8 +3,8 @@ package com.bitvault.ui.views.dashboard;
 import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.IServiceFactory;
 import com.bitvault.ui.model.Profile;
-import com.bitvault.ui.views.password.PasswordView;
 import com.bitvault.ui.views.password.PasswordVM;
+import com.bitvault.ui.views.password.PasswordView;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleObjectProperty;
 

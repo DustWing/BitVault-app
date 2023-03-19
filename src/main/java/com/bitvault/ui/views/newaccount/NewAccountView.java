@@ -1,7 +1,7 @@
 package com.bitvault.ui.views.newaccount;
 
-import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.BitVaultVBox;
+import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.JavaFxUtil;

@@ -1,8 +1,8 @@
 package com.bitvault.ui.views.password;
 
-import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.BitVaultHBox;
 import com.bitvault.ui.components.BitVaultVBox;
+import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.TimerBar;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.hyperlink.HyperLinkCell;

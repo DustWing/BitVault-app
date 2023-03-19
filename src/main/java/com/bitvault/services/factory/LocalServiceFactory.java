@@ -12,7 +12,6 @@ import com.bitvault.services.local.CategoryService;
 import com.bitvault.services.local.PasswordService;
 import com.bitvault.services.local.ProfileService;
 import com.bitvault.services.local.UserService;
-import com.bitvault.security.UserSession;
 
 public class LocalServiceFactory implements IServiceFactory {
 

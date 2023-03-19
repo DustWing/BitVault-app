@@ -8,7 +8,6 @@ import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.model.SecureDetails;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.paint.Color;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,9 +33,6 @@ public class PasswordDetailsVM {
     private final SimpleObjectProperty<Category> selectedCat = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<LocalDate> expiresOn = new SimpleObjectProperty<>();
 
-
-    private final SimpleStringProperty newCategoryName = new SimpleStringProperty();
-
     public PasswordDetailsVM(
             Password password,
             List<Category> categories,
@@ -60,12 +56,13 @@ public class PasswordDetailsVM {
     }
 
     private void editSetUp() {
-        userNameProperty.set(password.getUsername());
-        passwordProperty.set(password.getPassword());
-        domainProperty.set(password.getSecureDetails().getDomain());
-        descriptionProperty.set(password.getSecureDetails().getDescription());
-        expiresOn.set(password.getSecureDetails().getExpiresOn().toLocalDate());
-        selectedCat.set(password.getSecureDetails().getCategory());
+        this.titleProperty.set(password.getSecureDetails().getTitle());
+        this.userNameProperty.set(password.getUsername());
+        this.passwordProperty.set(password.getPassword());
+        this.domainProperty.set(password.getSecureDetails().getDomain());
+        this.descriptionProperty.set(password.getSecureDetails().getDescription());
+        this.expiresOn.set(password.getSecureDetails().getExpiresOn().toLocalDate());
+        this.selectedCat.set(password.getSecureDetails().getCategory());
     }
 
 
@@ -172,13 +169,6 @@ public class PasswordDetailsVM {
         return expiresOn;
     }
 
-    public String getNewCategoryName() {
-        return newCategoryName.get();
-    }
-
-    public SimpleStringProperty newCategoryNameProperty() {
-        return newCategoryName;
-    }
 
     public String getTitleProperty() {
         return titleProperty.get();

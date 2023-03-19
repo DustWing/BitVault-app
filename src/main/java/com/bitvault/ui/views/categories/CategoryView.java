@@ -1,13 +1,6 @@
 package com.bitvault.ui.views.categories;
 
 import com.bitvault.ui.components.BitVaultVBox;
-import com.bitvault.ui.components.textfield.BvTextField;
-import com.bitvault.ui.utils.BvSpacing;
-import com.bitvault.ui.utils.JavaFxUtil;
-import com.bitvault.util.Labels;
-import javafx.geometry.Pos;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.layout.HBox;
 
 public class CategoryView extends BitVaultVBox {
 

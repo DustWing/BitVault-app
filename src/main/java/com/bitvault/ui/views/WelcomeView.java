@@ -2,8 +2,8 @@ package com.bitvault.ui.views;
 
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.views.login.LoginVM;
-import com.bitvault.ui.views.newaccount.NewAccountVM;
 import com.bitvault.ui.views.login.LoginView;
+import com.bitvault.ui.views.newaccount.NewAccountVM;
 import com.bitvault.ui.views.newaccount.NewAccountView;
 import javafx.geometry.Pos;
 

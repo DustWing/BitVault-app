@@ -1,7 +1,5 @@
 package com.bitvault.database.models;
 
-import com.bitvault.ui.model.Password;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

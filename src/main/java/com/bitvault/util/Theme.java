@@ -1,6 +1,5 @@
 package com.bitvault.util;
 
-import javafx.application.Application;
 import javafx.scene.Scene;
 
 public class Theme {

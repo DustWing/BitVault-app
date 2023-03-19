@@ -8,8 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
-import javafx.stage.*;
 import javafx.stage.Window;
+import javafx.stage.*;
 import javafx.util.Duration;
 
 import java.awt.*;

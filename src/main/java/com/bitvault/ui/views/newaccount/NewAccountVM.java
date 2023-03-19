@@ -1,7 +1,7 @@
 package com.bitvault.ui.views.newaccount;
 
-import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.security.UserSession;
+import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.model.User;
 import com.bitvault.ui.views.factory.ViewFactory;

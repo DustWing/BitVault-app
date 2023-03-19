@@ -13,12 +13,10 @@ import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.model.SecureDetails;
-import com.bitvault.util.DateTimeUtils;
 import com.bitvault.util.Result;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -162,13 +160,18 @@ public class PasswordService implements IPasswordService {
 
             try {
 
+                checkProfile(connection, password.getSecureDetails().getProfile().id());
+
+                checkCategory(connection, password.getSecureDetails().getCategory());
+
                 final SecureDetailsDM secureDetailsDM = SecureDetailsDM.convert(password.getSecureDetails());
 
                 final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
                 secureDetailsDao.update(secureDetailsDM);
 
                 final String encryptUsername = encryptionProvider.encrypt(password.getUsername());
-                final PasswordDM passwordDM = new PasswordDM(password.getId(), encryptUsername, password.getPassword(), password.getId());
+                final String encryptPassword = encryptionProvider.encrypt(password.getPassword());
+                final PasswordDM passwordDM = new PasswordDM(password.getId(), encryptUsername, encryptPassword, password.getId());
 
                 final IPasswordDao passwordDao = new PasswordDao(connection);
                 passwordDao.update(passwordDM);

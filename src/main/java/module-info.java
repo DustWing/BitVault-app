@@ -37,7 +37,6 @@ module com.bitvault {
     exports com.bitvault;
 
     exports com.bitvault.util;
-    exports com.bitvault.ui.viewmodel;
     exports com.bitvault.ui.views;
     exports com.bitvault.ui.views.factory;
     exports com.bitvault.enums;

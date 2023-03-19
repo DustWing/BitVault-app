@@ -6,7 +6,7 @@ import com.bitvault.server.dto.SecureItemRqDto;
 import com.bitvault.server.endpoints.EndpointResolver;
 import com.bitvault.server.http.HttpServer;
 import com.bitvault.server.http.ServerListener;
-import com.bitvault.ui.components.BitVaultFlatButton;
+import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.exceptions.ViewLoadException;
 import com.bitvault.ui.model.Category;
@@ -96,21 +96,26 @@ public class ServerView extends BitVaultVBox {
     }
 
     private ButtonBar createButtonBar() {
-        BitVaultFlatButton start = new BitVaultFlatButton(Labels.i18n("start"));
-        start.setOnAction(event -> start());
-        start.setDefaultButton(true);
+        final BvButton start = new BvButton(Labels.i18n("start"))
+                .action(event -> start())
+                .defaultButton(true)
+                .withDefaultSize();
 
-        BitVaultFlatButton stop = new BitVaultFlatButton(Labels.i18n("stop"));
-        stop.setOnAction(event -> stop());
-        stop.setDefaultButton(false);
 
-        BitVaultFlatButton clearLog = new BitVaultFlatButton(Labels.i18n("clear"));
-        clearLog.setOnAction(event -> clear());
-        clearLog.setDefaultButton(false);
+        final BvButton stop = new BvButton(Labels.i18n("stop"))
+                .action(event -> stop())
+                .defaultButton(false)
+                .withDefaultSize();
 
-        BitVaultFlatButton showCache = new BitVaultFlatButton("Show Cache");
-        showCache.setOnAction(event -> showCache());
-        showCache.setDefaultButton(false);
+        final BvButton clearLog = new BvButton(Labels.i18n("clear"))
+                .action(event -> clear())
+                .defaultButton(false)
+                .withDefaultSize();
+
+        BvButton showCache = new BvButton("Show Cache")
+                .action(event -> showCache())
+                .defaultButton(false)
+                .withDefaultSize();
 
         ButtonBar buttonBar = new ButtonBar();
         buttonBar.getButtons()

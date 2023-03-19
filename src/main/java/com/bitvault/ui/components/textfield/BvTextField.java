@@ -2,6 +2,7 @@ package com.bitvault.ui.components.textfield;
 
 import com.bitvault.ui.utils.BvHeights;
 import com.bitvault.ui.utils.BvWidths;
+import com.bitvault.ui.utils.JavaFxUtil;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -48,12 +49,7 @@ public class BvTextField extends TextField {
     }
 
     public BvTextField withDefaultSize() {
-        this.setMaxWidth(BvWidths.LARGE);
-        this.setMinWidth(BvWidths.LARGE);
-        this.setPrefWidth(BvWidths.LARGE);
-        this.setPrefHeight(BvHeights.MEDIUM);
-        this.minHeight(BvHeights.MEDIUM);
-
+        JavaFxUtil.defaultSize(this);
         return this;
     }
 

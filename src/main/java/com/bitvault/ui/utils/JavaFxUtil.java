@@ -6,9 +6,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.stage.*;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -26,8 +25,6 @@ public class JavaFxUtil {
     public static Stage popUp(final Window owner, final Parent root) {
 
         final Scene scene = new Scene(root);
-        scene.getStylesheets().addAll(owner.getScene().getStylesheets());
-
         final Stage stage = new Stage();
         stage.initOwner(owner);
         stage.setScene(scene);
@@ -120,10 +117,28 @@ public class JavaFxUtil {
 
     }
 
-    public static void vGrowAlways(Pane pane){
+    public static void vGrowAlways(Pane pane) {
         pane.getChildren().forEach(
                 node -> VBox.setVgrow(node, Priority.ALWAYS)
         );
     }
 
+    public static void hGrowAlways(Pane pane) {
+        pane.getChildren().forEach(
+                node -> HBox.setHgrow(node, Priority.ALWAYS)
+        );
+    }
+
+    public static void defaultSize(Region region) {
+        region.setMaxWidth(BvWidths.LARGE);
+        region.setMinWidth(BvWidths.LARGE);
+        region.setPrefWidth(BvWidths.LARGE);
+        region.setPrefHeight(BvHeights.MEDIUM);
+        region.setMinHeight(BvHeights.MEDIUM);
+        region.setMaxHeight(BvHeights.MEDIUM);
+    }
+
+    public static void addDebugBorder(Region region) {
+        region.setBorder(Border.stroke(Paint.valueOf("#fcba03")));
+    }
 }

@@ -1,7 +1,7 @@
 package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
-import com.bitvault.ui.components.BitVaultFlatButton;
+import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.BvScaffold;
 import com.bitvault.ui.components.category.BvCategoryDd;
@@ -11,7 +11,6 @@ import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
-import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import javafx.geometry.Pos;
@@ -59,11 +58,13 @@ public class PasswordDetailsView extends BitVaultVBox {
                 .withDefaultSize()
                 .withPromptText(Labels.i18n("description"));
 
-        final BitVaultFlatButton okButton = new BitVaultFlatButton(Labels.i18n("ok"));
-        okButton.setOnAction(event -> saveBtnAction());
-        okButton.setDefaultButton(true);
+        final BvButton okButton = new BvButton(Labels.i18n("save"))
+                .withDefaultSize()
+                .action(event -> saveBtnAction())
+                .defaultButton(true);
 
         final DatePicker expiresOn = new DatePicker();
+        JavaFxUtil.defaultSize(expiresOn);
         expiresOn.valueProperty().bindBidirectional(passwordDetailsVM.expiresOnProperty());
 
 
@@ -89,7 +90,7 @@ public class PasswordDetailsView extends BitVaultVBox {
 
         this.setAlignment(Pos.TOP_CENTER);
         this.setFillWidth(true);
-        this.setPadding(BvInsets.all10);
+        this.setPrefSize(600,400);
         JavaFxUtil.vGrowAlways(this);
     }
 

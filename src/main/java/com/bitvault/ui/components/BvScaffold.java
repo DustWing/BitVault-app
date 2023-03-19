@@ -20,11 +20,10 @@ public class BvScaffold extends VBox {
         childrenVBox.setAlignment(Pos.TOP_CENTER);
         childrenVBox.setFillWidth(true);
         childrenVBox.setSpacing(BvSpacing.SMALL);
-
+        JavaFxUtil.vGrowAlways(childrenVBox);
 
         final ScrollPane scrollPane = new ScrollPane(childrenVBox);
         scrollPane.setFitToWidth(true);
-
 
         this.getChildren().addAll(
                 scrollPane,
@@ -34,6 +33,7 @@ public class BvScaffold extends VBox {
         this.setAlignment(Pos.BOTTOM_CENTER);
         this.setFillWidth(true);
         this.setPadding(BvInsets.all10);
+        this.setSpacing(BvSpacing.SMALL);
         JavaFxUtil.vGrowAlways(this);
 
     }

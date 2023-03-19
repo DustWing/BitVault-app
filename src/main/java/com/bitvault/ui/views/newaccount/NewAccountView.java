@@ -1,6 +1,6 @@
 package com.bitvault.ui.views.newaccount;
 
-import com.bitvault.ui.components.BitVaultFlatButton;
+import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.utils.BvInsets;
@@ -43,15 +43,15 @@ public class NewAccountView extends BitVaultVBox {
                 .withPromptText(Labels.i18n("file.name"))
                 .setRequired(true);
 
-        BitVaultFlatButton chooseFileBtn = new BitVaultFlatButton(Labels.i18n("choose.file"));
+        BvButton chooseFileBtn = new BvButton(Labels.i18n("choose.file")).withDefaultSize();;
         chooseFileBtn.setOnAction(event -> chooseFileAction());
 
 
-        BitVaultFlatButton loginButton = new BitVaultFlatButton(Labels.i18n("create"));
+        BvButton loginButton = new BvButton(Labels.i18n("create")).withDefaultSize();
         loginButton.setOnAction(event -> createBtnAction());
         loginButton.setDefaultButton(true);
 
-        BitVaultFlatButton backButton = new BitVaultFlatButton(Labels.i18n("back"));
+        BvButton backButton = new BvButton(Labels.i18n("back")).withDefaultSize();;
         backButton.setOnAction(event -> onBack.accept(this));
 
 //        newAccountVM.getValidatedForm().addAll(

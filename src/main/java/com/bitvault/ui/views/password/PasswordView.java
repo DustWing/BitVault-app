@@ -1,6 +1,6 @@
 package com.bitvault.ui.views.password;
 
-import com.bitvault.ui.components.BitVaultFlatButton;
+import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.BitVaultHBox;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.TimerBar;
@@ -27,7 +27,7 @@ public class PasswordView extends BitVaultVBox {
 
     private final PasswordVM passwordVM;
 
-    private final BitVaultFlatButton addNewBtn;
+    private final BvButton addNewBtn;
     private final BvTextField searchTf;
 
     private final TableView<Password> tableView;
@@ -45,7 +45,8 @@ public class PasswordView extends BitVaultVBox {
         VBox.setMargin(searchTf, BvInsets.right15);
 
 
-        this.addNewBtn = new BitVaultFlatButton(Labels.i18n("add.new"))
+        this.addNewBtn = new BvButton(Labels.i18n("add.new"))
+                .withDefaultSize()
                 .action(event -> showNewPassPopUp());
 
 
@@ -56,10 +57,10 @@ public class PasswordView extends BitVaultVBox {
         ).maxH(20);
 
 
-        HBox hBox = topBar();
+        HBox topBar = topBar();
 
         this.getChildren().addAll(
-                hBox,
+                topBar,
                 tableView,
                 bottomHBox
         );

@@ -3,7 +3,7 @@ package com.bitvault.ui.views.login;
 import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.IServiceFactory;
 import com.bitvault.services.factory.LocalServiceFactory;
-import com.bitvault.ui.components.BitVaultFlatButton;
+import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
@@ -59,15 +59,19 @@ public class LoginView extends BitVaultVBox {
 //                location
 //        );
 
-        BitVaultFlatButton loginButton = new BitVaultFlatButton(Labels.i18n("login"));
-        loginButton.setOnAction(event -> loginBtnAction());
-        loginButton.setDefaultButton(true);
+        BvButton loginButton = new BvButton(Labels.i18n("login"))
+                .action(event -> loginBtnAction())
+                .defaultButton(true)
+                .withDefaultSize();
 
-        BitVaultFlatButton newAccountBtn = new BitVaultFlatButton(Labels.i18n("new.account"));
-        newAccountBtn.setOnAction(event -> newAccBtn.run());
 
-        BitVaultFlatButton chooseFileBtn = new BitVaultFlatButton(Labels.i18n("choose.file"));
-        chooseFileBtn.setOnAction(event -> chooseFileAction());
+        BvButton newAccountBtn = new BvButton(Labels.i18n("new.account"))
+                .action(event -> newAccBtn.run())
+                .withDefaultSize();
+
+        BvButton chooseFileBtn = new BvButton(Labels.i18n("choose.file"))
+                .action(event -> chooseFileAction())
+                .withDefaultSize();;
 
 
         this.getChildren().addAll(

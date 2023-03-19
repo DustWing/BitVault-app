@@ -4,6 +4,7 @@ import com.bitvault.ui.components.TextColorComboBox;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.utils.BvSpacing;
+import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -50,6 +51,7 @@ public class BvCategoryDd extends VBox {
 
         final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withCircle(this.categories);
         categoriesDd.valueProperty().bindBidirectional(selectedCategory);
+        JavaFxUtil.defaultSize(categoriesDd);
 
         final BvTextField newCategory = new BvTextField()
                 .withBinding(newCategoryName)
@@ -58,12 +60,14 @@ public class BvCategoryDd extends VBox {
 
         final ColorPicker colorPicker = new ColorPicker();
         colorPicker.setOnAction(event -> onColorSelect.accept(colorPicker.getValue()));
+        JavaFxUtil.defaultSize(colorPicker);
 
         final HBox hBox = new HBox(newCategory, colorPicker);
         hBox.visibleProperty().bind(showNewCat);
         hBox.managedProperty().bind(showNewCat);
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(BvSpacing.SMALL);
+        JavaFxUtil.hGrowAlways(hBox);
 
         this.getChildren().addAll(
                 categoriesDd,
@@ -72,6 +76,7 @@ public class BvCategoryDd extends VBox {
 
         this.setAlignment(Pos.CENTER);
         this.setSpacing(BvSpacing.SMALL);
+        JavaFxUtil.vGrowAlways(this);
 
     }
 }

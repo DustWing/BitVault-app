@@ -1,7 +1,7 @@
 package com.bitvault.ui.views;
 
 import com.bitvault.ui.components.BitVaultCard;
-import com.bitvault.ui.components.BitVaultFlatButton;
+import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.viewmodel.PasswordCardVM;
 import com.bitvault.util.Labels;
@@ -39,12 +39,12 @@ public class PasswordCardView extends BitVaultCard {
 
         FontIcon editIc = new FontIcon(FILE_DOCUMENT_EDIT);
         editIc.setIconSize(20);
-        var editBtn = new BitVaultFlatButton(Labels.i18n("edit"), editIc);
+        var editBtn = new BvButton(Labels.i18n("edit"), editIc);
         editBtn.setOnAction(event -> onEdit.accept(password));
 
         FontIcon deleteIc = new FontIcon(DELETE_FOREVER);
         deleteIc.setIconSize(20);
-        var deleteBtn = new BitVaultFlatButton(
+        var deleteBtn = new BvButton(
                 Labels.i18n("delete"),
                 deleteIc
         );

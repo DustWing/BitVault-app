@@ -79,9 +79,8 @@ public class CategoryService implements ICategoryService {
                 return Result.error(new Exception("No category found"));
             }
 
-            categoryDao.update(
-                    CategoryDM.convert(category)
-            );
+            CategoryDM tpUpdate = CategoryDM.convert(category);
+            categoryDao.update(tpUpdate);
 
             return Result.Success;
 

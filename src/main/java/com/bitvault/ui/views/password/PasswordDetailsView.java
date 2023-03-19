@@ -25,12 +25,12 @@ public class PasswordDetailsView extends BitVaultVBox {
     private final PasswordDetailsVM passwordDetailsVM;
 
 
-    public static PasswordDetailsView edit(Password password, List<Category> categories, Profile profile, Consumer<Password> onAction) {
+    public static PasswordDetailsView editPassword(Password password, List<Category> categories, Profile profile, Consumer<Password> onAction) {
         final PasswordDetailsVM vm = new PasswordDetailsVM(password, categories, profile, Action.EDIT, onAction, new ValidateForm());
         return new PasswordDetailsView(vm);
     }
 
-    public static PasswordDetailsView create(List<Category> categories, Profile profile, Consumer<Password> onAction) {
+    public static PasswordDetailsView newPassword(List<Category> categories, Profile profile, Consumer<Password> onAction) {
         final PasswordDetailsVM vm = new PasswordDetailsVM(null, categories, profile, Action.NEW, onAction, new ValidateForm());
         return new PasswordDetailsView(vm);
     }

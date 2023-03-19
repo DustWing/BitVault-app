@@ -17,6 +17,7 @@ import com.bitvault.util.Result;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -70,7 +71,7 @@ public class PasswordService implements IPasswordService {
 
                 checkProfile(connection, password.getSecureDetails().getProfile().id());
 
-                checkCategory(connection, password.getSecureDetails().getCategory().id());
+                checkCategory(connection, password.getSecureDetails().getCategory());
 
                 final String id = UUID.randomUUID().toString();
 
@@ -121,11 +122,20 @@ public class PasswordService implements IPasswordService {
         }
     }
 
-    private void checkCategory(Connection connection, String id) {
+    private void checkCategory(Connection connection, Category category) {
         final CategoryDM categoryDM = new CategoryDao(connection)
-                .get(id);
+                .get(category.id());
 
         if (categoryDM == null) {
+
+//            CategoryDM newCat = new CategoryDM(
+//                    UUID.randomUUID().toString(),
+//                    category.name(),
+//                    category.color(),
+//                    LocalDateTime.now(),
+//
+//            )
+
             //Applicable only if file was edited by hand or error in code
             throw new IllegalArgumentException("No category found");
         }

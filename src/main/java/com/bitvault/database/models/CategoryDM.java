@@ -34,7 +34,8 @@ public record CategoryDM(
 
     /**
      * Converts {@link Category} to {@link CategoryDM}, to save a new entry to database. Use UUID for ID
-     * @param id The ID of the new category
+     *
+     * @param id       The ID of the new category
      * @param category The category we want to save
      * @return new instance of {@link CategoryDM}
      */
@@ -43,8 +44,8 @@ public record CategoryDM(
                 id,
                 category.name(),
                 category.color(),
-                DateTimeUtils.format(category.createdOn()),
-                DateTimeUtils.format(category.modifiedOn()),
+                DateTimeUtils.formatToUtc(category.createdOn()),
+                DateTimeUtils.formatToUtc(category.modifiedOn()),
                 category.type()
         );
     }
@@ -54,8 +55,8 @@ public record CategoryDM(
                 category.id(),
                 category.name(),
                 category.color(),
-                DateTimeUtils.format(category.createdOn()),
-                DateTimeUtils.format(category.modifiedOn()),
+                DateTimeUtils.formatToUtc(category.createdOn()),
+                DateTimeUtils.formatToUtc(category.modifiedOn()),
                 category.type()
         );
     }
@@ -66,8 +67,8 @@ public record CategoryDM(
                 cat.id(),
                 cat.name(),
                 cat.color(),
-                DateTimeUtils.parse(cat.createdOn()),
-                DateTimeUtils.parse(cat.modifiedOn()),
+                DateTimeUtils.parseToLocal(cat.createdOn()),
+                DateTimeUtils.parseToLocal(cat.modifiedOn()),
                 cat.type()
         );
     }

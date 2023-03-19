@@ -170,7 +170,7 @@ public class PasswordView extends BitVaultVBox {
 
     private void showNewPassPopUp() {
 
-        final PasswordDetailsView view = PasswordDetailsView.create(
+        final PasswordDetailsView view = PasswordDetailsView.newPassword(
                 new ArrayList<>(passwordVM.getCategories()),
                 passwordVM.getProfile(),
                 passwordVM::create
@@ -184,9 +184,9 @@ public class PasswordView extends BitVaultVBox {
 
         final Password password = passwordVM.prepareForEdit(oldPass);
 
-        final PasswordDetailsView view = PasswordDetailsView.edit(
+        final PasswordDetailsView view = PasswordDetailsView.editPassword(
                 password,
-                passwordVM.getCategories(),
+                new ArrayList<>(passwordVM.getCategories()),
                 passwordVM.getProfile(),
                 passwordVM::update
         );

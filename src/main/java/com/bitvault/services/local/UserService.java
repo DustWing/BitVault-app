@@ -65,7 +65,7 @@ public class UserService implements IUserService {
                 UUID.randomUUID().toString(),
                 "Default",
                 BvColors.toHex(Color.AQUA),
-                DateTimeUtils.format(LocalDateTime.now()),
+                DateTimeUtils.formatToUtc(LocalDateTime.now()),
                 null,
                 "Password"
         );
@@ -77,7 +77,7 @@ public class UserService implements IUserService {
         final ProfileDM defaultProfile = new ProfileDM(
                 UUID.randomUUID().toString(),
                 "Default",
-                DateTimeUtils.format(LocalDateTime.now()),
+                DateTimeUtils.formatToUtc(LocalDateTime.now()),
                 null
         );
         profileDao.create(defaultProfile);

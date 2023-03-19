@@ -28,8 +28,8 @@ public record ProfileDM(
         return new ProfileDM(
                 id,
                 profile.name(),
-                DateTimeUtils.format(profile.createdOn()),
-                DateTimeUtils.format(profile.modifiedOn())
+                DateTimeUtils.formatToUtc(profile.createdOn()),
+                DateTimeUtils.formatToUtc(profile.modifiedOn())
         );
     }
 
@@ -38,8 +38,8 @@ public record ProfileDM(
         return new ProfileDM(
                 profile.id(),
                 profile.name(),
-                DateTimeUtils.format(profile.createdOn()),
-                DateTimeUtils.format(profile.modifiedOn())
+                DateTimeUtils.formatToUtc(profile.createdOn()),
+                DateTimeUtils.formatToUtc(profile.modifiedOn())
         );
     }
 
@@ -48,8 +48,8 @@ public record ProfileDM(
         return new Profile(
                 profile.id(),
                 profile.name(),
-                DateTimeUtils.parse(profile.createdOn()),
-                DateTimeUtils.parse(profile.modifiedOn())
+                DateTimeUtils.parseToLocal(profile.createdOn()),
+                DateTimeUtils.parseToLocal(profile.modifiedOn())
         );
     }
 }

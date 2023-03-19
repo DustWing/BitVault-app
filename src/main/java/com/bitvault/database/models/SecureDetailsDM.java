@@ -52,10 +52,10 @@ public record SecureDetailsDM(
                 secureDetails.getTitle(),
                 secureDetails.getDescription(),
                 secureDetails.isFavourite(),
-                DateTimeUtils.format(secureDetails.getCreatedOn()),
-                DateTimeUtils.format(secureDetails.getModifiedOn()),
-                DateTimeUtils.format(secureDetails.getExpiresOn()),
-                DateTimeUtils.format(secureDetails.getImportedOn()),
+                DateTimeUtils.formatToUtc(secureDetails.getCreatedOn()),
+                DateTimeUtils.formatToUtc(secureDetails.getModifiedOn()),
+                DateTimeUtils.formatToUtc(secureDetails.getExpiresOn()),
+                DateTimeUtils.formatToUtc(secureDetails.getImportedOn()),
                 secureDetails.isRequiresMp(),
                 secureDetails.isShared()
         );
@@ -70,10 +70,10 @@ public record SecureDetailsDM(
                 secureDetails.getTitle(),
                 secureDetails.getDescription(),
                 secureDetails.isFavourite(),
-                DateTimeUtils.format(secureDetails.getCreatedOn()),
-                DateTimeUtils.format(secureDetails.getModifiedOn()),
-                DateTimeUtils.format(secureDetails.getExpiresOn()),
-                DateTimeUtils.format(secureDetails.getImportedOn()),
+                DateTimeUtils.formatToUtc(secureDetails.getCreatedOn()),
+                DateTimeUtils.formatToUtc(secureDetails.getModifiedOn()),
+                DateTimeUtils.formatToUtc(secureDetails.getExpiresOn()),
+                DateTimeUtils.formatToUtc(secureDetails.getImportedOn()),
                 secureDetails.isRequiresMp(),
                 secureDetails.isShared()
         );
@@ -89,10 +89,10 @@ public record SecureDetailsDM(
                 secureDetails.title(),
                 secureDetails.description(),
                 secureDetails.favourite(),
-                DateTimeUtils.parse(secureDetails.createdOn()),
-                DateTimeUtils.parse(secureDetails.modifiedOn()),
-                DateTimeUtils.parse(secureDetails.expiresOn()),
-                DateTimeUtils.parse(secureDetails.importedOn()),
+                DateTimeUtils.parseToLocal(secureDetails.createdOn()),
+                DateTimeUtils.parseToLocal(secureDetails.modifiedOn()),
+                DateTimeUtils.parseToLocal(secureDetails.expiresOn()),
+                DateTimeUtils.parseToLocal(secureDetails.importedOn()),
                 secureDetails.requiresMp(),
                 secureDetails.shared()
         );

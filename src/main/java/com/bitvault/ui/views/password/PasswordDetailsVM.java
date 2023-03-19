@@ -6,7 +6,6 @@ import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.model.SecureDetails;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.paint.Color;
@@ -34,7 +33,6 @@ public class PasswordDetailsVM {
 
 
     private final SimpleStringProperty newCategoryName = new SimpleStringProperty();
-    private final SimpleBooleanProperty showNewCat = new SimpleBooleanProperty();
     private Color selectedColor;
 
     public PasswordDetailsVM(
@@ -177,14 +175,6 @@ public class PasswordDetailsVM {
 
     public SimpleStringProperty newCategoryNameProperty() {
         return newCategoryName;
-    }
-
-    public boolean isShowNewCat() {
-        return showNewCat.get();
-    }
-
-    public SimpleBooleanProperty showNewCatProperty() {
-        return showNewCat;
     }
 
     public void setSelectedColor(Color selectedColor) {

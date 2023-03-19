@@ -1,11 +1,11 @@
 package com.bitvault.ui.listcell;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public class TextColorListCell<T extends ITextColorCell> extends ListCell<T> {
@@ -21,6 +21,8 @@ public class TextColorListCell<T extends ITextColorCell> extends ListCell<T> {
         this.shape = shape;
         this.label = new Label();
         this.hbox = new HBox(shape, label);
+        this.hbox.setAlignment(Pos.CENTER_LEFT);
+        this.hbox.setSpacing(10);
 
     }
 

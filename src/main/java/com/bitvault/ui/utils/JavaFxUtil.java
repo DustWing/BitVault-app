@@ -32,7 +32,8 @@ public class JavaFxUtil {
         stage.initOwner(owner);
         stage.setScene(scene);
         stage.initModality(Modality.WINDOW_MODAL);
-
+        stage.setMinWidth(600);
+        stage.setMinHeight(400);
         return stage;
     }
 

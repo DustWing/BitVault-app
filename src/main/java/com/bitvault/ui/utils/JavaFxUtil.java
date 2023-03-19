@@ -130,6 +130,15 @@ public class JavaFxUtil {
     }
 
     public static void defaultSize(Region region) {
+        region.setMaxWidth(BvWidths.MEDIUM);
+        region.setMinWidth(BvWidths.MEDIUM);
+        region.setPrefWidth(BvWidths.MEDIUM);
+        region.setPrefHeight(BvHeights.MEDIUM);
+        region.setMinHeight(BvHeights.MEDIUM);
+        region.setMaxHeight(BvHeights.MEDIUM);
+    }
+
+    public static void largeSize(Region region) {
         region.setMaxWidth(BvWidths.LARGE);
         region.setMinWidth(BvWidths.LARGE);
         region.setPrefWidth(BvWidths.LARGE);

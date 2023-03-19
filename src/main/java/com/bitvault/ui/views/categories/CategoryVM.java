@@ -37,8 +37,6 @@ public class CategoryVM {
 
     }
 
-
-
     public String getName() {
         return name.get();
     }

@@ -13,6 +13,7 @@ import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.model.SecureDetails;
+import com.bitvault.util.DateTimeUtils;
 import com.bitvault.util.Result;
 
 import java.sql.Connection;
@@ -123,22 +124,15 @@ public class PasswordService implements IPasswordService {
     }
 
     private void checkCategory(Connection connection, Category category) {
-        final CategoryDM categoryDM = new CategoryDao(connection)
-                .get(category.id());
+        final CategoryDao categoryDao = new CategoryDao(connection);
+
+        final CategoryDM categoryDM = categoryDao.get(category.id());
 
         if (categoryDM == null) {
-
-//            CategoryDM newCat = new CategoryDM(
-//                    UUID.randomUUID().toString(),
-//                    category.name(),
-//                    category.color(),
-//                    LocalDateTime.now(),
-//
-//            )
-
             //Applicable only if file was edited by hand or error in code
             throw new IllegalArgumentException("No category found");
         }
+
     }
 
     private SecureDetailsDM saveSecureDetails(Connection connection, String id, SecureDetails secureDetails) {
@@ -175,7 +169,7 @@ public class PasswordService implements IPasswordService {
 
                 final String encryptUsername = encryptionProvider.encrypt(password.getUsername());
                 final PasswordDM passwordDM = new PasswordDM(password.getId(), encryptUsername, password.getPassword(), password.getId());
-                
+
                 final IPasswordDao passwordDao = new PasswordDao(connection);
                 passwordDao.update(passwordDM);
 

@@ -1,21 +1,25 @@
 package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
-import com.bitvault.ui.components.BvButton;
-import com.bitvault.ui.components.BitVaultVBox;
-import com.bitvault.ui.components.BvScaffold;
-import com.bitvault.ui.components.category.BvCategoryDd;
+import com.bitvault.ui.components.*;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
+import com.bitvault.ui.utils.BvHeights;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -38,51 +42,47 @@ public class PasswordDetailsView extends BitVaultVBox {
     public PasswordDetailsView(PasswordDetailsVM passwordDetailsVM) {
         this.passwordDetailsVM = passwordDetailsVM;
 
-        final BvTextField usernameTf = new BvTextField()
-                .withBinding(passwordDetailsVM.userNamePropertyProperty())
+        final BvTextField titleTf = new BvTextField()
+                .withBinding(passwordDetailsVM.titlePropertyProperty())
                 .setRequired(true)
                 .withDefaultSize()
-                .withPromptText(Labels.i18n("username"));
+                .withPromptText(Labels.i18n("title"));
 
-
-        final BvPasswordInput bvPasswordInput = new BvPasswordInput(passwordDetailsVM.passwordPropertyProperty());
-
+        final GridPane usernamePassword = createUsernamePassword();
 
         final BvTextField domainTf = new BvTextField()
                 .withBinding(passwordDetailsVM.domainPropertyProperty())
-                .withDefaultSize()
+                .withSize(410, BvHeights.MEDIUM)
                 .withPromptText(Labels.i18n("domain"));
 
-        final BvTextField descriptionTf = new BvTextField()
-                .withBinding(passwordDetailsVM.descriptionPropertyProperty())
-                .withDefaultSize()
-                .withPromptText(Labels.i18n("description"));
+        final TextArea descriptionTf = createDescription();
+
+        final DatePicker expiresOn = new DatePicker();
+        expiresOn.setPromptText(Labels.i18n("expires.on"));
+        JavaFxUtil.defaultSize(expiresOn);
+        expiresOn.valueProperty().bindBidirectional(passwordDetailsVM.expiresOnProperty());
+
+        ObservableList<Category> categories = FXCollections.observableArrayList(passwordDetailsVM.getCategories());
+        final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withCircle(categories);
+        categoriesDd.valueProperty().bindBidirectional(passwordDetailsVM.selectedCatProperty());
+        JavaFxUtil.defaultSize(categoriesDd);
+
+        BvDoubleColumn expiryCategory = new BvDoubleColumn(List.of(expiresOn), List.of(categoriesDd));
 
         final BvButton okButton = new BvButton(Labels.i18n("save"))
                 .withDefaultSize()
                 .action(event -> saveBtnAction())
                 .defaultButton(true);
 
-        final DatePicker expiresOn = new DatePicker();
-        JavaFxUtil.defaultSize(expiresOn);
-        expiresOn.valueProperty().bindBidirectional(passwordDetailsVM.expiresOnProperty());
-
-
-        final BvCategoryDd bvCategoryDd = new BvCategoryDd(
-                passwordDetailsVM.getCategories(),
-                passwordDetailsVM.newCategoryNameProperty(),
-                passwordDetailsVM::setSelectedColor);
-
-
 //        passwordDetailsVM.getValidatedForm().add(usernameTf);
 //        passwordDetailsVM.getValidatedForm().add(passwordTf);
 
-        List<Node> list = List.of(usernameTf,
-                bvPasswordInput,
+        List<Node> list = List.of(
+                titleTf,
+                usernamePassword,
                 domainTf,
                 descriptionTf,
-                expiresOn,
-                bvCategoryDd
+                expiryCategory
         );
         BvScaffold bvScaffold = new BvScaffold(list, okButton);
 
@@ -90,12 +90,38 @@ public class PasswordDetailsView extends BitVaultVBox {
 
         this.setAlignment(Pos.TOP_CENTER);
         this.setFillWidth(true);
-        this.setPrefSize(600,400);
+        this.setPrefSize(600, 500);
         JavaFxUtil.vGrowAlways(this);
+    }
+
+    private GridPane createUsernamePassword() {
+
+        final BvTextField usernameTf = new BvTextField()
+                .withBinding(passwordDetailsVM.userNamePropertyProperty())
+                .setRequired(true)
+                .withDefaultSize()
+                .withPromptText(Labels.i18n("username"));
+
+        final BvPasswordInput passwordInput = new BvPasswordInput(passwordDetailsVM.passwordPropertyProperty());
+
+        return new BvDoubleColumn(List.of(usernameTf), List.of(passwordInput));
+    }
+
+    private TextArea createDescription() {
+        TextArea descriptionTf = new TextArea();
+        descriptionTf.textProperty().bindBidirectional(passwordDetailsVM.descriptionPropertyProperty());
+        descriptionTf.setPromptText(Labels.i18n("description"));
+        descriptionTf.setMinWidth(410);
+        descriptionTf.setMaxWidth(410);
+        descriptionTf.setMaxHeight(BvHeights.LARGE);
+        descriptionTf.setMinHeight(BvHeights.LARGE);
+
+        return descriptionTf;
     }
 
 
     public void saveBtnAction() {
+
         boolean valid = passwordDetailsVM.save();
 
         if (valid) {

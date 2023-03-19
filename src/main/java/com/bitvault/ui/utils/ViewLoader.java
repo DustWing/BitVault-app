@@ -15,7 +15,7 @@ public class ViewLoader {
 
 
             Parent view = parentSupplier.get();
-            final Scene scene = new Scene(view, 840, 700);
+            final Scene scene = new Scene(view, 840, 600);
             stage.setScene(scene);
             stage.show();
         } catch (ViewLoadException ex) {

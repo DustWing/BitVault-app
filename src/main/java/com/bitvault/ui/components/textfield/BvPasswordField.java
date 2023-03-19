@@ -43,8 +43,8 @@ public class BvPasswordField extends PasswordField {
     }
 
     public BvPasswordField withDefaultSize() {
-        this.setMaxWidth(BvWidths.LARGE);
-        this.setPrefWidth(BvWidths.LARGE);
+        this.setMaxWidth(BvWidths.MEDIUM);
+        this.setPrefWidth(BvWidths.MEDIUM);
         this.setPrefHeight(BvHeights.MEDIUM);
 
         return this;

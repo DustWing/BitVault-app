@@ -48,8 +48,23 @@ public class BvTextField extends TextField {
         return this;
     }
 
+    public BvTextField withLeft(final Node node) {
+        this.setLeft(node);
+        return this;
+    }
+
     public BvTextField withDefaultSize() {
         JavaFxUtil.defaultSize(this);
+        return this;
+    }
+
+    public BvTextField withSize(double width, double height) {
+        this.setMaxWidth(width);
+        this.setMinWidth(width);
+        this.setPrefWidth(width);
+        this.setPrefHeight(height);
+        this.setMinHeight(height);
+        this.setMaxHeight(height);
         return this;
     }
 

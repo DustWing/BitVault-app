@@ -24,6 +24,9 @@ public class PasswordDetailsVM {
     private final Profile profile;
     private final Consumer<Password> onAction;
     private final ValidateForm validatedForm;
+
+
+    private final SimpleStringProperty titleProperty = new SimpleStringProperty();
     private final SimpleStringProperty userNameProperty = new SimpleStringProperty();
     private final SimpleStringProperty passwordProperty = new SimpleStringProperty();
     private final SimpleStringProperty domainProperty = new SimpleStringProperty();
@@ -33,7 +36,6 @@ public class PasswordDetailsVM {
 
 
     private final SimpleStringProperty newCategoryName = new SimpleStringProperty();
-    private Color selectedColor;
 
     public PasswordDetailsVM(
             Password password,
@@ -50,6 +52,7 @@ public class PasswordDetailsVM {
         this.onAction = onAction;
         this.validatedForm = validateForm;
 
+        this.selectedCatProperty().set(categories.get(0));
 
         if (Action.EDIT.equals(action)) {
             editSetUp();
@@ -84,7 +87,7 @@ public class PasswordDetailsVM {
                 getSelectedCat(),
                 profile,
                 getDomainProperty(),
-                null,
+                getTitleProperty(),
                 getDescriptionProperty(),
                 false,
                 now,
@@ -177,7 +180,11 @@ public class PasswordDetailsVM {
         return newCategoryName;
     }
 
-    public void setSelectedColor(Color selectedColor) {
-        this.selectedColor = selectedColor;
+    public String getTitleProperty() {
+        return titleProperty.get();
+    }
+
+    public SimpleStringProperty titlePropertyProperty() {
+        return titleProperty;
     }
 }

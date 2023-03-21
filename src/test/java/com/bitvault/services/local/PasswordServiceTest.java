@@ -37,7 +37,7 @@ class PasswordServiceTest {
             throw new RuntimeException("Set up location for test file");
         }
 
-        final UserSession userSession = UserSession.newSession(location, "username", "password");
+        final UserSession userSession = UserSession.newAesSession(location, "username", "password");
 
 
         final ConnectionProvider connectionProvider = new LocalDB(location);

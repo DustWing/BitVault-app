@@ -89,7 +89,7 @@ public class PasswordDetailsVM {
                 false,
                 now,
                 modifiedOn,
-                getExpiresOn().atStartOfDay(),
+                getExpiresOn() == null ? null : getExpiresOn().atStartOfDay(),
                 null,
                 false,
                 false

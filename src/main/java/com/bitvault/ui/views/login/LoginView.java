@@ -106,9 +106,9 @@ public class LoginView extends BitVaultVBox {
             return;
         }
 
-        final UserSession userSession = UserSession.newSession(loginVM.getLocation(), loginVM.getUsername(), loginVM.getPassword());
+        final UserSession userSession = UserSession.newAesSession(loginVM.getLocation(), loginVM.getUsername(), loginVM.getPassword());
 
-        final IServiceFactory serviceFactory = new LocalServiceFactory(loginVM.getLocation(), userSession);
+        final IServiceFactory serviceFactory = new LocalServiceFactory(loginVM.getLocation(), userSession.getEncryptionProvider());
 
         final User user = new User(
                 null,

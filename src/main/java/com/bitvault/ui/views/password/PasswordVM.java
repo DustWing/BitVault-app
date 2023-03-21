@@ -95,13 +95,13 @@ public class PasswordVM {
     }
     public boolean copyPassword(Password selectedItem){
         if (selectedItem == null) return false;
-        final String decrypt = userSession.decrypt(selectedItem.getPassword());
+        final String decrypt = userSession.getEncryptionProvider().decrypt(selectedItem.getPassword());
         JavaFxUtil.copyToClipBoard(decrypt);
         return true;
     }
 
     public Password prepareForEdit(Password oldPass){
-        final String decrypt = userSession.decrypt(oldPass.getPassword());
+        final String decrypt = userSession.getEncryptionProvider().decrypt(oldPass.getPassword());
 
         return new Password(
                 oldPass.getId(),

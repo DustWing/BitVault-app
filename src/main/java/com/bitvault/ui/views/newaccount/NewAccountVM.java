@@ -39,10 +39,10 @@ public class NewAccountVM {
 
         String location = getLocation() + "/" + getFileName() + ".vault";
 
-        final UserSession userSession = UserSession.newSession(location, getUsername(), getPassword());
+        final UserSession userSession = UserSession.newAesSession(location, getUsername(), getPassword());
 
 
-        final LocalServiceFactory localServiceFactory = new LocalServiceFactory(location, userSession);
+        final LocalServiceFactory localServiceFactory = new LocalServiceFactory(location, userSession.getEncryptionProvider());
 
         Result<User> userResult = localServiceFactory.getUserService()
                 .register(user);

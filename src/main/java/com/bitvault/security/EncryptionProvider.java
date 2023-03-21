@@ -6,4 +6,6 @@ public interface EncryptionProvider {
 
     String decrypt(String value);
 
+    void destroy();
+
 }

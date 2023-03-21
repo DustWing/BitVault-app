@@ -41,7 +41,7 @@ class PasswordServiceTest {
 
 
         final ConnectionProvider connectionProvider = new LocalDB(location);
-        passwordService = new PasswordService(connectionProvider, userSession);
+        passwordService = new PasswordService(connectionProvider, userSession.getEncryptionProvider());
         categoryService = new CategoryService(connectionProvider);
         profileService = new ProfileService(connectionProvider);
 

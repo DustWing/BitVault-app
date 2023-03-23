@@ -13,7 +13,6 @@ public class ViewLoader {
 
         try {
 
-
             Parent view = parentSupplier.get();
             final Scene scene = new Scene(view, 840, 600);
             stage.setScene(scene);

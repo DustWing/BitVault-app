@@ -1,15 +1,14 @@
-package com.bitvault.ui.utils;
+package com.bitvault.ui.listnode;
 
 import com.bitvault.ui.model.Identifiable;
+import com.bitvault.ui.utils.JavaFxUtil;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * <p>
@@ -24,7 +23,6 @@ import java.util.stream.IntStream;
  *                     final VBox vBox = new VBox(
  *                             new Label(item.getId())
  *                     );
- *                     vBox.setId(item.getId());
  *                     return vBox;
  *                 })
  *      );
@@ -57,20 +55,7 @@ public class ListNodeConverter<E extends Identifiable, R extends Node> implement
             return;
         }
 
-        if (c.wasReplaced()) {
-            c.getAddedSubList().forEach(
-                    e -> {
-                        OptionalInt indexOpt = IntStream.range(0, nodes.size())
-                                .filter(i -> e.getId().equals(nodes.get(i).getId()))
-                                .findFirst();
-
-                        R to = converter.apply(e);
-                        if (indexOpt.isPresent()) {
-                            nodes.set(indexOpt.getAsInt(), to);
-                        }
-                    }
-            );
-        } else if (c.wasAdded()) {
+        if (c.wasAdded()) {
             c.getAddedSubList().forEach(
                     e -> {
                         R to = converter.apply(e);
@@ -80,9 +65,9 @@ public class ListNodeConverter<E extends Identifiable, R extends Node> implement
             //scroll to last added element
             JavaFxUtil.scrollToLast(listView);
         } else if (c.wasRemoved()) {
-            var ids = c.getRemoved().stream().map(
-                    Identifiable::getId
-            ).collect(Collectors.toSet());
+            var ids = c.getRemoved().stream()
+                    .map(Identifiable::getUniqueId)
+                    .collect(Collectors.toSet());
             nodes.removeIf(r -> ids.contains(r.getId()));
         }
     }

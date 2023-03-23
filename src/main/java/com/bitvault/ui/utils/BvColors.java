@@ -14,6 +14,10 @@ public class BvColors {
         return toHex(random());
     }
 
+    public static Color fromHex(String value){
+        return Color.valueOf(value);
+    }
+
     public static String toHex(Color color) {
         int red = (int) (color.getRed() * 255);
         int green = (int) (color.getGreen() * 255);

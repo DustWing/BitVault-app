@@ -12,18 +12,7 @@ public record Category(
         LocalDateTime modifiedOn,
         String type
 
-) implements ITextColorCell {
-
-
-    @Override
-    public String getColor() {
-        return color;
-    }
-
-    @Override
-    public String getText() {
-        return name;
-    }
+) implements ITextColorCell, Identifiable {
 
     public static Category create(
             String name,
@@ -40,6 +29,21 @@ public record Category(
                 modifiedOn,
                 type
         );
+    }
+
+    @Override
+    public String getColor() {
+        return color;
+    }
+
+    @Override
+    public String getText() {
+        return name;
+    }
+
+    @Override
+    public String getUniqueId() {
+        return id;
     }
 
 }

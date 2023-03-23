@@ -17,9 +17,6 @@ public class CategoryVM {
 
 
     private final ICategoryService categoryService;
-    private final StringProperty name = new SimpleStringProperty();
-    private final ObjectProperty<Color> color = new SimpleObjectProperty<>();
-
     private final ObservableList<Category> categories = FXCollections.observableArrayList();
 
     public CategoryVM(ICategoryService categoryService) {
@@ -34,22 +31,10 @@ public class CategoryVM {
 
         categories.addAll(categoriesResult.get());
 
-
     }
 
-    public String getName() {
-        return name.get();
-    }
 
-    public StringProperty nameProperty() {
-        return name;
-    }
-
-    public Color getColor() {
-        return color.get();
-    }
-
-    public ObjectProperty<Color> colorProperty() {
-        return color;
+    public ObservableList<Category> getCategories() {
+        return categories;
     }
 }

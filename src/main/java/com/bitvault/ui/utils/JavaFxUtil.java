@@ -123,15 +123,23 @@ public class JavaFxUtil {
         );
     }
 
+    public static void vGrowAlways(Node node) {
+        VBox.setVgrow(node, Priority.ALWAYS);
+    }
+
     public static void hGrowAlways(Pane pane) {
         pane.getChildren().forEach(
                 node -> HBox.setHgrow(node, Priority.ALWAYS)
         );
     }
 
+    public static void hGrowAlways(Node node) {
+        HBox.setHgrow(node, Priority.ALWAYS);
+    }
+
     public static void defaultSize(Region region) {
         region.setMaxWidth(BvWidths.MEDIUM);
-        region.setMinWidth(BvWidths.MEDIUM);
+        region.setMinWidth(BvWidths.SMALL);
         region.setPrefWidth(BvWidths.MEDIUM);
         region.setPrefHeight(BvHeights.MEDIUM);
         region.setMinHeight(BvHeights.MEDIUM);
@@ -140,7 +148,7 @@ public class JavaFxUtil {
 
     public static void largeSize(Region region) {
         region.setMaxWidth(BvWidths.LARGE);
-        region.setMinWidth(BvWidths.LARGE);
+        region.setMinWidth(BvWidths.SMALL);
         region.setPrefWidth(BvWidths.LARGE);
         region.setPrefHeight(BvHeights.MEDIUM);
         region.setMinHeight(BvHeights.MEDIUM);

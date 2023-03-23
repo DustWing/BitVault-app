@@ -11,7 +11,7 @@ public class Json {
     public static <T> Result<T> deserialize(String value, Class<T> tClass) {
 
         try {
-            T t = Json.MAPPER.readValue(value, tClass);
+            T t = MAPPER.readValue(value, tClass);
             return Result.ok(t);
         } catch (IOException e) {
             return Result.error(e);
@@ -21,7 +21,7 @@ public class Json {
     public static <T> Result<String> serialize(T value) {
 
         try {
-            String s = Json.MAPPER.writeValueAsString(value);
+            String s = MAPPER.writeValueAsString(value);
             return Result.ok(s);
         } catch (IOException e) {
             return Result.error(e);

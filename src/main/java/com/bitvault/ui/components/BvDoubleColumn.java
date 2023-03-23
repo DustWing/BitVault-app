@@ -11,6 +11,9 @@ import java.util.List;
 
 public class BvDoubleColumn extends GridPane {
 
+    public static BvDoubleColumn createSingle(Node left, Node right){
+        return new BvDoubleColumn(List.of(left),List.of(right));
+    }
 
     public BvDoubleColumn(List<Node> leftColumn, List<Node> rightColumn) {
 

@@ -9,11 +9,17 @@ public interface ICategoryService {
 
     Result<List<Category>> getCategories();
 
-    Result<Category> create(final Category category);
+    default Result<Category> create(final Category category){
+        return Result.ok(category);
+    };
 
-    Result<Boolean> update(final Category category);
+    default Result<Boolean> update(final Category category){
+        return Result.ok(false);
+    };
 
-    Result<Boolean> delete(final Category category);
+    default Result<Boolean> delete(final Category category){
+        return Result.ok(false);
+    };
 
 
 }

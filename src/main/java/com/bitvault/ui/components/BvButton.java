@@ -24,6 +24,7 @@ public class BvButton extends Button {
         super(text, graphic);
     }
 
+
     public BvButton action(EventHandler<ActionEvent> value){
         this.setOnAction(value);
         return this;

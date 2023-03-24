@@ -26,6 +26,7 @@ public class CategoryRowView extends HBox implements Identifiable {
     private final CategoryRowVM categoryRowVM;
     private Function<CategoryRowView, Result<Boolean>> onDelete;
 
+    final BvTextField categoryName;
 
     public static CategoryRowView createFromCategory(final Category category, Function<CategoryRowView, Result<Boolean>> onDelete) {
         final Color color = BvColors.fromHex(category.color());
@@ -46,7 +47,7 @@ public class CategoryRowView extends HBox implements Identifiable {
         this.categoryRowVM = categoryRowVM;
         this.onDelete = onDelete;
 
-        final BvTextField categoryName = new BvTextField()
+        this.categoryName = new BvTextField()
                 .withDefaultSize()
                 .withBinding(this.categoryRowVM.categoryNameProperty())
                 .withPromptText("Category")
@@ -88,6 +89,10 @@ public class CategoryRowView extends HBox implements Identifiable {
     public CategoryRowView onDeleteAction(Function<CategoryRowView, Result<Boolean>> onDelete) {
         this.onDelete = onDelete;
         return this;
+    }
+
+    public void focus(){
+        this.categoryName.requestFocus();
     }
 
     @Override

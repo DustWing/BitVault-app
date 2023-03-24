@@ -3,17 +3,26 @@ package com.bitvault.ui.components;
 import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.BvSpacing;
 import com.bitvault.ui.utils.JavaFxUtil;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class BvScaffold extends VBox {
 
 
     final VBox childrenVBox = new VBox();
+
+    final ScrollPane scrollPane;
 
 
     public static BvScaffold createDefault() {
@@ -28,7 +37,7 @@ public class BvScaffold extends VBox {
         this.childrenVBox.setSpacing(BvSpacing.SMALL);
         JavaFxUtil.vGrowAlways(this.childrenVBox);
 
-        final ScrollPane scrollPane = new ScrollPane(this.childrenVBox);
+        this.scrollPane = new ScrollPane(this.childrenVBox);
         scrollPane.setFitToWidth(true);
 
         this.getChildren().add(scrollPane);
@@ -42,6 +51,7 @@ public class BvScaffold extends VBox {
         this.setSpacing(BvSpacing.SMALL);
         JavaFxUtil.vGrowAlways(this);
 
+
     }
 
     public void addChild(Node node) {
@@ -52,6 +62,7 @@ public class BvScaffold extends VBox {
 
     public void removeChild(Node node) {
         this.childrenVBox.getChildren().remove(node);
+        this.childrenVBox.requestFocus();
     }
 
     public void removeChild(int index) {
@@ -71,4 +82,13 @@ public class BvScaffold extends VBox {
     }
 
 
+    public BvScaffold enableScrollToLast() {
+
+        this.childrenVBox.heightProperty()
+                .addListener((__, oldValue, newValue) -> {
+                    if (oldValue.intValue() < newValue.intValue())
+                        scrollPane.setVvalue((Double) newValue);
+                });
+        return this;
+    }
 }

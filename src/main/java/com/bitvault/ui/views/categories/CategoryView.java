@@ -51,7 +51,7 @@ public class CategoryView extends VBox {
 
     public CategoryView(CategoryVM categoryVM) {
         this.categoryVM = categoryVM;
-        this.bvScaffold = BvScaffold.createDefault();
+
 
         final List<CategoryRowView> categoryRowViews = this.categoryVM.getCategories()
                 .stream()
@@ -62,10 +62,12 @@ public class CategoryView extends VBox {
         final FontIcon plusIcon = new FontIcon(PLUS);
         final BvButton addNewBtn = new BvButton(Labels.i18n("add.new"), plusIcon)
                 .withDefaultSize()
-                .action(actionEvent -> this.bvScaffold.addChild(CategoryRowView.createNew(this::onDelete)));
+                .action(actionEvent -> addNew());
 
-        this.bvScaffold.withChildren(nodes)
-                .withFooter(addNewBtn);
+        this.bvScaffold = BvScaffold.createDefault()
+                .withChildren(nodes)
+                .withFooter(addNewBtn)
+                .enableScrollToLast();
 
         this.getChildren().add(bvScaffold);
 
@@ -77,6 +79,12 @@ public class CategoryView extends VBox {
     private Result<Boolean> onDelete(CategoryRowView categoryRowView) {
         this.bvScaffold.removeChild(categoryRowView);
         return Result.Success;
+    }
+
+    private void addNew() {
+        CategoryRowView aNew = CategoryRowView.createNew(this::onDelete);
+        this.bvScaffold.addChild(aNew);
+        aNew.focus();
     }
 
 }

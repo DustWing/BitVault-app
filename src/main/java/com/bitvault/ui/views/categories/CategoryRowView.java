@@ -2,7 +2,8 @@ package com.bitvault.ui.views.categories;
 
 import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.textfield.BvTextField;
-import com.bitvault.ui.model.Identifiable;
+import com.bitvault.ui.listnode.Identifiable;
+import com.bitvault.ui.listnode.IdentifiableNode;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.utils.BvColors;
 import com.bitvault.ui.utils.BvSpacing;
@@ -19,10 +20,10 @@ import java.util.function.Function;
 
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignD.DELETE;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignP.PENCIL;
-import static org.kordamp.ikonli.materialdesign2.MaterialDesignC.CHECK;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignC.CHECK_BOLD;
 
 
-public class CategoryRowView extends HBox implements Identifiable {
+public class CategoryRowView extends HBox implements IdentifiableNode {
     private final CategoryRowVM categoryRowVM;
     private Function<CategoryRowView, Result<Boolean>> onDelete;
 
@@ -71,9 +72,9 @@ public class CategoryRowView extends HBox implements Identifiable {
         edit.visibleProperty().bind(this.categoryRowVM.allowEditProperty());
         edit.managedProperty().bind(this.categoryRowVM.allowEditProperty());
 
-        final FontIcon saveIcon = new FontIcon(CHECK);
+        final FontIcon saveIcon = new FontIcon(CHECK_BOLD);
         final BvButton saveBtn = new BvButton("", saveIcon);
-        saveBtn.setOnAction(actionEvent -> this.categoryRowVM.edit());
+        saveBtn.setOnAction(actionEvent -> save());
         saveBtn.visibleProperty().bind(this.categoryRowVM.allowSaveProperty());
         saveBtn.managedProperty().bind(this.categoryRowVM.allowSaveProperty());
 
@@ -85,12 +86,17 @@ public class CategoryRowView extends HBox implements Identifiable {
 
     }
 
+    private void save(){
+        this.categoryRowVM.save();
+        this.requestFocus();
+    }
 
     public CategoryRowView onDeleteAction(Function<CategoryRowView, Result<Boolean>> onDelete) {
         this.onDelete = onDelete;
         return this;
     }
 
+    @Override
     public void focus(){
         this.categoryName.requestFocus();
     }

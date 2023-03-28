@@ -13,11 +13,11 @@ public interface ICategoryService {
         return Result.ok(category);
     };
 
-    default Result<Boolean> update(final Category category){
-        return Result.ok(false);
+    default Result<Category> update(final Category category){
+        return Result.ok(category);
     };
 
-    default Result<Boolean> delete(final Category category){
+    default Result<Boolean> delete(final String id){
         return Result.ok(false);
     };
 

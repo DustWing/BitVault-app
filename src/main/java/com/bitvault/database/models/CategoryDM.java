@@ -5,6 +5,7 @@ import com.bitvault.util.DateTimeUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public record CategoryDM(
         String id,
@@ -50,13 +51,13 @@ public record CategoryDM(
         );
     }
 
-    public static CategoryDM convert(final Category category) {
+    public static CategoryDM convertUpdate(final Category category) {
         return new CategoryDM(
                 category.id(),
                 category.name(),
                 category.color(),
                 DateTimeUtils.formatToUtc(category.createdOn()),
-                DateTimeUtils.formatToUtc(category.modifiedOn()),
+                DateTimeUtils.formatToUtc(LocalDateTime.now()),
                 category.type()
         );
     }

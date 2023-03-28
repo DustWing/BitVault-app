@@ -36,5 +36,7 @@ public class BvInsets {
     public static Insets bottom15 = right(15);
 
     public static Insets all10 = new Insets(10);
+    public static Insets all20 = new Insets(20);
+
 
 }

@@ -3,19 +3,12 @@ package com.bitvault.ui.components;
 import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.BvSpacing;
 import com.bitvault.ui.utils.JavaFxUtil;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class BvScaffold extends VBox {
 
@@ -82,7 +75,11 @@ public class BvScaffold extends VBox {
     }
 
 
-    public BvScaffold enableScrollToLast() {
+    public void scrollToTop(){
+        scrollPane.setVvalue(0.0);
+    }
+
+    public BvScaffold enableScrollToBottom() {
 
         this.childrenVBox.heightProperty()
                 .addListener((__, oldValue, newValue) -> {

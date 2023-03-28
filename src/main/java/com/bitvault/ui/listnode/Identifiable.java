@@ -1,4 +1,4 @@
-package com.bitvault.ui.model;
+package com.bitvault.ui.listnode;
 
 public interface Identifiable {
     String getUniqueId();

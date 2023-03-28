@@ -54,6 +54,21 @@ public class JavaFxUtil {
         listView.scrollTo(listView.getItems().size() - 1);
     }
 
+    private static void scrollTo(ScrollPane pane, Node node) {
+        double width = pane.getContent().getBoundsInLocal().getWidth();
+        double height = pane.getContent().getBoundsInLocal().getHeight();
+
+        double x = node.getBoundsInParent().getMaxX();
+        double y = node.getBoundsInParent().getMaxY();
+
+        // scrolling values range from 0 to 1
+        pane.setVvalue(y / height);
+        pane.setHvalue(x / width);
+
+        // just for usability
+        node.requestFocus();
+    }
+
     public static void changeScene(Pane parent, Node from, Node to) {
         FadeTransition fadeInTransition = new FadeTransition(Duration.millis(1000), to);
         fadeInTransition.setFromValue(0.0);

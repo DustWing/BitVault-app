@@ -42,7 +42,6 @@ public class BitVault extends Application {
 
 //        ViewLoader.load(stage, WelcomeView::new);
 
-
         stage.setOnCloseRequest(event -> runOnCloseActions());
 
 

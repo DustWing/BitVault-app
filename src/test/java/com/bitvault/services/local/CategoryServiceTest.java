@@ -108,7 +108,7 @@ class CategoryServiceTest {
 
         Category category = categories.get(0);
 
-        Result<Boolean> update = categoryService.update(
+        Result<Category> update = categoryService.update(
                 new Category(
                         category.id(),
                         category.name(),
@@ -143,7 +143,7 @@ class CategoryServiceTest {
         }
 
         Category category = categories.get(0);
-        Result<Boolean> delete = categoryService.delete(category);
+        Result<Boolean> delete = categoryService.delete(category.id());
         if (delete.isFail()) {
             fail(delete.getError());
         }

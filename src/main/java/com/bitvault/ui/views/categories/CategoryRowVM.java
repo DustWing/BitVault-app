@@ -13,7 +13,6 @@ public class CategoryRowVM {
     private final SimpleObjectProperty<Color> categoryColor = new SimpleObjectProperty<>();
     private final SimpleBooleanProperty allowEdit = new SimpleBooleanProperty(true);
     private final SimpleBooleanProperty allowSave = new SimpleBooleanProperty(false);
-
     private final SimpleBooleanProperty deleted = new SimpleBooleanProperty();
 
 
@@ -27,7 +26,6 @@ public class CategoryRowVM {
     public void edit(){
         this.allowEdit.set(!allowEdit.get());
         this.allowSave.set(!allowSave.get());
-
     }
 
     public void save(){

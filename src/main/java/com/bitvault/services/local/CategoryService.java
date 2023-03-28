@@ -66,10 +66,9 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public Result<Boolean> update(Category category) {
+    public Result<Category> update(Category category) {
 
         try (Connection connection = connectionProvider.connect()) {
-
 
             final ICategoryDao categoryDao = new CategoryDao(connection);
 
@@ -79,10 +78,12 @@ public class CategoryService implements ICategoryService {
                 return Result.error(new Exception("No category found"));
             }
 
-            CategoryDM tpUpdate = CategoryDM.convert(category);
+            final CategoryDM tpUpdate = CategoryDM.convertUpdate(category);
             categoryDao.update(tpUpdate);
 
-            return Result.Success;
+            final Category catResult = CategoryDM.convert(categoryDM);
+
+            return Result.ok(catResult);
 
         } catch (SQLException e) {
             return Result.error(e);
@@ -91,18 +92,18 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public Result<Boolean> delete(Category category) {
+    public Result<Boolean> delete(String id) {
         try (Connection connection = connectionProvider.connect()) {
 
             final ICategoryDao categoryDao = new CategoryDao(connection);
 
-            final CategoryDM categoryDM = categoryDao.get(category.id());
+            final CategoryDM categoryDM = categoryDao.get(id);
 
             if (categoryDM == null) {
                 return Result.error(new Exception("No category found"));
             }
 
-            categoryDao.delete(category.id());
+            categoryDao.delete(id);
 
             return Result.Success;
 

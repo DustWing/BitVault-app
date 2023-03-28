@@ -1,4 +1,4 @@
-package com.bitvault;
+package com.bitvault.ui.async;
 
 public class BvServiceException extends RuntimeException{
     public BvServiceException() {

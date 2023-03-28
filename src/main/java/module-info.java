@@ -78,5 +78,7 @@ module com.bitvault {
     opens com.bitvault.ui.views.newaccount to javafx.fxml;
     exports com.bitvault.ui.listnode;
     opens com.bitvault.ui.listnode to com.fasterxml.jackson.databind;
+    exports com.bitvault.ui.async;
+    opens com.bitvault.ui.async to javafx.fxml;
 
 }

@@ -1,6 +1,7 @@
 package com.bitvault.ui.utils;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class BvColors {
 
@@ -14,7 +15,7 @@ public class BvColors {
         return toHex(random());
     }
 
-    public static Color fromHex(String value){
+    public static Color fromHex(String value) {
         return Color.valueOf(value);
     }
 
@@ -34,7 +35,8 @@ public class BvColors {
     private static String toHex(int value) {
         String hexed = Integer.toHexString(value);
         return hexed.length() == 1 ? "0" + hexed : hexed;
-
     }
+
+    public static final Paint LOADING_BG = Color.rgb(45, 45, 45, 0.4);
 
 }

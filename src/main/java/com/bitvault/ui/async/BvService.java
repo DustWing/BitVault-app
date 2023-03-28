@@ -1,4 +1,4 @@
-package com.bitvault;
+package com.bitvault.ui.async;
 
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;

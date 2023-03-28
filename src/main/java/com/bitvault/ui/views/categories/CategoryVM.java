@@ -1,19 +1,14 @@
 package com.bitvault.ui.views.categories;
 
-import com.bitvault.BvService;
+import com.bitvault.ui.async.BvService;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.ui.model.Category;
-import com.bitvault.ui.utils.BvColors;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.paint.Color;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public class CategoryVM {
 
@@ -46,13 +41,6 @@ public class CategoryVM {
 
         loading.set(true);
 
-        try {
-            System.out.println("Paused");
-            Thread.sleep(1000 * 3);
-            System.out.println("Continue");
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         Result<List<Category>> categoriesResult = this.categoryService.getCategories();
 
@@ -73,7 +61,7 @@ public class CategoryVM {
         this.categories.remove(categoryRowView);
         return Result.Success;
     }
-    
+
     public CategoryRowView addNewCategory() {
         CategoryRowView aNew = CategoryRowView.createNew(this::onDelete);
         this.categories.add(aNew);

@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignC.CHECK_BOLD;
@@ -28,17 +29,17 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignP.PENCIL;
 
 public class CategoryRowView extends HBox implements IdentifiableNode {
     private final CategoryRowVM categoryRowVM;
-    private Function<CategoryRowView, Result<Boolean>> onDelete;
+    private Consumer<CategoryRowView> onDelete;
 
     final BvTextField categoryName;
 
-    public static CategoryRowView createFromCategory(final Category category, Function<CategoryRowView, Result<Boolean>> onDelete) {
+    public static CategoryRowView createFromCategory(final Category category, Consumer<CategoryRowView> onDelete) {
         final Color color = BvColors.fromHex(category.color());
         final CategoryRowVM categoryRowVM = new CategoryRowVM(category.id(), category.name(), color);
         return new CategoryRowView(categoryRowVM, onDelete);
     }
 
-    public static CategoryRowView createNew(Function<CategoryRowView, Result<Boolean>> onDelete) {
+    public static CategoryRowView createNew(Consumer<CategoryRowView> onDelete) {
         final String id = UUID.randomUUID().toString();
         final CategoryRowVM categoryRowVM = new CategoryRowVM(id, "", BvColors.random());
         categoryRowVM.allowEditProperty().set(false);
@@ -47,7 +48,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
     }
 
 
-    public CategoryRowView(CategoryRowVM categoryRowVM, Function<CategoryRowView, Result<Boolean>> onDelete) {
+    public CategoryRowView(CategoryRowVM categoryRowVM, Consumer<CategoryRowView> onDelete) {
         this.categoryRowVM = categoryRowVM;
         this.onDelete = onDelete;
 
@@ -82,7 +83,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
         //delete btn
         final FontIcon deleteIcon = new FontIcon(DELETE);
         final BvButton deleteButton = new BvButton("", deleteIcon);
-        deleteButton.setOnAction(actionEvent -> onDelete.apply(this));
+        deleteButton.setOnAction(actionEvent -> onDelete.accept(this));
         deleteButton.disableProperty().bind(this.categoryRowVM.loadingProperty());
 
         //edit btn
@@ -125,11 +126,6 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
     private void save() {
         this.categoryRowVM.save();
         this.requestFocus();
-    }
-
-    public CategoryRowView onDeleteAction(Function<CategoryRowView, Result<Boolean>> onDelete) {
-        this.onDelete = onDelete;
-        return this;
     }
 
     @Override

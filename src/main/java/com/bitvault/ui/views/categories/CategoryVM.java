@@ -1,7 +1,7 @@
 package com.bitvault.ui.views.categories;
 
-import com.bitvault.ui.async.BvService;
 import com.bitvault.services.interfaces.ICategoryService;
+import com.bitvault.ui.async.BvService;
 import com.bitvault.ui.model.Category;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -38,12 +38,9 @@ public class CategoryVM {
     }
 
     private List<Category> loadCategories() {
-
         loading.set(true);
 
-
         Result<List<Category>> categoriesResult = this.categoryService.getCategories();
-
         if (categoriesResult.isFail()) {
             //TODO handle error
             throw new RuntimeException(categoriesResult.getError());
@@ -53,13 +50,12 @@ public class CategoryVM {
         return categoriesResult.get();
     }
 
-    private Result<Boolean> onDelete(CategoryRowView categoryRowView) {
+    private void onDelete(CategoryRowView categoryRowView) {
         Result<Boolean> booleanResult = categoryService.delete(categoryRowView.getUniqueId());
         if (booleanResult.isFail()) {
-            return booleanResult;
+            return;
         }
         this.categories.remove(categoryRowView);
-        return Result.Success;
     }
 
     public CategoryRowView addNewCategory() {

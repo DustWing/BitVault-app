@@ -1,7 +1,5 @@
 package com.bitvault.util;
 
-import java.util.concurrent.TimeUnit;
-
 public class BvUtils {
 
     /**

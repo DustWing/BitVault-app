@@ -1,7 +1,6 @@
 package com.bitvault.ui.views.categories;
 
 import com.bitvault.ui.async.BvService;
-import com.bitvault.ui.utils.BvSpacing;
 import com.bitvault.util.BvUtils;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;

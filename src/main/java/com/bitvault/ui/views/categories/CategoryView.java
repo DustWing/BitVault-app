@@ -25,13 +25,11 @@ public class CategoryView extends VBox {
     private final CategoryVM categoryVM;
 
     private final ListView<CategoryRowView> listView;
-
     private final ProgressIndicator progressIndicator = new ProgressIndicator();
-
+    private final Label noRecordLbl = new Label(Labels.i18n("no.records"));
     private final BvButton addNewBtn;
 
     public static CategoryView createTest() {
-
 
         ICategoryService categoryService = () -> Result.ok(List.of(
                 new Category(UUID.randomUUID().toString(), "Cat1", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password"),
@@ -39,7 +37,6 @@ public class CategoryView extends VBox {
                 new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password"),
                 new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password")
         ));
-
 
         CategoryVM categoryVM = new CategoryVM(categoryService);
 
@@ -50,7 +47,7 @@ public class CategoryView extends VBox {
 
     public CategoryView(CategoryVM categoryVM) {
         this.categoryVM = categoryVM;
-        this.listView = new ListView<>(categoryVM.getCategories());
+        this.listView = new ListView<>(this.categoryVM.getCategories());
         this.listView.setPlaceholder(new Label(Labels.i18n("no.records")));
         this.listView.setFixedCellSize(60);
 
@@ -59,33 +56,33 @@ public class CategoryView extends VBox {
                 .withDefaultSize()
                 .action(actionEvent -> addNew());
 
+
         this.categoryVM.loadingProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) loading();
             else onLoaded();
         });
 
+        this.categoryVM.load();
+
+        this.getChildren().addAll(this.listView, this.addNewBtn);
         this.setFillWidth(true);
         this.setAlignment(Pos.CENTER);
-
-        this.categoryVM.load();
+        JavaFxUtil.vGrowAlways(this);
     }
 
     private void loading() {
-        this.getChildren().clear();
-        this.getChildren().add(this.progressIndicator);
-        JavaFxUtil.vGrowAlways(this);
-
+        this.addNewBtn.setDisable(true);
+        this.listView.setPlaceholder(this.progressIndicator);
     }
 
     private void onLoaded() {
-        this.getChildren().clear();
-        this.getChildren().addAll(listView, addNewBtn);
-        JavaFxUtil.vGrowAlways(this);
+        this.addNewBtn.setDisable(false);
+        this.listView.setPlaceholder(this.noRecordLbl);
     }
 
 
     private void addNew() {
-        CategoryRowView categoryRowView = this.categoryVM.addNewCategory();
+        final CategoryRowView categoryRowView = this.categoryVM.addNewCategory();
         JavaFxUtil.scrollToLast(this.listView);
         categoryRowView.focus();
     }

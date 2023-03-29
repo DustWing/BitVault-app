@@ -2,9 +2,7 @@ package com.bitvault;
 
 import atlantafx.base.theme.PrimerDark;
 import com.bitvault.ui.utils.ViewLoader;
-import com.bitvault.ui.views.WelcomeView;
 import com.bitvault.ui.views.categories.CategoryView;
-import com.bitvault.ui.views.login.LoginView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;

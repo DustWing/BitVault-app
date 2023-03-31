@@ -1,6 +1,6 @@
 package com.bitvault.services.local;
 
-import com.bitvault.algos.ArgonEncoder;
+import com.bitvault.security.ArgonAuthenticator;
 import com.bitvault.consts.Consts;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
@@ -27,8 +27,8 @@ class UserServiceTest {
         }
 
         final ConnectionProvider connectionProvider = new LocalDB(location);
-        final ArgonEncoder argonEncoder = new ArgonEncoder();
-        userService = new UserService(connectionProvider, argonEncoder);
+        final ArgonAuthenticator argonAuthenticator = new ArgonAuthenticator();
+        userService = new UserService(connectionProvider, argonAuthenticator);
 
     }
 
@@ -42,7 +42,7 @@ class UserServiceTest {
             fail(registerResult.getError());
         }
 
-        Result<User> authenticateRes = userService.authenticate(user);
+        Result<User> authenticateRes = userService.authenticate(user.name(),user.credentials());
 
         if (authenticateRes.isFail()) {
             fail(authenticateRes.getError());

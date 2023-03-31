@@ -1,44 +1,35 @@
 package com.bitvault.security;
 
-import java.util.Arrays;
+import com.bitvault.services.factory.ServiceFactory;
 
 public class UserSession {
 
-
-    private final String location;
-    private final char[] username;
-
+    private final String username;
     private final EncryptionProvider encryptionProvider;
+    private final ServiceFactory serviceFactory;
 
-    public static UserSession newAesSession(String filepath, String username, String password) {
 
-
-        EncryptionProvider provider = new AesEncryptionProvider(password.toCharArray());
-
-        return new UserSession(filepath, username.toCharArray(), provider);
-    }
-
-    private UserSession(String location, char[] username, EncryptionProvider encryptionProvider) {
-        this.location = location;
+    public UserSession(String username, EncryptionProvider encryptionProvider, ServiceFactory serviceFactory) {
         this.username = username;
         this.encryptionProvider = encryptionProvider;
+        this.serviceFactory = serviceFactory;
     }
 
     public void discard() {
-        Arrays.fill(this.username, (char) 0);
         this.encryptionProvider.destroy();
     }
 
-    public String getLocation() {
-        return location;
-    }
 
     public String getUsername() {
-        return new String(username);
+        return username;
     }
 
 
     public EncryptionProvider getEncryptionProvider() {
         return encryptionProvider;
+    }
+
+    public ServiceFactory getServiceFactory() {
+        return serviceFactory;
     }
 }

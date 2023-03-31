@@ -12,10 +12,14 @@ public class ViewLoader {
     public static void load(Stage stage, Supplier<Parent> parentSupplier) {
 
         try {
+            stage.setWidth(840);
+            stage.setHeight(600);
 
             Parent view = parentSupplier.get();
             final Scene scene = new Scene(view, 840, 600);
             stage.setScene(scene);
+
+            stage.centerOnScreen();
             stage.show();
         } catch (ViewLoadException ex) {
             ex.printStackTrace();

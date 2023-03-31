@@ -1,6 +1,13 @@
 package com.bitvault.ui.views.login;
 
+import com.bitvault.security.AesEncryptionProvider;
+import com.bitvault.security.EncryptionProvider;
+import com.bitvault.security.UserSession;
+import com.bitvault.services.factory.ServiceFactory;
+import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.ui.components.validation.ValidateForm;
+import com.bitvault.ui.model.User;
+import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -15,8 +22,32 @@ public class LoginVM {
     public LoginVM() {
     }
 
-    public boolean validate() {
-        return validateForm.validate();
+    public Result<UserSession> login() {
+
+        boolean formValidate = validateForm.validate();
+
+        if (!formValidate) {
+            return Result.error(new Exception(""));
+        }
+
+        final String location = this.location.get();
+        final String username = this.username.get();
+        final String password = this.password.get();
+
+        final EncryptionProvider encryptionProvider = new AesEncryptionProvider(password.toCharArray());
+
+        final ServiceFactory serviceFactory = new LocalServiceFactory(location, encryptionProvider);
+
+        final Result<User> authResult = serviceFactory.getUserService()
+                .authenticate(username, password);
+
+        if (authResult.isFail()) {
+            return Result.error(authResult.getError());
+        }
+
+        final UserSession userSession = new UserSession(username, encryptionProvider, serviceFactory);
+
+        return Result.ok(userSession);
     }
 
     public boolean isOffline() {

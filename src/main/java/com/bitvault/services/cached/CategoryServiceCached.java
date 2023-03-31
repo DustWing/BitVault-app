@@ -8,6 +8,8 @@ import com.bitvault.util.Result;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CategoryServiceCached implements ICategoryService {
 
@@ -22,7 +24,18 @@ public class CategoryServiceCached implements ICategoryService {
 
     @Override
     public Result<List<Category>> getCategories() {
-        if (cache.isEmpty()) {
+        if (this.cache.isEmpty()) {
+
+            final Result<List<Category>> categoriesResult = categoryService.getCategories();
+            if (categoriesResult.isFail()) {
+                return categoriesResult;
+            }
+
+            final Map<String, Category> map = categoriesResult.get().stream()
+                    .collect(Collectors.toMap(Category::id, Function.identity()));
+
+            this.cache.putAll(map);
+
             return categoryService.getCategories();
         }
         return Result.ok(List.copyOf(cache.values()));
@@ -38,7 +51,7 @@ public class CategoryServiceCached implements ICategoryService {
         }
 
         Category newCat = categoryResult.get();
-        cache.put(newCat.id(), newCat);
+        this.cache.put(newCat.id(), newCat);
 
         return categoryResult;
     }
@@ -51,14 +64,15 @@ public class CategoryServiceCached implements ICategoryService {
             return categoryResult;
         }
 
-        Category newCat = categoryResult.get();
-        cache.put(newCat.id(), newCat);
+        final Category newCat = categoryResult.get();
+        this.cache.put(newCat.id(), newCat);
+
         return categoryResult;
     }
 
     @Override
     public Result<Boolean> delete(String id) {
-        cache.remove(id);
+        this.cache.remove(id);
         return ICategoryService.super.delete(id);
     }
 }

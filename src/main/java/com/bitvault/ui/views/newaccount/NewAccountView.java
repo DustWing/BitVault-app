@@ -1,49 +1,46 @@
 package com.bitvault.ui.views.newaccount;
 
+import com.bitvault.security.UserSession;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.BvButton;
+import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.views.dashboard.DashBoardView;
-import com.bitvault.ui.views.factory.ViewFactory;
 import com.bitvault.util.Labels;
+import com.bitvault.util.Result;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.function.Consumer;
 
 
 public class NewAccountView extends BitVaultVBox {
 
     private final NewAccountVM newAccountVM;
 
-    public NewAccountView(
-            NewAccountVM newAccountVM,
-            Consumer<NewAccountView> onBack
-    ) {
+    public NewAccountView(NewAccountVM newAccountVM) {
         super();
         this.newAccountVM = newAccountVM;
 
         BvTextField username = new BvTextField()
                 .withBinding(newAccountVM.usernameProperty())
                 .withPromptText(Labels.i18n("username"))
+                .withDefaultSize()
                 .setRequired(true);
 
-        BvTextField password = new BvTextField()
-                .withBinding(newAccountVM.passwordProperty())
-                .withPromptText(Labels.i18n("password"))
-                .setRequired(true);
+        BvPasswordInput password = new BvPasswordInput(newAccountVM.passwordProperty());
 
         BvTextField fileName = new BvTextField()
                 .withBinding(newAccountVM.fileNameProperty())
                 .withPromptText(Labels.i18n("file.name"))
+                .withDefaultSize()
                 .setRequired(true);
 
-        BvButton chooseFileBtn = new BvButton(Labels.i18n("choose.file")).withDefaultSize();;
+        BvButton chooseFileBtn = new BvButton(Labels.i18n("choose.file")).withDefaultSize();
         chooseFileBtn.setOnAction(event -> chooseFileAction());
 
 
@@ -51,8 +48,6 @@ public class NewAccountView extends BitVaultVBox {
         loginButton.setOnAction(event -> createBtnAction());
         loginButton.setDefaultButton(true);
 
-        BvButton backButton = new BvButton(Labels.i18n("back")).withDefaultSize();;
-        backButton.setOnAction(event -> onBack.accept(this));
 
 //        newAccountVM.getValidatedForm().addAll(
 //                username,
@@ -65,13 +60,14 @@ public class NewAccountView extends BitVaultVBox {
                 password,
                 fileName,
                 chooseFileBtn,
-                loginButton,
-                backButton
+                loginButton
         );
 
+        this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
         this.setFillWidth(true);
         this.setPadding(BvInsets.all10);
+
     }
 
     private void chooseFileAction() {
@@ -88,18 +84,17 @@ public class NewAccountView extends BitVaultVBox {
 
     private void createBtnAction() {
 
-        boolean valid = newAccountVM.validate();
+        final Result<UserSession> userSessionResult = newAccountVM.create();
 
-        if (!valid) {
+        if (userSessionResult.isFail()) {
+            //TODO handle
             return;
         }
 
-        final ViewFactory viewFactory = newAccountVM.create();
+        final UserSession userSession = userSessionResult.get();
 
-        final DashBoardView view = viewFactory.getDashboardView();
+        final DashBoardView view = DashBoardView.create(userSession);
         final Scene scene = new Scene(view, 1080, 960);
-        //copy css
-        scene.getStylesheets().addAll(this.getScene().getStylesheets());
 
         final Stage stage = (Stage) this.getScene().getWindow();
         stage.setWidth(1080);
@@ -108,6 +103,7 @@ public class NewAccountView extends BitVaultVBox {
 
         //change scene
         stage.setScene(scene);
+
 
     }
 }

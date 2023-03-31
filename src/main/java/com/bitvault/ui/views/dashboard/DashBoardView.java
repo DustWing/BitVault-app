@@ -1,10 +1,11 @@
 package com.bitvault.ui.views.dashboard;
 
+import com.bitvault.security.UserSession;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.utils.JavaFxUtil;
+import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
 import com.bitvault.util.Labels;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -17,9 +18,12 @@ public final class DashBoardView extends BitVaultVBox {
 
     final DashBoardVM dashBoardVM;
 
-    public DashBoardView(
-            final DashBoardVM dashBoardVM
-    ) {
+    public static DashBoardView create(UserSession userSession) {
+        DashBoardVM dashBoardVM = new DashBoardVM(userSession);
+        return new DashBoardView(dashBoardVM);
+    }
+
+    DashBoardView(final DashBoardVM dashBoardVM) {
 
         this.dashBoardVM = dashBoardVM;
         init();
@@ -31,18 +35,7 @@ public final class DashBoardView extends BitVaultVBox {
 
         final Button logout = new Button("", logOutIcon);
         logout.setAccessibleText(Labels.i18n("logout"));
-        logout.setOnAction(event -> {
-
-            final Stage stage = (Stage) this.getScene().getWindow();
-            stage.setWidth(640);
-            stage.setHeight(400);
-            stage.centerOnScreen();
-
-            final WelcomeView view = new WelcomeView();
-            final Scene scene = new Scene(view, 640, 400);
-            stage.setScene(scene);
-        });
-
+        logout.setOnAction(event -> logout());
 
         final Tab passTab = new Tab(Labels.i18n("passwords"), dashBoardVM.getPasswordView());
         passTab.setClosable(false);
@@ -52,13 +45,15 @@ public final class DashBoardView extends BitVaultVBox {
 
         final TabPane tabPane = new TabPane(passTab, cardTab);
 
-        this.getChildren().addAll(
-                logout,
-                tabPane
-        );
+        this.getChildren().addAll(logout, tabPane);
 
         JavaFxUtil.vGrowAlways(this);
 
+    }
+
+    private void logout() {
+        final Stage stage = (Stage) this.getScene().getWindow();
+        ViewLoader.load(stage, WelcomeView::new);
     }
 
 

@@ -1,22 +1,17 @@
 package com.bitvault.ui.views.login;
 
 import com.bitvault.security.UserSession;
-import com.bitvault.services.factory.IServiceFactory;
-import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
-import com.bitvault.ui.model.User;
 import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.views.dashboard.DashBoardView;
-import com.bitvault.ui.views.factory.ViewFactory;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -27,10 +22,7 @@ public class LoginView extends BitVaultVBox {
 
     private final LoginVM loginVM;
 
-    public LoginView(
-            LoginVM loginVM,
-            Runnable newAccBtn
-    ) {
+    public LoginView(LoginVM loginVM) {
 
         super();
         this.loginVM = loginVM;
@@ -65,13 +57,9 @@ public class LoginView extends BitVaultVBox {
                 .withDefaultSize();
 
 
-        BvButton newAccountBtn = new BvButton(Labels.i18n("new.account"))
-                .action(event -> newAccBtn.run())
-                .withDefaultSize();
-
         BvButton chooseFileBtn = new BvButton(Labels.i18n("choose.file"))
                 .action(event -> chooseFileAction())
-                .withDefaultSize();;
+                .withDefaultSize();
 
 
         this.getChildren().addAll(
@@ -79,16 +67,13 @@ public class LoginView extends BitVaultVBox {
                 passwordSp,
                 location,
                 chooseFileBtn,
-                loginButton,
-                newAccountBtn
+                loginButton
         );
 
         this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
         this.setFillWidth(true);
         this.setPadding(BvInsets.all10);
-
-//        super.vGrowAlways();
     }
 
 
@@ -102,35 +87,16 @@ public class LoginView extends BitVaultVBox {
 
     private void loginBtnAction() {
 
-        if (!loginVM.validate()) {
+        final Result<UserSession> loginResults = loginVM.login();
+
+        if (loginResults.isFail()) {
+            //TODO handle
             return;
         }
 
-        final UserSession userSession = UserSession.newAesSession(loginVM.getLocation(), loginVM.getUsername(), loginVM.getPassword());
+        final UserSession userSession = loginResults.get();
 
-        final IServiceFactory serviceFactory = new LocalServiceFactory(loginVM.getLocation(), userSession.getEncryptionProvider());
-
-        final User user = new User(
-                null,
-                loginVM.getUsername(),
-                loginVM.getPassword()
-        );
-
-
-        Result<User> authResult = serviceFactory.getUserService()
-                .authenticate(user);
-
-        if (authResult.isFail()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error?");
-            alert.setContentText(authResult.getError().getMessage());
-            alert.showAndWait();
-            return;
-        }
-
-
-        final ViewFactory viewFactory = new ViewFactory(userSession, serviceFactory);
-        final DashBoardView view = viewFactory.getDashboardView();
+        final DashBoardView view =  DashBoardView.create(userSession);
         final Scene scene = new Scene(view, 1080, 960);
 
         final Stage stage = (Stage) this.getScene().getWindow();

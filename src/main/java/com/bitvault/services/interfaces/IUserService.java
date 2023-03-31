@@ -7,5 +7,5 @@ public interface IUserService {
 
     Result<User> register(User user);
 
-    Result<User> authenticate(User user);
+    Result<User> authenticate(String username, String password);
 }

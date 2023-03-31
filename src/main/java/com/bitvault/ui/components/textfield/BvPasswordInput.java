@@ -16,6 +16,7 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignE.EYE_OFF;
  */
 public class BvPasswordInput extends StackPane {
 
+
     /**
      * @param password bind string property to UI fields
      */

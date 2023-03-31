@@ -33,11 +33,10 @@ public class CategoryService implements ICategoryService {
 
             return Result.ok(
                     categories.stream()
-                            .map(
-                                    CategoryDM::convert
-                            )
+                            .map(CategoryDM::convert)
                             .toList()
             );
+
         } catch (SQLException e) {
             return Result.error(e);
         }

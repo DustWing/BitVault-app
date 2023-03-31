@@ -6,7 +6,14 @@ public record User(
         String credentials
 ) {
 
-    public User copy(final String credentials) {
+    public User forLogin(String name, String credentials){
+        return new User(
+                null,
+                this.name,
+                credentials
+        );
+    }
+    public User withNewCredentials(final String credentials) {
         return new User(
                 this.id,
                 this.name,

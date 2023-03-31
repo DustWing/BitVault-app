@@ -1,7 +1,7 @@
 package com.bitvault.ui.views.dashboard;
 
 import com.bitvault.security.UserSession;
-import com.bitvault.services.factory.IServiceFactory;
+import com.bitvault.services.factory.ServiceFactory;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.views.password.PasswordVM;
 import com.bitvault.ui.views.password.PasswordView;
@@ -15,14 +15,14 @@ public final class DashBoardVM {
 
 
     private final UserSession userSession;
-    private final IServiceFactory serviceFactory;
+    private final ServiceFactory serviceFactory;
     private List<Profile> profiles;
     private final SimpleObjectProperty<Profile> selectedProfile;
 
 
-    public DashBoardVM(UserSession userSession, final IServiceFactory serviceFactory) {
+    public DashBoardVM(UserSession userSession) {
         this.userSession = userSession;
-        this.serviceFactory = serviceFactory;
+        this.serviceFactory = userSession.getServiceFactory();
         this.selectedProfile = new SimpleObjectProperty<>();
         this.profiles = new ArrayList<>();
         init();

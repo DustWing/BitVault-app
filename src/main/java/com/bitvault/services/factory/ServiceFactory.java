@@ -5,7 +5,7 @@ import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.services.interfaces.IProfileService;
 import com.bitvault.services.interfaces.IUserService;
 
-public interface IServiceFactory {
+public interface ServiceFactory {
 
     IPasswordService getPasswordService();
 

@@ -1,14 +1,15 @@
 package com.bitvault.ui.views.newaccount;
 
+import com.bitvault.security.AesEncryptionProvider;
+import com.bitvault.security.EncryptionProvider;
 import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.LocalServiceFactory;
+import com.bitvault.services.factory.ServiceFactory;
 import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.model.User;
-import com.bitvault.ui.views.factory.ViewFactory;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.Alert;
 
 import java.util.UUID;
 
@@ -24,12 +25,22 @@ public class NewAccountVM {
     public NewAccountVM() {
     }
 
-    public boolean validate() {
+    public Result<UserSession> create() {
 
-        return validatedForm.validate();
-    }
+        boolean formValidate = validatedForm.validate();
 
-    public ViewFactory create() {
+        if (!formValidate) {
+            return Result.error(new Exception(""));
+        }
+
+        final String location = this.location.get();
+        final String username = this.username.get();
+        final String password = this.password.get();
+
+        final EncryptionProvider encryptionProvider = new AesEncryptionProvider(password.toCharArray());
+
+        final ServiceFactory serviceFactory = new LocalServiceFactory(location, encryptionProvider);
+
 
         User user = new User(
                 UUID.randomUUID().toString(),
@@ -37,28 +48,15 @@ public class NewAccountVM {
                 getPassword()
         );
 
-        String location = getLocation() + "/" + getFileName() + ".vault";
-
-        final UserSession userSession = UserSession.newAesSession(location, getUsername(), getPassword());
-
-
-        final LocalServiceFactory localServiceFactory = new LocalServiceFactory(location, userSession.getEncryptionProvider());
-
-        Result<User> userResult = localServiceFactory.getUserService()
+        Result<User> userResult = serviceFactory.getUserService()
                 .register(user);
 
         if (userResult.isFail()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error?");
-            alert.setContentText(userResult.getError().getMessage());
-            alert.showAndWait();
-            //
+            return Result.error(userResult.getError());
         }
 
-        User registeredUser = userResult.get();
-
-
-        return new ViewFactory(userSession, localServiceFactory);
+        final UserSession userSession = new UserSession(username, encryptionProvider, serviceFactory);
+        return Result.ok(userSession);
     }
 
 

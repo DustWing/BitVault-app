@@ -1,7 +1,6 @@
 package com.bitvault.ui.utils;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.Transition;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -69,18 +68,11 @@ public class JavaFxUtil {
         node.requestFocus();
     }
 
-    public static void changeScene(Pane parent, Node from, Node to) {
-        FadeTransition fadeInTransition = new FadeTransition(Duration.millis(1000), to);
+    public static void fadeIn(Node node) {
+        FadeTransition fadeInTransition = new FadeTransition(Duration.millis(1000), node);
         fadeInTransition.setFromValue(0.0);
         fadeInTransition.setToValue(1.0);
-        changeScene(parent, from, to, fadeInTransition);
-    }
-
-
-    public static void changeScene(Pane parent, Node from, Node to, Transition transition) {
-        parent.getChildren().remove(from);
-        parent.getChildren().add(to);
-        transition.play();
+        fadeInTransition.play();
     }
 
     public static void copyToClipBoard(final String value) {

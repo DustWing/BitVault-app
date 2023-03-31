@@ -1,6 +1,5 @@
 package com.bitvault.services.local;
 
-import com.bitvault.algos.ArgonEncoder;
 import com.bitvault.database.creator.DbCreator;
 import com.bitvault.database.creator.IDbCreator;
 import com.bitvault.database.daos.*;
@@ -8,6 +7,7 @@ import com.bitvault.database.models.CategoryDM;
 import com.bitvault.database.models.ProfileDM;
 import com.bitvault.database.models.UserDM;
 import com.bitvault.database.provider.ConnectionProvider;
+import com.bitvault.security.Authenticator;
 import com.bitvault.services.interfaces.IUserService;
 import com.bitvault.ui.model.User;
 import com.bitvault.ui.utils.BvColors;
@@ -22,27 +22,27 @@ import java.util.UUID;
 
 public class UserService implements IUserService {
 
-    private final ArgonEncoder argonEncoder;
+    private final Authenticator authenticator;
     private final ConnectionProvider connectionProvider;
 
-    public UserService(final ConnectionProvider connectionProvider, final ArgonEncoder argonEncoder) {
+    public UserService(final ConnectionProvider connectionProvider, final Authenticator authenticator) {
         this.connectionProvider = connectionProvider;
-        this.argonEncoder = argonEncoder;
+        this.authenticator = authenticator;
     }
 
     @Override
     public Result<User> register(User user) {
 
-        final String newCred = argonEncoder.hash((user.name() + user.credentials()).toCharArray());
+        final String newCred = authenticator.hash((user.name() + user.credentials()).toCharArray());
 
         final IDbCreator dbCreator = new DbCreator(connectionProvider);
         dbCreator.create();
 
         try (Connection connection = connectionProvider.connect()) {
+            final UserDM convert = UserDM.convert(user.withNewCredentials(newCred));
+
             final IUserDao userDao = new UserDao(connection);
-            userDao.create(
-                    UserDM.convert(user.copy(newCred))
-            );
+            userDao.create(convert);
 
             //create default category - must always have one
             createCategory(connection);
@@ -84,7 +84,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Result<User> authenticate(User user) {
+    public Result<User> authenticate(String username, String password) {
 
         final UserDM dbUser;
         try (Connection connection = connectionProvider.connect()) {
@@ -94,11 +94,9 @@ public class UserService implements IUserService {
             return Result.error(e);
         }
 
-        boolean verify = argonEncoder.verify(dbUser.credentials(), (user.name() + user.credentials()).toCharArray());
+        boolean verify = authenticator.verify(dbUser.credentials(), (username + password).toCharArray());
         if (!verify) {
-            return Result.error(
-                    new RuntimeException("Invalid user")
-            );
+            return Result.error(new RuntimeException("Invalid user"));
         }
         return Result.ok(UserDM.convert(dbUser));
     }

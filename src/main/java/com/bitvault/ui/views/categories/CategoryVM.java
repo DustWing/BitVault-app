@@ -1,7 +1,7 @@
 package com.bitvault.ui.views.categories;
 
 import com.bitvault.services.interfaces.ICategoryService;
-import com.bitvault.ui.async.BvService;
+import com.bitvault.ui.async.AsyncTask;
 import com.bitvault.ui.model.Category;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -21,7 +21,7 @@ public class CategoryVM {
     }
 
     public void load() {
-        BvService.create(this::loadCategories)
+        AsyncTask.toRun(this::loadCategories)
                 .onSuccess(this::onLoaded)
                 .onFailure(Throwable::printStackTrace)
                 .start();

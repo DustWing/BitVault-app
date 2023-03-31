@@ -6,27 +6,26 @@ import javafx.concurrent.Task;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class BvService<V> extends Service<V> {
+public class AsyncTask<V> extends Service<V> {
 
     private final Supplier<V> supplier;
 
-    public static <V> BvService<V> create(Supplier<V> supplier) {
-        final BvService<V> service = new BvService<>(supplier);
-        return service;
+    public static <V> AsyncTask<V> toRun(Supplier<V> supplier) {
+        return new AsyncTask<>(supplier);
 
     }
 
-    public BvService(Supplier<V> supplier) {
+    public AsyncTask(Supplier<V> supplier) {
         this.supplier = supplier;
     }
 
-    public BvService<V> onSuccess(Consumer<V> consumer) {
+    public AsyncTask<V> onSuccess(Consumer<V> consumer) {
         setOnSucceeded(event -> consumer.accept(this.getValue()));
         return this;
     }
 
-    public BvService<V> onFailure(Consumer<BvServiceException> onException) {
-        setOnFailed(event -> onException.accept(new BvServiceException(this.getException())));
+    public AsyncTask<V> onFailure(Consumer<AsyncTaskException> onException) {
+        setOnFailed(event -> onException.accept(new AsyncTaskException(this.getException())));
         return this;
     }
 

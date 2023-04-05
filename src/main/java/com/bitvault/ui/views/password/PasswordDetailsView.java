@@ -42,7 +42,7 @@ public class PasswordDetailsView extends BitVaultVBox {
 
         final BvTextField titleTf = new BvTextField()
                 .withBinding(passwordDetailsVM.titlePropertyProperty())
-                .setRequired(true)
+                .required(true)
                 .withDefaultSize()
                 .withPromptText(Labels.i18n("title"));
 
@@ -96,11 +96,12 @@ public class PasswordDetailsView extends BitVaultVBox {
 
         final BvTextField usernameTf = new BvTextField()
                 .withBinding(passwordDetailsVM.userNamePropertyProperty())
-                .setRequired(true)
+                .required(true)
                 .withDefaultSize()
                 .withPromptText(Labels.i18n("username"));
 
-        final BvPasswordInput passwordInput = new BvPasswordInput(passwordDetailsVM.passwordPropertyProperty());
+        final BvPasswordInput passwordInput = new BvPasswordInput()
+                .withBinding(passwordDetailsVM.passwordPropertyProperty());
 
         return new BvDoubleColumn(List.of(usernameTf), List.of(passwordInput));
     }

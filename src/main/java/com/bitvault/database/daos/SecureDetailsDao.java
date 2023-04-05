@@ -5,6 +5,7 @@ import com.bitvault.database.utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,8 @@ public class SecureDetailsDao implements ISecureDetailsDao {
             "SET category_id=?, domain=?, title=?, description=?, favourite=?, modified_on=?, expires_on=?, requires_mp=?, shared=? " +
             "WHERE ID=?";
     private static final String sDeleteQ = "DELETE FROM t_secure_details WHERE ID=?";
+
+    private static final String sCountByCategoryIdQ = "SELECT COUNT(*) FROM t_secure_details WHERE category_id=?";
 
     private final Connection connection;
 
@@ -87,7 +90,7 @@ public class SecureDetailsDao implements ISecureDetailsDao {
             //where
             stm.setString(++index, secureDetails.id());
 
-           return stm.executeUpdate();
+            return stm.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException("", e);
@@ -108,4 +111,21 @@ public class SecureDetailsDao implements ISecureDetailsDao {
     }
 
 
+    @Override
+    public int countByCategoryId(String id) {
+        try (
+                PreparedStatement stm = connection.prepareStatement(sCountByCategoryIdQ)
+        ) {
+            stm.setString(1, id);
+            ResultSet resultSet = stm.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+            return 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("", e);
+        }
+    }
 }

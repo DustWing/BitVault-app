@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 public class BvButton extends Button {
 
     private final static String STYLE_CLASS = "bit-vault-flat-button";
-    private final static String STYLE_SHEET = ResourceLoader.load("/com.bitvault/css/bitVaultButton.css");
 
     public BvButton() {
         super();

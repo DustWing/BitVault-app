@@ -153,7 +153,7 @@ public class PasswordService implements IPasswordService {
     }
 
     @Override
-    public Result<Boolean> update(Password password) {
+    public Result<Password> update(Password password) {
 
         try (Connection connection = connectionProvider.connect()) {
             connection.setAutoCommit(false);
@@ -178,7 +178,7 @@ public class PasswordService implements IPasswordService {
 
                 connection.commit();
 
-                return Result.Success;
+                return Result.ok(password);
 
             } catch (SQLException e) {
                 connection.rollback();

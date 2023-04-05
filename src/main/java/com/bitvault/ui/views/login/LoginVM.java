@@ -6,6 +6,7 @@ import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.ServiceFactory;
 import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.ui.components.validation.ValidateForm;
+import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.model.User;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -18,15 +19,18 @@ public class LoginVM {
     private final SimpleStringProperty password = new SimpleStringProperty();
     private final SimpleStringProperty location = new SimpleStringProperty();
     private final ValidateForm validateForm = new ValidateForm();
+    private final SimpleBooleanProperty loading = new SimpleBooleanProperty();
 
     public LoginVM() {
     }
 
     public Result<UserSession> login() {
 
-        boolean formValidate = validateForm.validate();
+        loading.set(true);
 
-        if (!formValidate) {
+        ValidateResult validateResult = validateForm.validate();
+
+        if (!validateResult.valid()) {
             return Result.error(new Exception(""));
         }
 
@@ -84,5 +88,13 @@ public class LoginVM {
 
     public SimpleStringProperty locationProperty() {
         return location;
+    }
+
+    public boolean isLoading() {
+        return loading.get();
+    }
+
+    public SimpleBooleanProperty loadingProperty() {
+        return loading;
     }
 }

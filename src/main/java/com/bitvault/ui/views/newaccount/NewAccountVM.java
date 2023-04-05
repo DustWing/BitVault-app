@@ -6,6 +6,7 @@ import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.services.factory.ServiceFactory;
 import com.bitvault.ui.components.validation.ValidateForm;
+import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.model.User;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -27,9 +28,9 @@ public class NewAccountVM {
 
     public Result<UserSession> create() {
 
-        boolean formValidate = validatedForm.validate();
+        ValidateResult validateResult = validatedForm.validate();
 
-        if (!formValidate) {
+        if (!validateResult.valid()) {
             return Result.error(new Exception(""));
         }
 

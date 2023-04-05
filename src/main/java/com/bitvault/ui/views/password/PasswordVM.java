@@ -26,19 +26,17 @@ public class PasswordVM {
 
     public PasswordVM(
             final UserSession userSession,
-            final IPasswordService passwordService,
-            final ICategoryService categoryService,
             final Profile profile
     ) {
         this.userSession = userSession;
-        this.passwordService = passwordService;
-        this.categoryService = categoryService;
+        this.passwordService = userSession.getServiceFactory().getPasswordService();
+        this.categoryService = userSession.getServiceFactory().getCategoryService();
         this.profile = profile;
         this.categories = new ArrayList<>();
         this.init();
     }
 
-    private void init() {
+    public void init() {
 
         Result<List<Password>> passwordsRes = passwordService.getPasswords();
         if (passwordsRes.isFail()) {
@@ -47,8 +45,8 @@ public class PasswordVM {
             return;
         }
 
+        passwords.clear();
         passwords.addAll(passwordsRes.get());
-
 
         Result<List<Category>> categoriesResult = categoryService.getCategories();
 
@@ -57,6 +55,7 @@ public class PasswordVM {
             passwordsRes.getError().printStackTrace();
             return;
         }
+        categories.clear();
         categories.addAll(categoriesResult.get());
 
 
@@ -123,5 +122,9 @@ public class PasswordVM {
 
     public Profile getProfile() {
         return profile;
+    }
+
+    public ICategoryService getCategoryService() {
+        return categoryService;
     }
 }

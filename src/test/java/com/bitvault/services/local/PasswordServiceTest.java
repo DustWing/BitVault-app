@@ -4,6 +4,10 @@ import com.bitvault.consts.Consts;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
 import com.bitvault.enums.Action;
+import com.bitvault.security.AesEncryptionProvider;
+import com.bitvault.security.EncryptionProvider;
+import com.bitvault.services.factory.LocalServiceFactory;
+import com.bitvault.services.factory.ServiceFactory;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.services.interfaces.IProfileService;
@@ -37,8 +41,11 @@ class PasswordServiceTest {
             throw new RuntimeException("Set up location for test file");
         }
 
-        final UserSession userSession = UserSession.newAesSession(location, "username", "password");
+        final EncryptionProvider encryptionProvider = new AesEncryptionProvider("password".toCharArray());
 
+        final ServiceFactory serviceFactory = new LocalServiceFactory(location, encryptionProvider);
+
+        final UserSession userSession = new UserSession("username", encryptionProvider, serviceFactory);
 
         final ConnectionProvider connectionProvider = new LocalDB(location);
         passwordService = new PasswordService(connectionProvider, userSession.getEncryptionProvider());
@@ -158,7 +165,7 @@ class PasswordServiceTest {
                 password.getAction()
         );
 
-        Result<Boolean> updateResult = passwordService.update(passwordUpdated);
+        Result<Password> updateResult = passwordService.update(passwordUpdated);
 
         if (updateResult.isFail()) {
             fail(updateResult.getError());

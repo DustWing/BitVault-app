@@ -6,6 +6,7 @@ import com.bitvault.database.provider.LocalDB;
 import com.bitvault.security.Authenticator;
 import com.bitvault.security.EncryptionProvider;
 import com.bitvault.services.cached.CategoryServiceCached;
+import com.bitvault.services.cached.PasswordServiceCached;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.services.interfaces.IProfileService;
@@ -26,9 +27,7 @@ public class LocalServiceFactory implements ServiceFactory {
         final ConnectionProvider connectionProvider = new LocalDB(location);
         final Authenticator argonAuthenticator = new ArgonAuthenticator();
 
-        final ICategoryService categoryService = new CategoryService(connectionProvider);
-
-        this.categoryService = new CategoryServiceCached(categoryService);
+        this.categoryService = new CategoryService(connectionProvider);
         this.passwordService = new PasswordService(connectionProvider, encryptionProvider);
         this.userService = new UserService(connectionProvider, argonAuthenticator);
         this.profileService = new ProfileService(connectionProvider);

@@ -1,5 +1,8 @@
 package com.bitvault.ui.components.textfield;
 
+import com.bitvault.ui.components.validation.ValidateField;
+import com.bitvault.ui.components.validation.ValidateResult;
+import com.bitvault.ui.utils.BvStyles;
 import com.bitvault.ui.utils.JavaFxUtil;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.ObjectProperty;
@@ -11,15 +14,11 @@ import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 
-public class BvTextField extends TextField {
-
-//    private final static String STYLE_SHEET = ResourceLoader.load("/com.bitvault/css/bitVaultTextField.css");
-//    @Override
-//    public String getUserAgentStylesheet() {
-//        return STYLE_SHEET;
-//    }
+public class BvTextField extends TextField implements ValidateField {
 
     boolean required = false;
 
@@ -28,6 +27,7 @@ public class BvTextField extends TextField {
      */
     public BvTextField() {
         getStyleClass().add("custom-text-field");
+        onWrite();
     }
 
 
@@ -71,9 +71,27 @@ public class BvTextField extends TextField {
         return this;
     }
 
-    public BvTextField setRequired(boolean required) {
+    public BvTextField required(boolean required) {
         this.required = required;
+        this.addRequiredListener();
         return this;
+    }
+
+
+    private void addRequiredListener() {
+        this.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                    if (!newValue) {// when focus lost
+                        this.pseudoClassStateChanged(BvStyles.STATE_DANGER, this.getText().isBlank());
+                    }
+                }
+        );
+    }
+
+    private void onWrite() {
+        this.textProperty().addListener((observable, oldValue, newValue) -> {
+            //if it was blank before remove the danger to avoid updating css
+            if (oldValue.isBlank()) this.pseudoClassStateChanged(BvStyles.STATE_DANGER, false);
+        });
     }
 
     public <E> BvTextField filter(FilteredList<E> filteredList, BiFunction<E, String, Boolean> onFilter) {
@@ -154,5 +172,16 @@ public class BvTextField extends TextField {
                 return BvTextField.this.rightProperty();
             }
         };
+    }
+
+    @Override
+    public ValidateResult validate() {
+        List<String> errorMessages = new ArrayList<>();
+        boolean valid = true;
+        if (required && (getText() == null || getText().isBlank())) {
+            errorMessages.add(getPromptText() + " is empty");
+            valid = false;
+        }
+        return new ValidateResult(valid, errorMessages);
     }
 }

@@ -2,6 +2,7 @@ package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
 import com.bitvault.ui.components.validation.ValidateForm;
+import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
@@ -61,14 +62,16 @@ public class PasswordDetailsVM {
         this.passwordProperty.set(password.getPassword());
         this.domainProperty.set(password.getSecureDetails().getDomain());
         this.descriptionProperty.set(password.getSecureDetails().getDescription());
-        this.expiresOn.set(password.getSecureDetails().getExpiresOn().toLocalDate());
+        this.expiresOn.set(password.getSecureDetails().getExpiresOn() == null ? null : password.getSecureDetails().getExpiresOn().toLocalDate());
         this.selectedCat.set(password.getSecureDetails().getCategory());
     }
 
 
     public boolean save() {
-        validatedForm.clear();
-        if (!validatedForm.validate()) {
+
+        ValidateResult validateResult = validatedForm.validate();
+
+        if (!validateResult.valid()) {
             return false;
         }
 

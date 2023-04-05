@@ -3,7 +3,6 @@ package com.bitvault;
 import atlantafx.base.theme.PrimerDark;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
-import com.bitvault.ui.views.categories.CategoryView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -36,25 +35,13 @@ public class BitVault extends Application {
         BitVault.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
 
         stage.setTitle("The Vault");
+        stage.setWidth(840);
+        stage.setHeight(600);
+
         //register on close
         stage.setOnCloseRequest(event -> runOnCloseActions());
 
-
-//        ViewLoader.load(stage, CategoryView::createTest);
-
         ViewLoader.load(stage, WelcomeView::new);
-
-
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com.bitvault/scenes/Test.fxml"));
-//
-//        try {
-//            Parent root = fxmlLoader.load();
-//            Scene scene = new Scene(root);
-//            stage.setScene(scene);
-//            stage.show();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
 
     }
 

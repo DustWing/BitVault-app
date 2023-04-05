@@ -1,7 +1,9 @@
 package com.bitvault.ui.components.validation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ValidateForm {
 
@@ -24,18 +26,19 @@ public class ValidateForm {
     }
 
 
-    public boolean validate() {
-
+    public ValidateResult validate() {
         boolean valid = true;
+        List<String> errorMessages = new ArrayList<>();
         for (ValidateField validatedField : validatedFieldList) {
-            if (!validatedField.validate()) {
+            ValidateResult validateResult = validatedField.validate();
+            if (!validateResult.valid()) {
                 valid = false;
+                errorMessages.addAll(validateResult.errorMessages());
             }
         }
-        return valid;
+
+        return new ValidateResult(valid, errorMessages);
     }
 
-    public void clear() {
-        validatedFieldList.forEach(ValidateField::clearError);
-    }
+
 }

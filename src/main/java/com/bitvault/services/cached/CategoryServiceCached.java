@@ -36,7 +36,7 @@ public class CategoryServiceCached implements ICategoryService {
 
             this.cache.putAll(map);
 
-            return categoryService.getCategories();
+            return categoriesResult;
         }
         return Result.ok(List.copyOf(cache.values()));
     }
@@ -44,7 +44,7 @@ public class CategoryServiceCached implements ICategoryService {
     @Override
     public Result<Category> create(Category category) {
 
-        Result<Category> categoryResult = ICategoryService.super.create(category);
+        Result<Category> categoryResult = categoryService.create(category);
 
         if (categoryResult.isFail()) {
             return categoryResult;
@@ -58,7 +58,7 @@ public class CategoryServiceCached implements ICategoryService {
 
     @Override
     public Result<Category> update(Category category) {
-        Result<Category> categoryResult = ICategoryService.super.create(category);
+        Result<Category> categoryResult = categoryService.update(category);
 
         if (categoryResult.isFail()) {
             return categoryResult;
@@ -72,7 +72,11 @@ public class CategoryServiceCached implements ICategoryService {
 
     @Override
     public Result<Boolean> delete(String id) {
+        Result<Boolean> deleteResult = categoryService.delete(id);
+        if (deleteResult.isFail()) {
+            return deleteResult;
+        }
         this.cache.remove(id);
-        return ICategoryService.super.delete(id);
+        return deleteResult;
     }
 }

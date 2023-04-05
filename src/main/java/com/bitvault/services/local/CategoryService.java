@@ -1,7 +1,6 @@
 package com.bitvault.services.local;
 
-import com.bitvault.database.daos.CategoryDao;
-import com.bitvault.database.daos.ICategoryDao;
+import com.bitvault.database.daos.*;
 import com.bitvault.database.models.CategoryDM;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.services.interfaces.ICategoryService;
@@ -11,14 +10,15 @@ import com.bitvault.util.Result;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.UUID;
 
 public class CategoryService implements ICategoryService {
 
 
     private final ConnectionProvider connectionProvider;
 
-    public CategoryService(final ConnectionProvider connectionProvider) {
+    public CategoryService(
+            final ConnectionProvider connectionProvider
+    ) {
 
         this.connectionProvider = connectionProvider;
     }
@@ -49,9 +49,7 @@ public class CategoryService implements ICategoryService {
 
             final ICategoryDao categoryDao = new CategoryDao(connection);
 
-            final String id = UUID.randomUUID().toString();
-
-            final CategoryDM categoryDM = CategoryDM.createNew(id, category);
+            final CategoryDM categoryDM = CategoryDM.createNew(category);
 
             //save
             categoryDao.create(categoryDM);
@@ -93,6 +91,14 @@ public class CategoryService implements ICategoryService {
     @Override
     public Result<Boolean> delete(String id) {
         try (Connection connection = connectionProvider.connect()) {
+
+            final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
+
+            int count = secureDetailsDao.countByCategoryId(id);
+
+            if (count > 0) {
+                return Result.error(new Exception("Category must be empty to delete."));
+            }
 
             final ICategoryDao categoryDao = new CategoryDao(connection);
 

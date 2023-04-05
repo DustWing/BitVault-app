@@ -10,7 +10,7 @@ public interface IPasswordService {
 
     Result<Password> create(Password password);
 
-    Result<Boolean> update(Password password);
+    Result<Password> update(Password password);
 
     Result<Boolean> delete(Password password);
 }

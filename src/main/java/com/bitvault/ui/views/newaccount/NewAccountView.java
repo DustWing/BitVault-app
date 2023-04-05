@@ -30,15 +30,16 @@ public class NewAccountView extends BitVaultVBox {
                 .withBinding(newAccountVM.usernameProperty())
                 .withPromptText(Labels.i18n("username"))
                 .withDefaultSize()
-                .setRequired(true);
+                .required(true);
 
-        BvPasswordInput password = new BvPasswordInput(newAccountVM.passwordProperty());
+        BvPasswordInput password = new BvPasswordInput()
+                .withBinding(newAccountVM.passwordProperty());
 
         BvTextField fileName = new BvTextField()
                 .withBinding(newAccountVM.fileNameProperty())
                 .withPromptText(Labels.i18n("file.name"))
                 .withDefaultSize()
-                .setRequired(true);
+                .required(true);
 
         BvButton chooseFileBtn = new BvButton(Labels.i18n("choose.file")).withDefaultSize();
         chooseFileBtn.setOnAction(event -> chooseFileAction());

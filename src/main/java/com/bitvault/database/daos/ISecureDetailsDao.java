@@ -12,5 +12,7 @@ public interface ISecureDetailsDao {
     int update(SecureDetailsDM secureDetails);
 
     int delete(String id);
+
+    int countByCategoryId(String id);
 }
 

@@ -6,6 +6,7 @@ import com.bitvault.util.DateTimeUtils;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record CategoryDM(
         String id,
@@ -36,17 +37,16 @@ public record CategoryDM(
     /**
      * Converts {@link Category} to {@link CategoryDM}, to save a new entry to database. Use UUID for ID
      *
-     * @param id       The ID of the new category
      * @param category The category we want to save
      * @return new instance of {@link CategoryDM}
      */
-    public static CategoryDM createNew(final String id, final Category category) {
+    public static CategoryDM createNew(final Category category) {
         return new CategoryDM(
-                id,
+                UUID.randomUUID().toString(),
                 category.name(),
                 category.color(),
-                DateTimeUtils.formatToUtc(category.createdOn()),
-                DateTimeUtils.formatToUtc(category.modifiedOn()),
+                DateTimeUtils.formatToUtc(LocalDateTime.now()),
+                null,
                 category.type()
         );
     }
@@ -56,9 +56,9 @@ public record CategoryDM(
                 category.id(),
                 category.name(),
                 category.color(),
-                DateTimeUtils.formatToUtc(category.createdOn()),
+                null,
                 DateTimeUtils.formatToUtc(LocalDateTime.now()),
-                category.type()
+                null
         );
     }
 

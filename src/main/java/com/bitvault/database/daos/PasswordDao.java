@@ -13,7 +13,6 @@ public class PasswordDao implements IPasswordDao {
 
     private static final String sGetQ = "SELECT * FROM t_passwords";
     private static final String sGetByIdQ = "SELECT * FROM t_passwords WHERE ID=?";
-
     private static final String sCreateQ = "INSERT INTO t_passwords VALUES (?,?,?,?)";
     private static final String sUpdateQ = "UPDATE t_passwords SET username=?, password=? WHERE ID=?";
     private static final String sDeleteQ = "DELETE FROM t_passwords WHERE ID=?";
@@ -94,4 +93,5 @@ public class PasswordDao implements IPasswordDao {
 
         }
     }
+
 }

@@ -43,10 +43,9 @@ public class WelcomeView extends BorderPane {
     }
 
     private void showLoginView() {
-        this.setCenter(loginView);
-        this.setBottom(newAccountLink);
+        this.setCenter(this.loginView);
+        this.setBottom(this.newAccountLink);
         JavaFxUtil.fadeIn(this.loginView);
-
     }
 
 }

@@ -1,6 +1,9 @@
 package com.bitvault.ui.utils;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -73,6 +76,12 @@ public class JavaFxUtil {
         fadeInTransition.setFromValue(0.0);
         fadeInTransition.setToValue(1.0);
         fadeInTransition.play();
+
+//        Timeline timeline = new Timeline(
+//                new KeyFrame(Duration.ZERO, new KeyValue(node.opacityProperty(), 0)),
+//                new KeyFrame(Duration.seconds(1), new KeyValue(node.opacityProperty(), 1))
+//        );
+//        timeline.play();
     }
 
     public static void copyToClipBoard(final String value) {

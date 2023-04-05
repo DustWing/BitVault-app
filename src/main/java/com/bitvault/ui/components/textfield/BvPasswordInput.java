@@ -1,5 +1,7 @@
 package com.bitvault.ui.components.textfield;
 
+import com.bitvault.ui.components.validation.ValidateField;
+import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,14 +16,13 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignE.EYE_OFF;
  * PasswordInput is a stack pane that had two TextField. It will render one field at a time. This will change from normal
  * Text field to a password text field.
  */
-public class BvPasswordInput extends StackPane {
+public class BvPasswordInput extends StackPane implements ValidateField {
+
+    private final BvTextField passwordTf;
+    private final BvPasswordField passwordPf;
 
 
-    /**
-     * @param password bind string property to UI fields
-     */
-    public BvPasswordInput(SimpleStringProperty password) {
-
+    public BvPasswordInput() {
 
         FontIcon eyeOn = new FontIcon(EYE);
         Button eyeOnBtn = new Button("", eyeOn);
@@ -31,16 +32,13 @@ public class BvPasswordInput extends StackPane {
         Button eyeOffBtn = new Button("", eyeOff);
         eyeOffBtn.setFocusTraversable(false);
 
-
-        final BvTextField passwordTf = new BvTextField()
-                .withBinding(password)
+        this.passwordTf = new BvTextField()
                 .withDefaultSize()
                 .withPromptText(Labels.i18n("password"))
                 .withRight(eyeOnBtn);
         passwordTf.setVisible(false);
 
-        final BvPasswordField passwordPf = new BvPasswordField()
-                .withBinding(password)
+        this.passwordPf = new BvPasswordField()
                 .withDefaultSize()
                 .withPromptText(Labels.i18n("password"))
                 .withRight(eyeOffBtn);
@@ -55,7 +53,6 @@ public class BvPasswordInput extends StackPane {
         eyeOffBtn.setOnAction(event -> {
             passwordTf.setVisible(true);
             passwordPf.setVisible(false);
-
             JavaFxUtil.focus(passwordTf);
         });
 
@@ -63,5 +60,29 @@ public class BvPasswordInput extends StackPane {
                 passwordTf,
                 passwordPf
         );
+    }
+
+    public BvPasswordInput withText(String password) {
+        this.passwordTf.setText(password);
+        this.passwordPf.setText(password);
+        return this;
+    }
+
+    public BvPasswordInput withBinding(SimpleStringProperty password) {
+        this.passwordTf.withBinding(password);
+        this.passwordPf.withBinding(password);
+        return this;
+    }
+
+    public BvPasswordInput required(boolean required) {
+        this.passwordTf.required(required);
+        this.passwordPf.required(required);
+        return this;
+    }
+
+    @Override
+    public ValidateResult validate() {
+        this.passwordPf.validate();
+        return this.passwordTf.validate();
     }
 }

@@ -1,6 +1,9 @@
 package com.bitvault.ui.components.textfield;
 
+import com.bitvault.ui.components.validation.ValidateField;
+import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.utils.BvHeights;
+import com.bitvault.ui.utils.BvStyles;
 import com.bitvault.ui.utils.BvWidths;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -9,13 +12,10 @@ import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Skin;
 
-public class BvPasswordField extends PasswordField {
+import java.util.ArrayList;
+import java.util.List;
 
-//    private final static String STYLE_SHEET = ResourceLoader.load("/com.bitvault/css/bitVaultTextField.css");
-//    @Override
-//    public String getUserAgentStylesheet() {
-//        return STYLE_SHEET;
-//    }
+public class BvPasswordField extends PasswordField implements ValidateField {
 
     boolean required = false;
 
@@ -23,9 +23,9 @@ public class BvPasswordField extends PasswordField {
      * Instantiates a default CustomTextField.
      */
     public BvPasswordField() {
-        getStyleClass().add("custom-text-field");
+        this.getStyleClass().add("custom-text-field");
+        onWrite();
     }
-
 
     public BvPasswordField withText(String text) {
         this.setText(text);
@@ -55,11 +55,27 @@ public class BvPasswordField extends PasswordField {
         return this;
     }
 
-    public BvPasswordField isRequired(boolean required) {
+    public BvPasswordField required(boolean required) {
         this.required = required;
+        this.addRequiredListener();
         return this;
     }
 
+    private void addRequiredListener() {
+        this.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                    if (!newValue) {// when focus lost
+                        this.pseudoClassStateChanged(BvStyles.STATE_DANGER, this.getText().isBlank());
+                    }
+                }
+        );
+    }
+
+    private void onWrite() {
+        this.textProperty().addListener((observable, oldValue, newValue) -> {
+            //if it was blank before remove the danger to avoid updating css
+            if (oldValue.isBlank()) this.pseudoClassStateChanged(BvStyles.STATE_DANGER, false);
+        });
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     // Properties                                                            //
@@ -133,4 +149,21 @@ public class BvPasswordField extends PasswordField {
             }
         };
     }
+
+    @Override
+    public ValidateResult validate() {
+        List<String> errorMessages = new ArrayList<>();
+        boolean valid = true;
+        if (required && (getText() == null || getText().isBlank())) {
+            errorMessages.add(getPromptText() + " is empty");
+            valid = false;
+        }
+
+        if (!valid) {
+            this.pseudoClassStateChanged(BvStyles.STATE_DANGER, true);
+        }
+
+        return new ValidateResult(valid, errorMessages);
+    }
+
 }

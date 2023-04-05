@@ -19,7 +19,6 @@ import javafx.scene.paint.Color;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignC.CHECK_BOLD;
@@ -29,34 +28,33 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignP.PENCIL;
 
 public class CategoryRowView extends HBox implements IdentifiableNode {
     private final CategoryRowVM categoryRowVM;
-    private Consumer<CategoryRowView> onDelete;
-
     final BvTextField categoryName;
 
-    public static CategoryRowView createFromCategory(final Category category, Consumer<CategoryRowView> onDelete) {
+    public static CategoryRowView createFromCategory(
+            final Category category, Function<CategoryRowView, Boolean> onDelete, Function<CategoryRowView, Result<String>> onSave
+    ) {
         final Color color = BvColors.fromHex(category.color());
-        final CategoryRowVM categoryRowVM = new CategoryRowVM(category.id(), category.name(), color);
-        return new CategoryRowView(categoryRowVM, onDelete);
+        final CategoryRowVM categoryRowVM = new CategoryRowVM(category.id(), category.name(), color, onDelete, onSave);
+        return new CategoryRowView(categoryRowVM);
     }
 
-    public static CategoryRowView createNew(Consumer<CategoryRowView> onDelete) {
+    public static CategoryRowView createNew(Function<CategoryRowView, Boolean> onDelete, Function<CategoryRowView, Result<String>> onSave) {
         final String id = UUID.randomUUID().toString();
-        final CategoryRowVM categoryRowVM = new CategoryRowVM(id, "", BvColors.random());
+        final CategoryRowVM categoryRowVM = new CategoryRowVM(id, "", BvColors.random(), onDelete, onSave);
         categoryRowVM.allowEditProperty().set(false);
         categoryRowVM.allowSaveProperty().set(true);
-        return new CategoryRowView(categoryRowVM, onDelete);
+        return new CategoryRowView(categoryRowVM);
     }
 
 
-    public CategoryRowView(CategoryRowVM categoryRowVM, Consumer<CategoryRowView> onDelete) {
+    public CategoryRowView(CategoryRowVM categoryRowVM) {
         this.categoryRowVM = categoryRowVM;
-        this.onDelete = onDelete;
 
         this.categoryName = new BvTextField()
                 .withDefaultSize()
                 .withBinding(this.categoryRowVM.categoryNameProperty())
                 .withPromptText("Category")
-                .setRequired(true);
+                .required(true);
         categoryName.disableProperty().bind(this.categoryRowVM.allowEditProperty());
 
         //color picker
@@ -83,7 +81,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
         //delete btn
         final FontIcon deleteIcon = new FontIcon(DELETE);
         final BvButton deleteButton = new BvButton("", deleteIcon);
-        deleteButton.setOnAction(actionEvent -> onDelete.accept(this));
+        deleteButton.setOnAction(actionEvent -> this.categoryRowVM.delete(this));
         deleteButton.disableProperty().bind(this.categoryRowVM.loadingProperty());
 
         //edit btn
@@ -124,7 +122,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
     }
 
     private void save() {
-        this.categoryRowVM.save();
+        this.categoryRowVM.save(this);
         this.requestFocus();
     }
 
@@ -136,5 +134,13 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
     @Override
     public String getUniqueId() {
         return this.categoryRowVM.getId();
+    }
+
+    public String getCategoryName() {
+        return this.categoryRowVM.getCategoryName();
+    }
+
+    public String getColor() {
+        return BvColors.toHex(this.categoryRowVM.getCategoryColor());
     }
 }

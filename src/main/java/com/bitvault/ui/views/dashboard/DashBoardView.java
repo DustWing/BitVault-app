@@ -1,20 +1,21 @@
 package com.bitvault.ui.views.dashboard;
 
 import com.bitvault.security.UserSession;
-import com.bitvault.ui.components.BitVaultVBox;
-import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
+import com.bitvault.ui.views.password.PasswordVM;
+import com.bitvault.ui.views.password.PasswordView;
 import com.bitvault.util.Labels;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignL.LOGOUT;
 
-public final class DashBoardView extends BitVaultVBox {
+public final class DashBoardView extends BorderPane {
 
     final DashBoardVM dashBoardVM;
 
@@ -24,36 +25,34 @@ public final class DashBoardView extends BitVaultVBox {
     }
 
     DashBoardView(final DashBoardVM dashBoardVM) {
-
         this.dashBoardVM = dashBoardVM;
-        init();
+
+        final Button logout = getLogoutBtn();
+        final PasswordView passwordView = getPasswordView();
+
+        this.setTop(logout);
+        this.setCenter(passwordView);
     }
 
-    private void init() {
 
+    private Button getLogoutBtn() {
         FontIcon logOutIcon = new FontIcon(LOGOUT);
-
-        final Button logout = new Button("", logOutIcon);
+        final Button logout = new Button(Labels.i18n("logout"), logOutIcon);
         logout.setAccessibleText(Labels.i18n("logout"));
         logout.setOnAction(event -> logout());
-
-        final Tab passTab = new Tab(Labels.i18n("passwords"), dashBoardVM.getPasswordView());
-        passTab.setClosable(false);
-
-        final Tab cardTab = new Tab(Labels.i18n("cards"), new BitVaultVBox());
-        cardTab.setClosable(false);
-
-        final TabPane tabPane = new TabPane(passTab, cardTab);
-
-        this.getChildren().addAll(logout, tabPane);
-
-        JavaFxUtil.vGrowAlways(this);
-
+        BorderPane.setAlignment(logout, Pos.CENTER_RIGHT);
+        BorderPane.setMargin(logout, new Insets(10,0,20,10));
+        return logout;
     }
 
     private void logout() {
         final Stage stage = (Stage) this.getScene().getWindow();
         ViewLoader.load(stage, WelcomeView::new);
+    }
+
+    private PasswordView getPasswordView() {
+        final PasswordVM passwordVM = new PasswordVM(dashBoardVM.getUserSession(), dashBoardVM.getSelectedProfile());
+        return new PasswordView(passwordVM);
     }
 
 

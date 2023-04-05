@@ -51,15 +51,7 @@ public final class DashBoardVM {
         return selectedProfile;
     }
 
-    public PasswordView getPasswordView() {
-
-        final PasswordVM passwordVM = new PasswordVM(
-                userSession,
-                serviceFactory.getPasswordService(),
-                serviceFactory.getCategoryService(),
-                getSelectedProfile()
-        );
-
-        return new PasswordView(passwordVM);
+    public UserSession getUserSession() {
+        return userSession;
     }
 }

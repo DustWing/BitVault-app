@@ -6,8 +6,6 @@ import javafx.scene.layout.VBox;
 
 public class BitVaultVBox extends VBox {
 
-    private final static String STYLE_CLASS = "bit-vault-vbox";
-
     public BitVaultVBox() {
         super();
         initialize();
@@ -32,9 +30,4 @@ public class BitVaultVBox extends VBox {
 //        this.getStyleClass().add(STYLE_CLASS);
     }
 
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return ResourceLoader.load("/com.bitvault/css/bitVaultVbox.css");
-    }
 }

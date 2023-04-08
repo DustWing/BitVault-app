@@ -16,10 +16,7 @@ public class CategoryService implements ICategoryService {
 
     private final ConnectionProvider connectionProvider;
 
-    public CategoryService(
-            final ConnectionProvider connectionProvider
-    ) {
-
+    public CategoryService(final ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
@@ -31,11 +28,11 @@ public class CategoryService implements ICategoryService {
 
             final List<CategoryDM> categories = new CategoryDao(connection).get();
 
-            return Result.ok(
-                    categories.stream()
-                            .map(CategoryDM::convert)
-                            .toList()
-            );
+            final List<Category> list = categories.stream()
+                    .map(CategoryDM::convert)
+                    .toList();
+
+            return Result.ok(list);
 
         } catch (SQLException e) {
             return Result.error(e);

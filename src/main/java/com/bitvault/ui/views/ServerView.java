@@ -6,7 +6,6 @@ import com.bitvault.server.dto.SecureItemRqDto;
 import com.bitvault.server.endpoints.EndpointResolver;
 import com.bitvault.server.http.HttpServer;
 import com.bitvault.server.http.ServerListener;
-import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.exceptions.ViewLoadException;
 import com.bitvault.ui.model.Category;
@@ -21,6 +20,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import org.sqlite.util.StringUtils;
 
 import java.awt.image.BufferedImage;
@@ -29,7 +29,7 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ServerView extends BitVaultVBox {
+public class ServerView extends VBox {
 
     private HttpServer httpServer;
     private final TextArea textArea;

@@ -47,8 +47,8 @@ public class HttpServer {
 
             final Channel ch = serverBootstrap.bind(this.mPort).sync().channel();
 
-            System.err.println("Open your web browser and navigate to " +
-                    "http" + "://127.0.0.1:" + port + '/');
+//            System.err.println("Open your web browser and navigate to " +
+//                    "http" + "://127.0.0.1:" + port + '/');
 
             mChannelFuture = ch.closeFuture();
 

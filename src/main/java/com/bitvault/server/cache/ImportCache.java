@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 public final class ImportCache {
 
     private final ConcurrentLinkedQueue<LocalPasswordDto> cache;
-    private Consumer<LocalPasswordDto> onAddPassword;
+    private final Consumer<LocalPasswordDto> onAddPassword;
 
     private final SecretKey secretKey;
     private final byte[] IV;

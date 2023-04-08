@@ -28,11 +28,11 @@ public class ProfileService implements IProfileService {
 
             final List<ProfileDM> profiles = new ProfileDao(connection).get();
 
-            return Result.ok(
-                    profiles.stream()
-                            .map(ProfileDM::convert)
-                            .toList()
-            );
+            final List<Profile> list = profiles.stream()
+                    .map(ProfileDM::convert)
+                    .toList();
+
+            return Result.ok(list);
         } catch (SQLException e) {
             return Result.error(e);
         }

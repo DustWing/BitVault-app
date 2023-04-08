@@ -81,7 +81,7 @@ public class BvTextField extends TextField implements ValidateField {
     private void addRequiredListener() {
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
                     if (!newValue) {// when focus lost
-                        this.pseudoClassStateChanged(BvStyles.STATE_DANGER, this.getText().isBlank());
+                        this.pseudoClassStateChanged(BvStyles.STATE_DANGER, this.getText()!=null && this.getText().isBlank());
                     }
                 }
         );

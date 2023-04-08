@@ -22,10 +22,11 @@ public class BitVault extends Application {
 
     private static final List<Runnable> onCloseActions = new CopyOnWriteArrayList<>();
 
-    public static void addCloseAction(Runnable runnable){
+    public static void addCloseAction(Runnable runnable) {
         onCloseActions.add(runnable);
     }
-    public static void runOnCloseActions(){
+
+    public static void runOnCloseActions() {
         onCloseActions.forEach(Runnable::run);
     }
 
@@ -35,15 +36,10 @@ public class BitVault extends Application {
         BitVault.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
 
         stage.setTitle("The Vault");
-        stage.setWidth(840);
-        stage.setHeight(600);
-
         //register on close
         stage.setOnCloseRequest(event -> runOnCloseActions());
 
-        ViewLoader.load(stage, WelcomeView::new);
-
+        ViewLoader.load(stage, 840, 600, WelcomeView::new);
     }
-
 
 }

@@ -11,8 +11,10 @@ import java.util.function.Supplier;
 
 public class ViewLoader {
 
-    public static void load(Stage stage, Supplier<Parent> parentSupplier) {
+    public static void load(Stage stage, double width, double height, Supplier<Parent> parentSupplier) {
         try {
+            stage.setWidth(width);
+            stage.setHeight(height);
             Parent view = parentSupplier.get();
             final Scene scene = new Scene(view);
             stage.setScene(scene);
@@ -37,4 +39,5 @@ public class ViewLoader {
             throw new RuntimeException(e);
         }
     }
+
 }

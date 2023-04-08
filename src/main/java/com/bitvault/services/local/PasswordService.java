@@ -66,11 +66,11 @@ public class PasswordService implements IPasswordService {
 
             connection.setAutoCommit(false);
 
+            checkProfile(connection, password.getSecureDetails().getProfile().id());
+
+            checkCategory(connection, password.getSecureDetails().getCategory());
+
             try {
-
-                checkProfile(connection, password.getSecureDetails().getProfile().id());
-
-                checkCategory(connection, password.getSecureDetails().getCategory());
 
                 final String id = UUID.randomUUID().toString();
 
@@ -104,7 +104,6 @@ public class PasswordService implements IPasswordService {
             }
 
         } catch (SQLException e) {
-
             return Result.error(e);
         }
 
@@ -158,12 +157,11 @@ public class PasswordService implements IPasswordService {
         try (Connection connection = connectionProvider.connect()) {
             connection.setAutoCommit(false);
 
+            checkProfile(connection, password.getSecureDetails().getProfile().id());
+
+            checkCategory(connection, password.getSecureDetails().getCategory());
+
             try {
-
-                checkProfile(connection, password.getSecureDetails().getProfile().id());
-
-                checkCategory(connection, password.getSecureDetails().getCategory());
-
                 final SecureDetailsDM secureDetailsDM = SecureDetailsDM.convert(password.getSecureDetails());
 
                 final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
@@ -230,23 +228,29 @@ public class PasswordService implements IPasswordService {
                 .collect(Collectors.toMap(ProfileDM::id, Function.identity()));
 
 
-        return passwords.stream().map(
-                passwordDM -> {
+        return passwords.stream()
+                .map(passwordDM -> getPassword(detailsMap, catMap, profileMap, passwordDM))
+                .toList();
+    }
 
-                    final SecureDetailsDM details = detailsMap.get(passwordDM.secureDetailsId());
+    private Password getPassword(
+            Map<String, SecureDetailsDM> detailsMap,
+            Map<String, CategoryDM> catMap,
+            Map<String, ProfileDM> profileMap,
+            PasswordDM passwordDM
+    ) {
+        final SecureDetailsDM details = detailsMap.get(passwordDM.secureDetailsId());
 
-                    final Category category = CategoryDM.convert(catMap.get(details.categoryId()));
+        final Category category = CategoryDM.convert(catMap.get(details.categoryId()));
 
-                    final Profile profile = ProfileDM.convert(profileMap.get(details.profileId()));
+        final Profile profile = ProfileDM.convert(profileMap.get(details.profileId()));
 
-                    final SecureDetails secureDetails = SecureDetailsDM.convert(details, category, profile);
+        final SecureDetails secureDetails = SecureDetailsDM.convert(details, category, profile);
 
-                    final String decryptUserName = encryptionProvider.decrypt(passwordDM.username());
+        final String decryptUserName = encryptionProvider.decrypt(passwordDM.username());
 
-                    return new Password(passwordDM.id(), decryptUserName, passwordDM.password(), secureDetails,
-                            Action.DEFAULT);
-                }
-        ).toList();
+        return new Password(passwordDM.id(), decryptUserName, passwordDM.password(), secureDetails,
+                Action.DEFAULT);
     }
 
 }

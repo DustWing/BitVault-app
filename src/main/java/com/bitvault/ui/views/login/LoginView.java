@@ -4,8 +4,11 @@ import com.bitvault.security.UserSession;
 import com.bitvault.ui.async.AsyncTask;
 import com.bitvault.ui.async.AsyncTaskException;
 import com.bitvault.ui.components.BvButton;
+import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
+import com.bitvault.ui.components.validation.ValidateForm;
+import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.views.dashboard.DashBoardView;
@@ -26,15 +29,11 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FOLDER;
 public class LoginView extends VBox {
 
     private final LoginVM loginVM;
+    private final ValidateForm validateForm;
+
 
     public LoginView(LoginVM loginVM) {
-
         this.loginVM = loginVM;
-
-        //TODO for testing - remove later
-        loginVM.usernameProperty().set("a");
-        loginVM.passwordProperty().set("a");
-        loginVM.locationProperty().set("F:/Documents/TestFiles/test2.vault");
 
         final BvTextField username = getUserNameTf();
 
@@ -42,24 +41,14 @@ public class LoginView extends VBox {
                 .withBinding(loginVM.passwordProperty())
                 .required(true);
 
-
         final BvTextField location = getLocationTf();
 
         final Button loginButton = getLoginBtn();
 
-        loginVM.getValidatedForm().addAll(
-                username,
-                passwordSp,
-                location
-        );
+        this.validateForm = new ValidateForm();
+        this.validateForm.addAll(username, passwordSp, location);
 
-        this.getChildren().addAll(
-                username,
-                passwordSp,
-                location,
-                loginButton
-        );
-
+        this.getChildren().addAll(username, passwordSp, location, loginButton);
         this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
         this.setFillWidth(true);
@@ -106,6 +95,11 @@ public class LoginView extends VBox {
 
     private void loginBtnAction() {
 
+        ValidateResult validate = validateForm.validate();
+        if(!validate.valid()){
+            return;
+        }
+
         AsyncTask.toRun(loginVM::login)
                 .onSuccess(this::onLoginSuccess)
                 .onFailure(this::onException)
@@ -116,8 +110,8 @@ public class LoginView extends VBox {
     private void onLoginSuccess(Result<UserSession> loginResults) {
 
         if (loginResults.isFail()) {
-            //TODO handle
             this.loginVM.loadingProperty().set(false);
+            ErrorAlert.show("woops",loginResults.getError());
             return;
         }
 

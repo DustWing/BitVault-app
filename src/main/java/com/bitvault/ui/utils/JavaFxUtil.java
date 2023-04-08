@@ -4,6 +4,8 @@ import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -134,7 +136,7 @@ public class JavaFxUtil {
 
     }
 
-    public static void vGrowAlways(Pane pane) {
+    public static void vGrowAlways(VBox pane) {
         pane.getChildren().forEach(
                 node -> VBox.setVgrow(node, Priority.ALWAYS)
         );
@@ -144,7 +146,7 @@ public class JavaFxUtil {
         VBox.setVgrow(node, Priority.ALWAYS);
     }
 
-    public static void hGrowAlways(Pane pane) {
+    public static void hGrowAlways(HBox pane) {
         pane.getChildren().forEach(
                 node -> HBox.setHgrow(node, Priority.ALWAYS)
         );
@@ -152,6 +154,19 @@ public class JavaFxUtil {
 
     public static void hGrowAlways(Node node) {
         HBox.setHgrow(node, Priority.ALWAYS);
+    }
+
+    public static void borderPaneCenterAll(BorderPane borderPane) {
+        borderPane.getChildren().forEach(
+                node -> BorderPane.setAlignment(node, Pos.CENTER)
+        );
+    }
+
+    public static void borderPaneSpacing(BorderPane borderPane, double spacing) {
+        Insets insets = new Insets(0, 0, spacing, 0);
+        borderPane.getChildren().forEach(
+                node -> BorderPane.setMargin(node, insets)
+        );
     }
 
     public static void defaultSize(Region region) {
@@ -170,6 +185,13 @@ public class JavaFxUtil {
         region.setPrefHeight(BvHeights.MEDIUM);
         region.setMinHeight(BvHeights.MEDIUM);
         region.setMaxHeight(BvHeights.MEDIUM);
+    }
+
+    public static void vboxArrangement(VBox vBox){
+        vBox.setAlignment(Pos.BOTTOM_CENTER);
+        vBox.setFillWidth(true);
+        vBox.setPadding(BvInsets.all10);
+        vBox.setSpacing(BvSpacing.SMALL);
     }
 
     public static void addDebugBorder(Region region) {

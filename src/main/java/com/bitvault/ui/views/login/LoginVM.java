@@ -22,17 +22,15 @@ public class LoginVM {
     private final SimpleBooleanProperty loading = new SimpleBooleanProperty();
 
     public LoginVM() {
+        //TODO for testing - remove later
+        this.usernameProperty().set("a");
+        this.passwordProperty().set("a");
+        this.locationProperty().set("F:/Documents/TestFiles/test2.vault");
     }
 
     public Result<UserSession> login() {
 
         loading.set(true);
-
-        ValidateResult validateResult = validateForm.validate();
-
-        if (!validateResult.valid()) {
-            return Result.error(new Exception(""));
-        }
 
         final String location = this.location.get();
         final String username = this.username.get();

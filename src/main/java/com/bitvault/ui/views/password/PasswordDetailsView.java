@@ -1,7 +1,10 @@
 package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
-import com.bitvault.ui.components.*;
+import com.bitvault.ui.components.BvButton;
+import com.bitvault.ui.components.BvDoubleColumn;
+import com.bitvault.ui.components.BvScaffold;
+import com.bitvault.ui.components.TextColorComboBox;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.components.validation.ValidateForm;
@@ -17,12 +20,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-public class PasswordDetailsView extends BitVaultVBox {
+public class PasswordDetailsView extends VBox {
 
     private final PasswordDetailsVM passwordDetailsVM;
 
@@ -40,25 +45,15 @@ public class PasswordDetailsView extends BitVaultVBox {
     public PasswordDetailsView(PasswordDetailsVM passwordDetailsVM) {
         this.passwordDetailsVM = passwordDetailsVM;
 
-        final BvTextField titleTf = new BvTextField()
-                .withBinding(passwordDetailsVM.titlePropertyProperty())
-                .required(true)
-                .withDefaultSize()
-                .withPromptText(Labels.i18n("title"));
+        final BvTextField titleTf = getTitleTf();
 
         final GridPane usernamePassword = createUsernamePassword();
 
-        final BvTextField domainTf = new BvTextField()
-                .withBinding(passwordDetailsVM.domainPropertyProperty())
-                .withSize(410, BvHeights.MEDIUM)
-                .withPromptText(Labels.i18n("domain"));
+        final BvTextField domainTf = getDomainTf();
 
         final TextArea descriptionTf = createDescription();
 
-        final DatePicker expiresOn = new DatePicker();
-        expiresOn.setPromptText(Labels.i18n("expires.on"));
-        JavaFxUtil.defaultSize(expiresOn);
-        expiresOn.valueProperty().bindBidirectional(passwordDetailsVM.expiresOnProperty());
+        final DatePicker expiresOn = getExpiryDp();
 
         ObservableList<Category> categories = FXCollections.observableArrayList(passwordDetailsVM.getCategories());
         final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withCircle(categories);
@@ -71,9 +66,11 @@ public class PasswordDetailsView extends BitVaultVBox {
                 .withDefaultSize()
                 .action(event -> saveBtnAction())
                 .defaultButton(true);
+        BorderPane.setAlignment(okButton, Pos.CENTER);
 
 //        passwordDetailsVM.getValidatedForm().add(usernameTf);
 //        passwordDetailsVM.getValidatedForm().add(passwordTf);
+
 
         List<Node> list = List.of(
                 titleTf,
@@ -92,6 +89,16 @@ public class PasswordDetailsView extends BitVaultVBox {
         JavaFxUtil.vGrowAlways(this);
     }
 
+    private BvTextField getTitleTf() {
+
+        final BvTextField titleTf = new BvTextField()
+                .withBinding(passwordDetailsVM.titlePropertyProperty())
+                .required(true)
+                .withDefaultSize()
+                .withPromptText(Labels.i18n("title"));
+        return titleTf;
+    }
+
     private GridPane createUsernamePassword() {
 
         final BvTextField usernameTf = new BvTextField()
@@ -106,6 +113,14 @@ public class PasswordDetailsView extends BitVaultVBox {
         return new BvDoubleColumn(List.of(usernameTf), List.of(passwordInput));
     }
 
+    private BvTextField getDomainTf() {
+        final BvTextField domainTf = new BvTextField()
+                .withBinding(passwordDetailsVM.domainPropertyProperty())
+                .withSize(410, BvHeights.MEDIUM)
+                .withPromptText(Labels.i18n("domain"));
+        return domainTf;
+    }
+
     private TextArea createDescription() {
         TextArea descriptionTf = new TextArea();
         descriptionTf.textProperty().bindBidirectional(passwordDetailsVM.descriptionPropertyProperty());
@@ -114,15 +129,20 @@ public class PasswordDetailsView extends BitVaultVBox {
         descriptionTf.setMaxWidth(410);
         descriptionTf.setMaxHeight(BvHeights.LARGE);
         descriptionTf.setMinHeight(BvHeights.LARGE);
-
         return descriptionTf;
+    }
+
+    private DatePicker getExpiryDp() {
+        final DatePicker expiresOn = new DatePicker();
+        expiresOn.setPromptText(Labels.i18n("expires.on"));
+        JavaFxUtil.defaultSize(expiresOn);
+        expiresOn.valueProperty().bindBidirectional(this.passwordDetailsVM.expiresOnProperty());
+        return expiresOn;
     }
 
 
     public void saveBtnAction() {
-
         boolean valid = passwordDetailsVM.save();
-
         if (valid) {
             this.getScene().getWindow().hide();
         }

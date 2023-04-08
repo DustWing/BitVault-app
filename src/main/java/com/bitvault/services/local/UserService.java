@@ -8,6 +8,7 @@ import com.bitvault.database.models.ProfileDM;
 import com.bitvault.database.models.UserDM;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.security.Authenticator;
+import com.bitvault.services.exceptions.InvalidUserException;
 import com.bitvault.services.interfaces.IUserService;
 import com.bitvault.ui.model.User;
 import com.bitvault.ui.utils.BvColors;
@@ -96,7 +97,7 @@ public class UserService implements IUserService {
 
         boolean verify = authenticator.verify(dbUser.credentials(), (username + password).toCharArray());
         if (!verify) {
-            return Result.error(new RuntimeException("Invalid user"));
+            return Result.error(new InvalidUserException("invalid.username.or.password"));
         }
         return Result.ok(UserDM.convert(dbUser));
     }

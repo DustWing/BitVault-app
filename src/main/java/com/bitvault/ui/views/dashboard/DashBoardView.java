@@ -47,13 +47,12 @@ public final class DashBoardView extends BorderPane {
 
     private void logout() {
         final Stage stage = (Stage) this.getScene().getWindow();
-        ViewLoader.load(stage, WelcomeView::new);
+        ViewLoader.load(stage, 840, 600, WelcomeView::new);
     }
 
     private PasswordView getPasswordView() {
         final PasswordVM passwordVM = new PasswordVM(dashBoardVM.getUserSession(), dashBoardVM.getSelectedProfile());
         return new PasswordView(passwordVM);
     }
-
 
 }

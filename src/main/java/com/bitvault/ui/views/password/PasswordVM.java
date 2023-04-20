@@ -106,8 +106,7 @@ public class PasswordVM {
                 oldPass.getId(),
                 oldPass.getUsername(),
                 decrypt,
-                oldPass.getSecureDetails(),
-                Action.EDIT
+                oldPass.getSecureDetails()
         );
 
     }

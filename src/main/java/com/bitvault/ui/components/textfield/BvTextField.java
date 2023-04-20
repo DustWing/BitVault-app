@@ -90,7 +90,7 @@ public class BvTextField extends TextField implements ValidateField {
     private void onWrite() {
         this.textProperty().addListener((observable, oldValue, newValue) -> {
             //if it was blank before remove the danger to avoid updating css
-            if (oldValue.isBlank()) this.pseudoClassStateChanged(BvStyles.STATE_DANGER, false);
+            if (oldValue == null || oldValue.isBlank()) this.pseudoClassStateChanged(BvStyles.STATE_DANGER, false);
         });
     }
 

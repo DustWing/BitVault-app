@@ -1,8 +1,8 @@
 package com.bitvault;
 
-import atlantafx.base.theme.PrimerDark;
 import com.bitvault.ui.utils.ViewLoader;
-import com.bitvault.ui.views.WelcomeView;
+import com.bitvault.ui.views.sync.SyncView;
+import com.bitvault.util.Theme;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BitVault extends Application {
-    public static void launch(String[] not_used) {
+    public static void launch(String[] __) {
         launch();
     }
 
@@ -33,13 +33,13 @@ public class BitVault extends Application {
     private void show(Stage stage) {
 
         //set default css
-        BitVault.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+        BitVault.setUserAgentStylesheet(Theme.DARK);
 
         stage.setTitle("The Vault");
         //register on close
         stage.setOnCloseRequest(event -> runOnCloseActions());
 
-        ViewLoader.load(stage, 840, 600, WelcomeView::new);
+        ViewLoader.load(stage, 840, 600, SyncView::createTest);
     }
 
 }

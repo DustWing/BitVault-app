@@ -1,6 +1,7 @@
 package com.bitvault.server.http;
 
 import com.bitvault.server.endpoints.EndpointResolver;
+import com.bitvault.util.Result;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -87,7 +88,7 @@ public class HttpServer {
     }
 
     private void onMsg(String msg) {
-        serverListeners.forEach(e -> e.onMessage(msg));
+        serverListeners.forEach(e -> e.onMessage(Result.ok(msg)));
     }
 
     public int getPort() {

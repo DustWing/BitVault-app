@@ -39,12 +39,12 @@ public class PasswordTableView extends BorderPane {
         this.tableView = createTable(filteredList);
 
         final HBox topBar = topBar(filteredList);
+        BorderPane.setMargin(topBar, BvInsets.bottom10);
 
         this.timerBar = new TimerBar(new ProgressBar(), JavaFxUtil::clearClipBoard);
         timerBar.getProgressBar().setVisible(false);
         final BitVaultHBox bottomHBox = new BitVaultHBox(timerBar.getProgressBar())
                 .maxH(20);
-
 
         this.setTop(topBar);
         this.setCenter(tableView);

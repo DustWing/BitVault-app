@@ -8,9 +8,17 @@ import java.util.List;
 public interface IPasswordService {
     Result<List<Password>> getPasswords();
 
-    Result<Password> create(Password password);
+    default Result<Password> create(Password password) {
+        return Result.ok(password);
+    }
 
-    Result<Password> update(Password password);
+    default Result<Password> update(Password password) {
+        return Result.ok(password);
+    }
 
-    Result<Boolean> delete(Password password);
+    ;
+
+    default Result<Boolean> delete(Password password) {
+        return Result.Success;
+    }
 }

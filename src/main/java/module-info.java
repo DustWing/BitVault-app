@@ -24,7 +24,7 @@ module com.bitvault {
     requires io.netty.codec;
     requires io.netty.common;
 
-    requires atlantafx.base;
+//    requires atlantafx.base;
 
     opens com.bitvault to javafx.fxml;
     opens com.bitvault.ui.views to javafx.fxml;
@@ -79,5 +79,7 @@ module com.bitvault {
     opens com.bitvault.ui.listnode to com.fasterxml.jackson.databind;
     exports com.bitvault.ui.async;
     opens com.bitvault.ui.async to javafx.fxml;
+    exports com.bitvault.ui.views.sync;
+    opens com.bitvault.ui.views.sync to javafx.fxml;
 
 }

@@ -23,17 +23,17 @@ public class BvInsets {
     public static Insets right10 = right(10);
     public static Insets right15 = right(15);
 
-    public static Insets left5 = right(5);
-    public static Insets left10 = right(10);
-    public static Insets left15 = right(15);
+    public static Insets left5 = left(5);
+    public static Insets left10 = left(10);
+    public static Insets left15 = left(15);
 
-    public static Insets top5 = right(5);
-    public static Insets top10 = right(10);
-    public static Insets top15 = right(15);
+    public static Insets top5 = top(5);
+    public static Insets top10 = top(10);
+    public static Insets top15 = top(15);
 
-    public static Insets bottom5 = right(5);
-    public static Insets bottom10 = right(10);
-    public static Insets bottom15 = right(15);
+    public static Insets bottom5 = bottom(5);
+    public static Insets bottom10 = bottom(10);
+    public static Insets bottom15 = bottom(15);
 
     public static Insets all10 = new Insets(10);
     public static Insets all20 = new Insets(20);

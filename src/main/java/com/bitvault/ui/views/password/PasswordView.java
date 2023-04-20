@@ -49,20 +49,23 @@ public class PasswordView extends BorderPane {
 
         this.setLeft(newCatBtn);
         this.setCenter(passwordTableView);
+        BorderPane.setMargin(passwordTableView, BvInsets.all10);
 
     }
 
     public void onNewCatAction() {
         CategoryVM categoryVM = new CategoryVM(this.passwordVM.getCategoryService());
         CategoryView categoryView = new CategoryView(categoryVM);
-        this.setCenter(categoryView);
         this.setLeft(showPassword);
+        this.setCenter(categoryView);
+        BorderPane.setMargin(categoryView, BvInsets.all10);
     }
 
     public void onPasswordAction() {
         passwordVM.init();// to reload passwords
         this.setLeft(newCatBtn);
         this.setCenter(passwordTableView);
+        BorderPane.setMargin(passwordTableView, BvInsets.all10);
     }
 
 

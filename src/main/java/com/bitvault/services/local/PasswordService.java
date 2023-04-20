@@ -92,9 +92,7 @@ public class PasswordService implements IPasswordService {
                         passwordDM.id(),
                         password.getUsername(),
                         passwordDM.password(),
-                        secureDetails,
-                        Action.DEFAULT
-                );
+                        secureDetails);
 
                 return Result.ok(passwordResult);
 
@@ -249,8 +247,7 @@ public class PasswordService implements IPasswordService {
 
         final String decryptUserName = encryptionProvider.decrypt(passwordDM.username());
 
-        return new Password(passwordDM.id(), decryptUserName, passwordDM.password(), secureDetails,
-                Action.DEFAULT);
+        return new Password(passwordDM.id(), decryptUserName, passwordDM.password(), secureDetails);
     }
 
 }

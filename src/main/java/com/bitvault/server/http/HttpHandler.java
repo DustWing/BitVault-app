@@ -164,17 +164,14 @@ class HttpHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     private void onMsg(String msg) {
-        serverListeners.forEach(e -> e.onMessage(msg));
+        serverListeners.forEach(e -> e.onMessage(Result.ok(msg)));
     }
 
     private void onError(Throwable throwable) {
-        serverListeners.forEach(e -> e.onError(throwable));
+        serverListeners.forEach(e -> e.onMessage(Result.error(new Exception(throwable))));
     }
 
-    private record Response(
-            String body,
-            HttpResponseStatus status
-    ) {
+    private record Response(String body, HttpResponseStatus status) {
         public static Response createOk(String body) {
             return new Response(body, OK);
         }

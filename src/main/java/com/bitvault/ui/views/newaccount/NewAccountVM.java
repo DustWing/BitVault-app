@@ -34,7 +34,7 @@ public class NewAccountVM {
             return Result.error(new Exception(""));
         }
 
-        final String location = this.location.get();
+        final String location = this.location.get()+"/" + getFileName() + ".vault";
         final String username = this.username.get();
         final String password = this.password.get();
 

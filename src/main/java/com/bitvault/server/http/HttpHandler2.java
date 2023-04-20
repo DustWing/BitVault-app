@@ -14,6 +14,7 @@ package com.bitvault.server.http;/*
  * under the License.
  */
 
+import com.bitvault.util.Result;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -195,10 +196,10 @@ class HttpHandler2 extends SimpleChannelInboundHandler<Object> {
     }
 
     private void onMsg(String msg) {
-        serverListeners.forEach(e -> e.onMessage(msg));
+        serverListeners.forEach(e -> e.onMessage(Result.ok(msg)));
     }
 
     private void onError(Throwable throwable) {
-        serverListeners.forEach(e -> e.onError(throwable));
+        serverListeners.forEach(e -> e.onMessage(Result.error(new Exception(throwable))));
     }
 }

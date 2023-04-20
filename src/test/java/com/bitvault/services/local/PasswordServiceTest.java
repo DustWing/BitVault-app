@@ -3,15 +3,14 @@ package com.bitvault.services.local;
 import com.bitvault.consts.Consts;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
-import com.bitvault.enums.Action;
 import com.bitvault.security.AesEncryptionProvider;
 import com.bitvault.security.EncryptionProvider;
+import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.services.factory.ServiceFactory;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.services.interfaces.IProfileService;
-import com.bitvault.security.UserSession;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
@@ -97,8 +96,7 @@ class PasswordServiceTest {
                 null,
                 "username",
                 "password",
-                secureDetails,
-                Action.NEW
+                secureDetails
         );
 
         Result<Password> passwordResult = passwordService.create(password);
@@ -161,8 +159,7 @@ class PasswordServiceTest {
                 password.getId(),
                 password.getUsername() + "updated",
                 password.getPassword() + "updated",
-                secureDetails,
-                password.getAction()
+                secureDetails
         );
 
         Result<Password> updateResult = passwordService.update(passwordUpdated);

@@ -3,6 +3,7 @@ package com.bitvault.server.http;
 import com.bitvault.algos.AES;
 import com.bitvault.server.dto.KeyDto;
 import com.bitvault.server.dto.SecureItemRqDto;
+import com.bitvault.util.DateTimeUtils;
 import com.bitvault.util.Json;
 import com.bitvault.util.Result;
 
@@ -23,6 +24,8 @@ import java.util.Base64;
 
 public class TestServer {
 
+    private static String host = "http://127.0.0.1:65354";
+
     public static void main(String[] args) throws Exception {
 
         HttpClient httpClient = HttpClient
@@ -30,7 +33,7 @@ public class TestServer {
                 .build();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://127.0.0.1:8080/key"))
+                .uri(new URI(host + "/key"))
                 .GET()
                 .build();
 
@@ -70,10 +73,10 @@ public class TestServer {
                 true,
                 false,
                 "",
-                "",
-                "",
-                "",
-                "",
+                DateTimeUtils.getTimeNow(),
+                DateTimeUtils.getTimeNow(),
+                DateTimeUtils.getTimeNow(),
+                DateTimeUtils.getTimeNow(),
                 "",
                 SecureItemRqDto.SecureItemSharedType.PRIVATE
         );
@@ -107,7 +110,7 @@ public class TestServer {
 
 
         HttpRequest request2 = HttpRequest.newBuilder()
-                .uri(new URI("http://127.0.0.1:8080/shareSecureItem"))
+                .uri(new URI(host + "/shareSecureItem"))
                 .POST(HttpRequest.BodyPublishers.ofString(body.get()))
                 .build();
 

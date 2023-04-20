@@ -102,8 +102,7 @@ public class PasswordDetailsVM {
                 id,
                 getUserNameProperty(),
                 getPasswordProperty(),
-                secureDetails,
-                action
+                secureDetails
         );
 
         onAction.accept(passResult);

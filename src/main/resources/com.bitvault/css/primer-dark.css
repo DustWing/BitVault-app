@@ -1370,6 +1370,13 @@ Text {
     -fx-background-color: -color-cell-border, -color-cell-bg-selected;
 }
 
+.table-view > .virtual-flow > .clipped-container > .sheet > .table-row-cell .table-cell:warning{
+    -fx-text-fill: -color-base-9;
+}
+.table-view > .virtual-flow > .clipped-container > .sheet > .table-row-cell:warning {
+    -fx-background-color: -color-warning-1;
+}
+
 .list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected,
 .tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:selected,
 .table-view:focused > .virtual-flow > .clipped-container > .sheet > .table-row-cell:filled:selected,

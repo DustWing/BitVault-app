@@ -24,7 +24,7 @@ import java.util.Base64;
 
 public class TestServer {
 
-    private static String host = "http://127.0.0.1:65354";
+    private static String host = "http://127.0.0.1:59585";
 
     public static void main(String[] args) throws Exception {
 
@@ -109,12 +109,17 @@ public class TestServer {
         }
 
 
-        HttpRequest request2 = HttpRequest.newBuilder()
-                .uri(new URI(host + "/shareSecureItem"))
-                .POST(HttpRequest.BodyPublishers.ofString(body.get()))
-                .build();
+        System.out.println(body.get());
 
-        httpClient
-                .send(request2, HttpResponse.BodyHandlers.ofString());
+//        HttpRequest request2 = HttpRequest.newBuilder()
+//                .uri(new URI(host + "/shareSecureItem"))
+//                .POST(HttpRequest.BodyPublishers.ofString(body.get()))
+//                .build();
+//
+//        HttpResponse<String> send = httpClient
+//                .send(request2, HttpResponse.BodyHandlers.ofString());
+//
+//        System.out.println(send.statusCode());
+//        System.out.println(send.body());
     }
 }

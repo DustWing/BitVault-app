@@ -1,11 +1,10 @@
 package com.bitvault.ui.model;
 
-import com.bitvault.enums.Action;
 import com.bitvault.ui.hyperlink.IWebLocation;
 
 import java.util.Objects;
 
-public final class Password implements IWebLocation {
+public final class Password implements IWebLocation{
     private final String id;
     private final String username;
     private final String password;
@@ -77,4 +76,5 @@ public final class Password implements IWebLocation {
                 "password=" + password + ", " +
                 "secureDetails=" + secureDetails + ']';
     }
+
 }

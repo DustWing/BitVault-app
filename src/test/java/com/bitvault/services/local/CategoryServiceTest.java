@@ -8,6 +8,7 @@ import com.bitvault.ui.model.Category;
 import com.bitvault.ui.utils.BvColors;
 import com.bitvault.util.Result;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@Order(3)
 class CategoryServiceTest {
 
     static ICategoryService categoryService;

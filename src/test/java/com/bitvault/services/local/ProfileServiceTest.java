@@ -7,6 +7,7 @@ import com.bitvault.services.interfaces.IProfileService;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.util.Result;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Order(2)
 class ProfileServiceTest {
 
     static IProfileService profileService;

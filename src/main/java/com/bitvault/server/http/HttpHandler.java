@@ -131,11 +131,16 @@ class HttpHandler extends SimpleChannelInboundHandler<Object> {
         httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json; charset=UTF-8");
 
         if (keepAlive) {
+            // Add 'Content-Length' header only for a keep-alive connection.
             httpResponse.headers()
                     .setInt(HttpHeaderNames.CONTENT_LENGTH, httpResponse.content().readableBytes());
+            // Add keep alive header as per:
+            // - https://www.w3.org/Protocols/HTTP/1.1/draft-ietf-http-v11-spec-01.html#Connection
             httpResponse.headers()
                     .set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         }
+
+        // Write the response.
         ctx.write(httpResponse);
 
         if (!keepAlive) {

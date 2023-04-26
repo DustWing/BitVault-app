@@ -1,16 +1,13 @@
 package com.bitvault.ui.views.sync;
 
 import com.bitvault.BitVault;
+import com.bitvault.security.UserSession;
 import com.bitvault.server.cache.ImportCache;
 import com.bitvault.server.dto.SecureItemRqDto;
 import com.bitvault.server.endpoints.EndpointResolver;
 import com.bitvault.server.http.HttpServer;
-import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.ui.exceptions.ViewLoadException;
-import com.bitvault.ui.model.Category;
-import com.bitvault.ui.model.LocalServerInfo;
-import com.bitvault.ui.model.Password;
-import com.bitvault.ui.model.SecureDetails;
+import com.bitvault.ui.model.*;
 import com.bitvault.util.DateTimeUtils;
 import com.bitvault.util.Json;
 import com.bitvault.util.QrUtils;
@@ -36,12 +33,22 @@ public class SyncViewModel {
     private static final String newLine = System.getProperty("line.separator");
     private HttpServer httpServer;
     private ImportCache importCache;
-    private final ObservableList<Password> passwords = FXCollections.observableList(new ArrayList<>());
+    private final ObservableList<SyncValue<Password>> passwords = FXCollections.observableList(new ArrayList<>());
     private final SimpleStringProperty log = new SimpleStringProperty();
-    private final IPasswordService passwordService;
+    private final UserSession userSession;
+    private final List<Password> oldPasswords;
 
-    public SyncViewModel(IPasswordService passwordService) {
-        this.passwordService = passwordService;
+    public SyncViewModel(UserSession userSession) {
+        this.userSession = userSession;
+
+        Result<List<Password>> passwords = this.userSession.getServiceFactory()
+                .getPasswordService()
+                .getPasswords();
+
+        if (passwords.isFail()) {
+            throw new RuntimeException(passwords.getError());
+        }
+        oldPasswords = passwords.get();
     }
 
     public Result<Image> createQrdImage(int port) {
@@ -149,24 +156,42 @@ public class SyncViewModel {
     }
 
 
-    private void onAddPassword(SecureItemRqDto.LocalPasswordDto localPasswordDto){
-        Password password = fromDto(localPasswordDto);
+    private void onAddPassword(SecureItemRqDto.LocalPasswordDto localPasswordDto) {
+        final Password passwordNew = fromDto(localPasswordDto);
 
-        Result<List<Password>> passwords = this.passwordService.getPasswords();
-        List<Password> passwords1 = passwords.get();
-        Optional<Password> any = passwords1.stream().filter(password1 -> password.getUsername().equals(password1.getUsername())).findAny();
+        final Optional<Password> passwordOpt = oldPasswords.stream()
+                .filter(old -> passwordNew.getUsername().equals(old.getUsername())
+                        && passwordNew.getSecureDetails().getDomain().equals(old.getSecureDetails().getDomain())
+                        && passwordNew.getSecureDetails().getProfile().id().equals(old.getSecureDetails().getProfile().id())
+                )
+                .findAny();
 
-        if(any.isPresent()){
-            appendText("Already found:" + password);
+        final SyncValue<Password> syncValue;
+        if (passwordOpt.isPresent()) {
+            appendText("Already found CHANGED:" + passwordNew);
+            appendText("Already found OLD:" + passwordOpt.get());
+            syncValue = SyncValue.createConflict(passwordOpt.get(), passwordNew);
+        } else {
+            syncValue = SyncValue.createNew(passwordNew);
         }
 
-        this.passwords.add(password);
+        this.passwords.add(syncValue);
     }
 
     private Password fromDto(SecureItemRqDto.LocalPasswordDto localPasswordDto) {
-        SecureDetails secureDetails = new SecureDetails(
+
+        final Category category = new Category(
+                localPasswordDto.category(),
+                localPasswordDto.category(),
+                "",
+                null,
+                null,
+                null
+        );
+
+        final SecureDetails secureDetails = new SecureDetails(
                 localPasswordDto.id(),
-                new Category(localPasswordDto.category(), localPasswordDto.category(), "", null, null, null),
+                category,
                 null,
                 localPasswordDto.domainDetails() == null ? null : localPasswordDto.domainDetails().domain(),
                 "No title",
@@ -184,7 +209,8 @@ public class SyncViewModel {
                 localPasswordDto.id(),
                 localPasswordDto.username(),
                 localPasswordDto.password(),
-                secureDetails);
+                secureDetails
+        );
         return password;
     }
 
@@ -193,7 +219,7 @@ public class SyncViewModel {
         return log;
     }
 
-    public ObservableList<Password> getPasswords() {
+    public ObservableList<SyncValue<Password>> getPasswords() {
         return passwords;
     }
 }

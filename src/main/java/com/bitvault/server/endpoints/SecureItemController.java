@@ -67,8 +67,11 @@ public class SecureItemController implements IGetEndpoint<KeyDto>, IPostEndpoint
         SecureItemRqDto.LocalPasswordDto localPasswordDto = deserialize.get();
 
 
-        importCache.add(localPasswordDto);
+        Result<Boolean> addResult = importCache.add(localPasswordDto);
 
+        if (addResult.isFail()) {
+            return Result.error(addResult.getError());
+        }
         return Result.Success;
     }
 

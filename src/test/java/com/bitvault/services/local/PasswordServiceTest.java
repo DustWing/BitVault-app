@@ -1,16 +1,11 @@
 package com.bitvault.services.local;
 
 import com.bitvault.consts.Consts;
-import com.bitvault.database.provider.ConnectionProvider;
-import com.bitvault.database.provider.LocalDB;
 import com.bitvault.security.AesEncryptionProvider;
 import com.bitvault.security.EncryptionProvider;
 import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.services.factory.ServiceFactory;
-import com.bitvault.services.interfaces.ICategoryService;
-import com.bitvault.services.interfaces.IPasswordService;
-import com.bitvault.services.interfaces.IProfileService;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
@@ -25,12 +20,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+
 class PasswordServiceTest {
 
-    static IPasswordService passwordService;
-    static ICategoryService categoryService;
-    static IProfileService profileService;
-
+    static UserSession userSession;
 
     @BeforeAll
     static void init() {
@@ -40,23 +33,18 @@ class PasswordServiceTest {
             throw new RuntimeException("Set up location for test file");
         }
 
-        final EncryptionProvider encryptionProvider = new AesEncryptionProvider("password".toCharArray());
+        EncryptionProvider encryptionProvider= new AesEncryptionProvider("password".toCharArray());
 
         final ServiceFactory serviceFactory = new LocalServiceFactory(location, encryptionProvider);
 
-        final UserSession userSession = new UserSession("username", encryptionProvider, serviceFactory);
-
-        final ConnectionProvider connectionProvider = new LocalDB(location);
-        passwordService = new PasswordService(connectionProvider, userSession.getEncryptionProvider());
-        categoryService = new CategoryService(connectionProvider);
-        profileService = new ProfileService(connectionProvider);
+        userSession = new UserSession("username", encryptionProvider, serviceFactory);
 
     }
 
     @Test
     void create() {
 
-        Result<List<Category>> resultCat = categoryService.getCategories();
+        Result<List<Category>> resultCat = userSession.getServiceFactory().getCategoryService().getCategories();
 
         if (resultCat.isFail()) {
             fail(resultCat.getError());
@@ -66,7 +54,7 @@ class PasswordServiceTest {
         final List<Category> categoryList = resultCat.get();
 
 
-        Result<List<Profile>> profilesResult = profileService.getProfiles();
+        Result<List<Profile>> profilesResult = userSession.getServiceFactory().getProfileService().getProfiles();
 
         if (profilesResult.isFail()) {
             fail(resultCat.getError());
@@ -99,7 +87,7 @@ class PasswordServiceTest {
                 secureDetails
         );
 
-        Result<Password> passwordResult = passwordService.create(password);
+        Result<Password> passwordResult = userSession.getServiceFactory().getPasswordService().create(password);
         if (passwordResult.isFail()) {
             fail(resultCat.getError());
             return;
@@ -107,14 +95,16 @@ class PasswordServiceTest {
 
         Password password1 = passwordResult.get();
 
-        assertEquals(password1.getPassword(), password.getPassword());
+        String decryptNewPass = userSession.getEncryptionProvider().decrypt(password1.getPassword());
+
+        assertEquals(decryptNewPass, password.getPassword());
 
     }
 
     @Test
     void getPasswords() {
 
-        Result<List<Password>> passwordsResult = passwordService.getPasswords();
+        Result<List<Password>> passwordsResult = userSession.getServiceFactory().getPasswordService().getPasswords();
         if (passwordsResult.isFail()) {
             fail(passwordsResult.getError());
             return;
@@ -128,7 +118,7 @@ class PasswordServiceTest {
     @Test
     void update() {
 
-        Result<List<Password>> passwordsResults = passwordService.getPasswords();
+        Result<List<Password>> passwordsResults = userSession.getServiceFactory().getPasswordService().getPasswords();
 
         List<Password> passwordList = passwordsResults.get();
 
@@ -162,7 +152,7 @@ class PasswordServiceTest {
                 secureDetails
         );
 
-        Result<Password> updateResult = passwordService.update(passwordUpdated);
+        Result<Password> updateResult = userSession.getServiceFactory().getPasswordService().update(passwordUpdated);
 
         if (updateResult.isFail()) {
             fail(updateResult.getError());
@@ -174,7 +164,7 @@ class PasswordServiceTest {
     @Test
     void delete() {
 
-        Result<List<Password>> passwordsResults = passwordService.getPasswords();
+        Result<List<Password>> passwordsResults = userSession.getServiceFactory().getPasswordService().getPasswords();
 
         List<Password> passwordList = passwordsResults.get();
 
@@ -183,7 +173,7 @@ class PasswordServiceTest {
             return;
         }
 
-        Result<Boolean> deleteResult = passwordService.delete(passwordList.get(0));
+        Result<Boolean> deleteResult = userSession.getServiceFactory().getPasswordService().delete(passwordList.get(0));
 
         if (deleteResult.isFail()) {
             fail(deleteResult.getError());

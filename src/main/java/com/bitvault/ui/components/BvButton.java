@@ -1,7 +1,6 @@
 package com.bitvault.ui.components;
 
 import com.bitvault.ui.utils.JavaFxUtil;
-import com.bitvault.util.ResourceLoader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;

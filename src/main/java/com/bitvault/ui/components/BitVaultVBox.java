@@ -1,6 +1,5 @@
 package com.bitvault.ui.components;
 
-import com.bitvault.util.ResourceLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 

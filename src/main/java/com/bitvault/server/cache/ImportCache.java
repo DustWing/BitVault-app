@@ -2,9 +2,11 @@ package com.bitvault.server.cache;
 
 import com.bitvault.algos.AES;
 import com.bitvault.server.dto.SecureItemRqDto.LocalPasswordDto;
+import com.bitvault.util.Result;
 
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
@@ -26,14 +28,15 @@ public final class ImportCache {
 
         SecretKey secretKey;
         try {
-            secretKey = AES.randomSecretKey();
+//            secretKey = AES.randomSecretKey();
+            secretKey = AES.secretKey("secret".toCharArray(),"salt".getBytes());
 
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
 
-        byte[] iv = AES.generateIv();
-
+//        byte[] iv = AES.generateIv();
+        byte[] iv = new byte[12];
         return new ImportCache(new ConcurrentLinkedQueue<>(), secretKey, iv, onAddPassword);
     }
 
@@ -49,9 +52,16 @@ public final class ImportCache {
         return cache.stream().toList();
     }
 
-    public void add(LocalPasswordDto password) {
+    public Result<Boolean> add(LocalPasswordDto password) {
         cache.add(password);
-        onAddPassword.accept(password);
+
+        try {
+            onAddPassword.accept(password);
+        }catch (Throwable throwable){//catching everything - had NoClassDefFoundError at some point
+            return Result.error(new Exception(throwable));
+        }
+
+        return Result.Success;
     }
 
     public void remove(LocalPasswordDto password) {

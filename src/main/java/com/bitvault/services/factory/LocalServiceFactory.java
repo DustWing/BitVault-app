@@ -1,12 +1,10 @@
 package com.bitvault.services.factory;
 
-import com.bitvault.security.ArgonAuthenticator;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.database.provider.LocalDB;
+import com.bitvault.security.ArgonAuthenticator;
 import com.bitvault.security.Authenticator;
 import com.bitvault.security.EncryptionProvider;
-import com.bitvault.services.cached.CategoryServiceCached;
-import com.bitvault.services.cached.PasswordServiceCached;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.services.interfaces.IProfileService;

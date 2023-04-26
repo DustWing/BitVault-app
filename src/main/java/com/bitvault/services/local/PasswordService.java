@@ -6,7 +6,6 @@ import com.bitvault.database.models.PasswordDM;
 import com.bitvault.database.models.ProfileDM;
 import com.bitvault.database.models.SecureDetailsDM;
 import com.bitvault.database.provider.ConnectionProvider;
-import com.bitvault.enums.Action;
 import com.bitvault.security.EncryptionProvider;
 import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.ui.model.Category;

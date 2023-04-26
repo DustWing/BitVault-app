@@ -1,6 +1,5 @@
 package com.bitvault.ui.views.password;
 
-import com.bitvault.enums.Action;
 import com.bitvault.security.UserSession;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.services.interfaces.IPasswordService;

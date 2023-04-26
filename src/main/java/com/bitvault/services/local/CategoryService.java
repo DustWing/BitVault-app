@@ -1,6 +1,9 @@
 package com.bitvault.services.local;
 
-import com.bitvault.database.daos.*;
+import com.bitvault.database.daos.CategoryDao;
+import com.bitvault.database.daos.ICategoryDao;
+import com.bitvault.database.daos.ISecureDetailsDao;
+import com.bitvault.database.daos.SecureDetailsDao;
 import com.bitvault.database.models.CategoryDM;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.services.interfaces.ICategoryService;

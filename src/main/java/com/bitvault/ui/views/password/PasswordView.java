@@ -1,29 +1,11 @@
 package com.bitvault.ui.views.password;
 
-import com.bitvault.ui.components.BitVaultHBox;
-import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.BvButton;
-import com.bitvault.ui.components.TimerBar;
-import com.bitvault.ui.components.textfield.BvTextField;
-import com.bitvault.ui.hyperlink.HyperLinkCell;
-import com.bitvault.ui.model.Password;
 import com.bitvault.ui.utils.BvInsets;
-import com.bitvault.ui.utils.JavaFxUtil;
-import com.bitvault.ui.utils.KeyCombinationConst;
 import com.bitvault.ui.views.categories.CategoryVM;
 import com.bitvault.ui.views.categories.CategoryView;
-import com.bitvault.util.Labels;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-
-import java.util.ArrayList;
 
 
 public class PasswordView extends BorderPane {

@@ -57,6 +57,7 @@
     -color-fg-emphasis: #ffffff;
     -color-bg-default: #0d1117;
     -color-bg-overlay: #0d1117;
+    -color-bg-card: #13171d;
     -color-bg-subtle: #161b22;
     -color-bg-inset: #010409;
     -color-border-default: #30363d;
@@ -1396,12 +1397,12 @@ Text {
     -fx-background-color: -color-cell-bg-selected-focused;
 }
 
-.cell .text-input {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-padding: 0;
-}
+/*.cell .text-input {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-insets: 0;*/
+/*    -fx-background-radius: 0;*/
+/*    -fx-padding: 0;*/
+/*}*/
 .cell .check-box {
     -fx-padding: 0 6px 0 0;
 }
@@ -1438,7 +1439,7 @@ Text {
     -color-disclosure: -color-fg-muted;
     -fx-border-color: -color-cell-border;
     -fx-border-width: 1px;
-    -fx-border-radius: 0;
+    -fx-border-radius: 4px, 3px;
 }
 .list-view > .virtual-flow > .corner {
     -fx-background-color: -color-cell-border;
@@ -3920,4 +3921,14 @@ Text {
     -fx-padding: 8px 12px 8px 12px;
     -fx-opacity: 0.85;
     -fx-effect: dropshadow(three-pass-box, -color-shadow-default, 8px, 0.6, 0, 2);
+}
+
+/*My CSS*/
+.card {
+    -fx-padding: 20px;
+    -fx-background-insets: 0, 1px;
+    -fx-background-radius: 4px, 3px;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px, 3px;
+    -fx-border-color: -color-border-default;
 }

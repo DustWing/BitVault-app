@@ -5,8 +5,8 @@ import javafx.scene.control.Alert;
 
 public class ErrorAlert {
 
-    public static void show(String title, String msg) {
 
+    public static void show(String title, String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setContentText(msg);

@@ -2,6 +2,7 @@ package com.bitvault.ui.views.password;
 
 import com.bitvault.ui.components.BitVaultHBox;
 import com.bitvault.ui.components.BvButton;
+import com.bitvault.ui.components.CardBuilder;
 import com.bitvault.ui.components.TimerBar;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.hyperlink.HyperLinkCell;
@@ -10,6 +11,7 @@ import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.BvStyles;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.utils.KeyCombinationConst;
+import com.bitvault.ui.views.sync.SyncTableRowFactory;
 import com.bitvault.util.Labels;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -26,17 +28,19 @@ import java.util.ArrayList;
 public class PasswordTableView extends BorderPane {
 
     private final PasswordVM passwordVM;
-    private final TableView<Password> tableView;
     private final TimerBar timerBar;
 
+    private final FilteredList<Password> filteredList;
 
     public PasswordTableView(PasswordVM passwordVM) {
         this.passwordVM = passwordVM;
 
         ObservableList<Password> passwords = passwordVM.getPasswords();
 
-        final FilteredList<Password> filteredList = new FilteredList<>(passwords, s -> true);
-        this.tableView = createTable(filteredList);
+        this.filteredList = new FilteredList<>(passwords, s -> true);
+        final TableView<Password> tableView = createTable(filteredList);
+
+        VBox vBox = new CardBuilder().add(tableView).build();
 
         final HBox topBar = topBar(filteredList);
         BorderPane.setMargin(topBar, BvInsets.bottom10);
@@ -47,7 +51,7 @@ public class PasswordTableView extends BorderPane {
                 .maxH(20);
 
         this.setTop(topBar);
-        this.setCenter(tableView);
+        this.setCenter(vBox);
         this.setBottom(bottomHBox);
 
         this.setOnKeyPressed(event -> {
@@ -100,6 +104,12 @@ public class PasswordTableView extends BorderPane {
 
         TableView<Password> tableView = new TableView<>(passwords);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableView.setRowFactory(param -> new PasswordTableRowFactory(
+                this::copyUsername,
+                this::copyPassword,
+                this::showEditPopUp,
+                this::delete
+        ));
 
         final TableColumn<Password, String> titleC = new TableColumn<>("Title");
         titleC.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getSecureDetails().getTitle()));
@@ -120,44 +130,7 @@ public class PasswordTableView extends BorderPane {
         tableView.getColumns().add(domainC);
         tableView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
 
-        setContextMenu(tableView);
-
         return tableView;
-    }
-
-    private void setContextMenu(TableView<Password> tableView) {
-        final ContextMenu contextMenu = new ContextMenu();
-        MenuItem copyUserName = new MenuItem("Copy UserName");
-        copyUserName.setOnAction(event -> {
-                    Password selectedItem = tableView.getSelectionModel().getSelectedItem();
-                    if (selectedItem == null) return;
-                    System.out.println(selectedItem);
-                }
-        );
-        MenuItem copyPassword = new MenuItem("Copy Password");
-        copyPassword.setOnAction(event -> copyPassword(tableView));
-
-        MenuItem edit = new MenuItem("Edit");
-        edit.setOnAction(
-                event -> {
-                    Password selectedItem = tableView.getSelectionModel().getSelectedItem();
-                    if (selectedItem == null) return;
-                    showEditPopUp(selectedItem);
-                }
-        );
-
-        MenuItem delete = new MenuItem("Delete");
-        delete.setOnAction(
-                event -> {
-                    Password selectedItem = tableView.getSelectionModel().getSelectedItem();
-                    if (selectedItem == null) return;
-                    delete(selectedItem);
-                }
-        );
-
-        contextMenu.getItems().addAll(copyUserName, copyPassword, edit, delete);
-
-        tableView.setContextMenu(contextMenu);
     }
 
     public void showEditPopUp(Password oldPass) {
@@ -178,10 +151,30 @@ public class PasswordTableView extends BorderPane {
         passwordVM.delete(password);
     }
 
+    private void copyPassword(Password selectedItem) {
+        final boolean copied = passwordVM.copyPassword(selectedItem);
+        if (copied)
+            this.timerBar.start(30);
+    }
+
     private void copyPassword(TableView<Password> tableView) {
         final Password selectedItem = tableView.getSelectionModel().getSelectedItem();
         final boolean copied = passwordVM.copyPassword(selectedItem);
         if (copied)
             this.timerBar.start(30);
+    }
+
+    private void copyUsername(Password selectedItem) {
+        final boolean copied = passwordVM.copyUsername(selectedItem);
+        if (copied)
+            this.timerBar.start(30);
+    }
+
+    public void filterByCategory(String id){
+        if("ALL".equals(id)){
+            this.filteredList.setPredicate(password -> true);
+            return;
+        }
+        this.filteredList.setPredicate(password -> password.getSecureDetails().getCategory().id().equals(id));
     }
 }

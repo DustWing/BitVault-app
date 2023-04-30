@@ -1,7 +1,10 @@
 package com.bitvault.ui.views.categories;
 
 import com.bitvault.ui.components.BvButton;
+import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.components.textfield.BvTextField;
+import com.bitvault.ui.components.validation.ValidateForm;
+import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.listnode.IdentifiableNode;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.utils.BvColors;
@@ -30,6 +33,10 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
     private final CategoryRowVM categoryRowVM;
     final BvTextField categoryName;
 
+    private final ValidateForm validateForm;
+
+
+
     public static CategoryRowView createFromCategory(
             final Category category, Function<CategoryRowView, Boolean> onDelete, Function<CategoryRowView, Result<String>> onSave
     ) {
@@ -54,8 +61,12 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
                 .withDefaultSize()
                 .withBinding(this.categoryRowVM.categoryNameProperty())
                 .withPromptText("Category")
-                .required(true);
+                .required(true)
+                .maxLength(50)
+                .minLength(10);
         categoryName.disableProperty().bind(this.categoryRowVM.allowEditProperty());
+
+        validateForm = new ValidateForm( this.categoryName);
 
         //color picker
         final ColorPicker colorPicker = new ColorPicker();
@@ -122,6 +133,12 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
     }
 
     private void save() {
+        ValidateResult validate = validateForm.validate();
+        if(!validate.valid()){
+            ErrorAlert.show("Category Error", validate.errorMessages().toString());
+            JavaFxUtil.focus(this.categoryName);
+            return;
+        }
         this.categoryRowVM.save(this);
         this.requestFocus();
     }

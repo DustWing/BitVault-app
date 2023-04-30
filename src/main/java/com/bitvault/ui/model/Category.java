@@ -15,6 +15,20 @@ public record Category(
 
 ) implements ITextColorCell, Identifiable {
 
+    public static Category createFake(
+            String id,
+            String name,
+            String color) {
+        return new Category(
+                id,
+                name,
+                color,
+                null,
+                null,
+                null
+        );
+    }
+
     public static Category createNew(
             String name,
             String color,

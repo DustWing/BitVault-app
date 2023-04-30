@@ -41,7 +41,7 @@ public class SyncViewModel {
     public SyncViewModel(UserSession userSession) {
         this.userSession = userSession;
 
-        Result<List<Password>> passwords = this.userSession.getServiceFactory()
+        final Result<List<Password>> passwords = this.userSession.getServiceFactory()
                 .getPasswordService()
                 .getPasswords();
 

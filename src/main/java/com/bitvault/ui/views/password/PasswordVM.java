@@ -88,13 +88,16 @@ public class PasswordVM {
         });
     }
 
-    public void onTimeEnd() {
-        JavaFxUtil.clearClipBoard();
-    }
     public boolean copyPassword(Password selectedItem){
         if (selectedItem == null) return false;
         final String decrypt = userSession.getEncryptionProvider().decrypt(selectedItem.getPassword());
         JavaFxUtil.copyToClipBoard(decrypt);
+        return true;
+    }
+
+    public boolean copyUsername(Password selectedItem){
+        if (selectedItem == null) return false;
+        JavaFxUtil.copyToClipBoard(selectedItem.getUsername());
         return true;
     }
 

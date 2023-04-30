@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -36,12 +37,13 @@ public final class DashBoardView extends BorderPane {
 
 
     private Button getLogoutBtn() {
+
         FontIcon logOutIcon = new FontIcon(LOGOUT);
         final Button logout = new Button(Labels.i18n("logout"), logOutIcon);
         logout.setAccessibleText(Labels.i18n("logout"));
         logout.setOnAction(event -> logout());
         BorderPane.setAlignment(logout, Pos.CENTER_RIGHT);
-        BorderPane.setMargin(logout, new Insets(10,0,20,10));
+        BorderPane.setMargin(logout, new Insets(10,10,20,0));
         return logout;
     }
 

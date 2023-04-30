@@ -14,16 +14,16 @@ public class TextColorComboBox<T extends ITextColorCell> extends ComboBox<T> {
 
     public static <T extends ITextColorCell> TextColorComboBox<T> withRectangle(ObservableList<T> items) {
 
-        final Supplier<Shape> rectangle = () -> new Rectangle(20, 20);
+        final Supplier<Shape> shape = () -> new Rectangle(20, 20);
 
-        return new TextColorComboBox<>(items, rectangle);
+        return new TextColorComboBox<>(items, shape);
     }
 
     public static <T extends ITextColorCell> TextColorComboBox<T> withCircle(ObservableList<T> items) {
 
-        final Supplier<Shape> rectangle = () -> new Circle(5);
+        final Supplier<Shape> shape = () -> new Circle(5);
 
-        return new TextColorComboBox<>(items, rectangle);
+        return new TextColorComboBox<>(items, shape);
     }
 
     public TextColorComboBox(ObservableList<T> items, Supplier<Shape> shape) {

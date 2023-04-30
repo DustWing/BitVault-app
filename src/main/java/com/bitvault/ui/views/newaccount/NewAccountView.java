@@ -1,24 +1,26 @@
 package com.bitvault.ui.views.newaccount;
 
 import com.bitvault.security.UserSession;
-import com.bitvault.ui.components.BitVaultVBox;
 import com.bitvault.ui.components.BvButton;
+import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.utils.BvInsets;
+import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.JavaFxUtil;
+import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.dashboard.DashBoardView;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 
 
-public class NewAccountView extends BitVaultVBox {
+public class NewAccountView extends VBox {
 
     private final NewAccountVM newAccountVM;
 
@@ -88,23 +90,17 @@ public class NewAccountView extends BitVaultVBox {
         final Result<UserSession> userSessionResult = newAccountVM.create();
 
         if (userSessionResult.isFail()) {
-            //TODO handle
+            ErrorAlert.show("New account error", userSessionResult.getError());
             return;
         }
 
         final UserSession userSession = userSessionResult.get();
 
         final DashBoardView view = DashBoardView.create(userSession);
-        final Scene scene = new Scene(view, 1080, 960);
-
+        final BvSceneSize aDefault = BvSceneSize.Default;
         final Stage stage = (Stage) this.getScene().getWindow();
-        stage.setWidth(1080);
-        stage.setHeight(960);
-        stage.centerOnScreen();
 
-        //change scene
-        stage.setScene(scene);
-
+        ViewLoader.load(stage, aDefault.width(), aDefault.height(), () -> view);
 
     }
 }

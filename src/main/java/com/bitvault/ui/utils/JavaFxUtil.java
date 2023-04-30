@@ -139,9 +139,6 @@ public class JavaFxUtil {
         );
     }
 
-    public static void vGrowAlways(Node node) {
-        VBox.setVgrow(node, Priority.ALWAYS);
-    }
 
     public static void hGrowAlways(HBox pane) {
         pane.getChildren().forEach(
@@ -185,7 +182,6 @@ public class JavaFxUtil {
     }
 
     public static void vboxArrangement(VBox vBox){
-        vBox.setAlignment(Pos.BOTTOM_CENTER);
         vBox.setFillWidth(true);
         vBox.setPadding(BvInsets.all10);
         vBox.setSpacing(BvSpacing.SMALL);

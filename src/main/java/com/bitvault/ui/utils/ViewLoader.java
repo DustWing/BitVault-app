@@ -1,5 +1,6 @@
 package com.bitvault.ui.utils;
 
+import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.exceptions.ViewLoadException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,7 +23,7 @@ public class ViewLoader {
             stage.show();
         } catch (ViewLoadException ex) {
             ex.printStackTrace();
-            //TODO show error window
+            ErrorAlert.show("ViewLoader", ex);
         }
     }
 

@@ -102,7 +102,6 @@ public class CategoryVM {
         if (categoryResult.isFail()) {
             categoryResult.getError().printStackTrace();
             //TODO
-
             return Result.error(categoryResult.getError());
         }
 

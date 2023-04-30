@@ -15,6 +15,10 @@ public class ValidateForm {
         this.validatedFieldList = validatedFieldList;
     }
 
+    public ValidateForm(ValidateField validatedField) {
+        this.validatedFieldList = List.of(validatedField);
+    }
+
     public void add(ValidateField field) {
         validatedFieldList.add(field);
     }

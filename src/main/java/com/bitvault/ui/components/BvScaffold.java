@@ -49,7 +49,7 @@ public class BvScaffold extends VBox {
 
     public void addChild(Node node) {
         this.childrenVBox.getChildren().add(node);
-        JavaFxUtil.vGrowAlways(node);
+        JavaFxUtil.vGrowAlways(childrenVBox);
     }
 
 
@@ -70,7 +70,7 @@ public class BvScaffold extends VBox {
 
     public BvScaffold withFooter(Node footer) {
         this.getChildren().add(footer);
-        JavaFxUtil.vGrowAlways(footer);
+        JavaFxUtil.vGrowAlways(this);
         return this;
     }
 

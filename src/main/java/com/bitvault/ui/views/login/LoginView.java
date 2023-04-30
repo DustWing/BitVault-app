@@ -10,7 +10,9 @@ import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.utils.BvInsets;
+import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.JavaFxUtil;
+import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.dashboard.DashBoardView;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
@@ -118,15 +120,11 @@ public class LoginView extends VBox {
         final UserSession userSession = loginResults.get();
 
         final DashBoardView view = DashBoardView.create(userSession);
-        final Scene scene = new Scene(view, 1080, 960);
-
+        final BvSceneSize aDefault = BvSceneSize.Default;
         final Stage stage = (Stage) this.getScene().getWindow();
-        stage.setWidth(1080);
-        stage.setHeight(960);
-        stage.centerOnScreen();
 
-        //change scene
-        stage.setScene(scene);
+        ViewLoader.load(stage, aDefault.width(), aDefault.height(), () -> view);
+
     }
 
     private void onException(AsyncTaskException asyncTaskException) {

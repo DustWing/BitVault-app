@@ -1,7 +1,8 @@
 package com.bitvault;
 
+import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.ViewLoader;
-import com.bitvault.ui.views.sync.SyncView;
+import com.bitvault.ui.views.WelcomeView;
 import com.bitvault.util.Theme;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -39,7 +40,8 @@ public class BitVault extends Application {
         //register on close
         stage.setOnCloseRequest(event -> runOnCloseActions());
 
-        ViewLoader.load(stage, 840, 600, SyncView::createTest);
+        BvSceneSize aDefault = BvSceneSize.Default;
+        ViewLoader.load(stage, aDefault.width(), aDefault.height(), WelcomeView::new);
     }
 
 }

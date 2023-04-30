@@ -88,12 +88,12 @@ public class SyncView extends VBox {
                 .defaultButton(false)
                 .withDefaultSize();
 
-        BvButton showCache = new BvButton("Show Cache")
+        final BvButton showCache = new BvButton("Show Cache")
                 .action(event -> this.syncViewModel.showCache())
                 .defaultButton(false)
                 .withDefaultSize();
 
-        ButtonBar buttonBar = new ButtonBar();
+        final ButtonBar buttonBar = new ButtonBar();
         buttonBar.getButtons()
                 .addAll(start, stop, clearLog, showCache);
 

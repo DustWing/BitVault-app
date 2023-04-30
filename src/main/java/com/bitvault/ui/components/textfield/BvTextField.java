@@ -12,6 +12,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.scene.Node;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.function.BiFunction;
 public class BvTextField extends TextField implements ValidateField {
 
     boolean required = false;
+    int minLength = 0;
 
     /**
      * Instantiates a default CustomTextField.
@@ -58,7 +60,7 @@ public class BvTextField extends TextField implements ValidateField {
 
     public BvTextField withSize(double width, double height) {
         this.setMaxWidth(width);
-        this.setMinWidth(width);
+        this.setMinWidth(width / 2);
         this.setPrefWidth(width);
         this.setPrefHeight(height);
         this.setMinHeight(height);
@@ -77,11 +79,21 @@ public class BvTextField extends TextField implements ValidateField {
         return this;
     }
 
+    public BvTextField maxLength(int maxLength) {
+        TextFormatter<String> formatter = LengthTextFormatter.createMaxLength(maxLength);
+        this.setTextFormatter(formatter);
+        return this;
+    }
+
+    public BvTextField minLength(int minLength) {
+        this.minLength = minLength;
+        return this;
+    }
 
     private void addRequiredListener() {
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
                     if (!newValue) {// when focus lost
-                        this.pseudoClassStateChanged(BvStyles.STATE_DANGER, this.getText()!=null && this.getText().isBlank());
+                        this.pseudoClassStateChanged(BvStyles.STATE_DANGER, this.getText() != null && this.getText().isBlank());
                     }
                 }
         );
@@ -179,9 +191,15 @@ public class BvTextField extends TextField implements ValidateField {
         List<String> errorMessages = new ArrayList<>();
         boolean valid = true;
         if (required && (getText() == null || getText().isBlank())) {
-            errorMessages.add(getPromptText() + " is empty");
+            errorMessages.add(getPromptText() + " is required");
             valid = false;
+        }
+
+        if (getText() == null || minLength > getText().trim().length()) {
+            errorMessages.add(getPromptText() + " minLength:" + minLength);
         }
         return new ValidateResult(valid, errorMessages);
     }
+
+
 }

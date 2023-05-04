@@ -4,7 +4,7 @@ import com.bitvault.ui.hyperlink.IWebLocation;
 
 import java.util.Objects;
 
-public final class Password implements IWebLocation{
+public final class Password implements IWebLocation {
     private final String id;
     private final String username;
     private final String password;
@@ -75,6 +75,33 @@ public final class Password implements IWebLocation{
                 "username=" + username + ", " +
                 "password=" + password + ", " +
                 "secureDetails=" + secureDetails + ']';
+    }
+
+
+    public boolean contains(String value) {
+        var toLower = value.toLowerCase();
+
+        boolean contains = false;
+        if (this.getUsername().toLowerCase().contains(toLower)) {
+            contains = true;
+        }
+        if (this.getSecureDetails().getDomain() != null && this.getSecureDetails().getDomain().contains(toLower)) {
+            contains = true;
+        }
+
+        if (this.getSecureDetails().getTitle() != null && this.getSecureDetails().getTitle().contains(toLower)) {
+            contains = true;
+        }
+
+//        if (this.getSecureDetails().getCategory().getText().contains(toLower)) {
+//            contains = true;
+//        }
+//
+//        if (this.getSecureDetails().getDescription() != null && this.getSecureDetails().getDescription().contains(toLower)) {
+//            contains = true;
+//        }
+
+        return contains;
     }
 
 }

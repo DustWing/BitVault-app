@@ -193,11 +193,14 @@ public class BvTextField extends TextField implements ValidateField {
         if (required && (getText() == null || getText().isBlank())) {
             errorMessages.add(getPromptText() + " is required");
             valid = false;
-        }
-
-        if (getText() == null || minLength > getText().trim().length()) {
+        }else if (getText() == null || minLength > getText().trim().length()) {
             errorMessages.add(getPromptText() + " minLength:" + minLength);
         }
+
+        if (!valid) {
+            this.pseudoClassStateChanged(BvStyles.STATE_DANGER, true);
+        }
+
         return new ValidateResult(valid, errorMessages);
     }
 

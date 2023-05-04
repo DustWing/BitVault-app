@@ -2,7 +2,6 @@ package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
 import com.bitvault.ui.components.validation.ValidateForm;
-import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
@@ -23,8 +22,6 @@ public class PasswordDetailsVM {
     private final List<Category> categories;
     private final Profile profile;
     private final Consumer<Password> onAction;
-    private final ValidateForm validatedForm;
-
 
     private final SimpleStringProperty titleProperty = new SimpleStringProperty();
     private final SimpleStringProperty userNameProperty = new SimpleStringProperty();
@@ -47,7 +44,6 @@ public class PasswordDetailsVM {
         this.profile = profile;
         this.action = action;
         this.onAction = onAction;
-        this.validatedForm = validateForm;
 
         this.selectedCatProperty().set(categories.get(0));
 
@@ -67,13 +63,7 @@ public class PasswordDetailsVM {
     }
 
 
-    public boolean save() {
-
-        ValidateResult validateResult = validatedForm.validate();
-
-        if (!validateResult.valid()) {
-            return false;
-        }
+    public void save() {
 
         final LocalDateTime now = LocalDateTime.now();
 
@@ -106,7 +96,7 @@ public class PasswordDetailsVM {
         );
 
         onAction.accept(passResult);
-        return true;
+
     }
 
 
@@ -119,9 +109,6 @@ public class PasswordDetailsVM {
         return categories;
     }
 
-    public ValidateForm getValidatedForm() {
-        return validatedForm;
-    }
 
     public String getUserNameProperty() {
         return userNameProperty.get();

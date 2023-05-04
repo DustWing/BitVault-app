@@ -2,6 +2,7 @@ package com.bitvault.ui.views.categories;
 
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.ui.async.AsyncTask;
+import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.model.Category;
 import com.bitvault.util.Result;
 import javafx.application.Platform;
@@ -71,6 +72,7 @@ public class CategoryVM {
 
         Result<Boolean> booleanResult = categoryService.delete(categoryRowView.getUniqueId());
         if (booleanResult.isFail()) {
+            Platform.runLater(()->ErrorAlert.show("Category Deletion", booleanResult.getError()));
             return false;
         }
         Platform.runLater(() -> this.categories.remove(categoryRowView));

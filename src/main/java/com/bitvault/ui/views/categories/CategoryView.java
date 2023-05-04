@@ -4,6 +4,7 @@ import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.utils.BvColors;
+import com.bitvault.ui.utils.BvSpacing;
 import com.bitvault.ui.utils.BvStyles;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
@@ -51,7 +52,7 @@ public class CategoryView extends VBox {
         this.listView = new ListView<>(this.categoryVM.getCategories());
         this.listView.setPlaceholder(new Label(Labels.i18n("no.records")));
         this.listView.setFixedCellSize(60);
-        this.listView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
+//        this.listView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
 
         final FontIcon plusIcon = new FontIcon(PLUS);
         this.addNewBtn = new BvButton(Labels.i18n("add.new"), plusIcon)
@@ -69,8 +70,10 @@ public class CategoryView extends VBox {
         this.getChildren().addAll(this.listView, this.addNewBtn);
         this.setFillWidth(true);
         this.setAlignment(Pos.CENTER);
+        this.setSpacing(BvSpacing.SMALL);
         JavaFxUtil.vGrowAlways(this);
     }
+
 
     private void loading() {
         this.addNewBtn.setDisable(true);

@@ -1,19 +1,14 @@
 package com.bitvault.ui.views.password;
 
-import com.bitvault.ui.components.BitVaultHBox;
-import com.bitvault.ui.components.BvButton;
-import com.bitvault.ui.components.CardBuilder;
-import com.bitvault.ui.components.TimerBar;
+import com.bitvault.ui.components.*;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.hyperlink.HyperLinkCell;
+import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
-import com.bitvault.ui.utils.BvInsets;
-import com.bitvault.ui.utils.BvStyles;
-import com.bitvault.ui.utils.JavaFxUtil;
-import com.bitvault.ui.utils.KeyCombinationConst;
-import com.bitvault.ui.views.sync.SyncTableRowFactory;
+import com.bitvault.ui.utils.*;
 import com.bitvault.util.Labels;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Pos;
@@ -22,13 +17,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.ArrayList;
+
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignP.PLUS;
 
 public class PasswordTableView extends BorderPane {
 
     private final PasswordVM passwordVM;
     private final TimerBar timerBar;
+
 
     private final FilteredList<Password> filteredList;
 
@@ -47,6 +46,7 @@ public class PasswordTableView extends BorderPane {
 
         this.timerBar = new TimerBar(new ProgressBar(), JavaFxUtil::clearClipBoard);
         timerBar.getProgressBar().setVisible(false);
+
         final BitVaultHBox bottomHBox = new BitVaultHBox(timerBar.getProgressBar())
                 .maxH(20);
 
@@ -66,12 +66,17 @@ public class PasswordTableView extends BorderPane {
         return new BvTextField()
                 .withPromptText(Labels.i18n("search"))
                 .withDefaultSize()
-                .filter(filteredList, (password, s) -> {
-                            var toLower = s.toLowerCase();
-                            return password.getUsername().toLowerCase().contains(toLower)
-                                    || password.getSecureDetails().getDomain().toLowerCase().contains(toLower);
-                        }
-                );
+                .filter(filteredList, Password::contains);
+    }
+
+    private TextColorComboBox<Category> categoryDropdown() {
+        Category fake = Category.createFake("ALL", "ALL", "#000000");
+        ObservableList<Category> list = FXCollections.observableArrayList(fake);
+        list.addAll(this.passwordVM.getCategories());
+        ObservableList<Category> categories = FXCollections.observableArrayList(list);
+        final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withCircle(categories);
+        categoriesDd.setValue(fake);
+        return categoriesDd;
     }
 
     private void showNewPassPopUp() {
@@ -86,17 +91,34 @@ public class PasswordTableView extends BorderPane {
     }
 
     private HBox topBar(FilteredList<Password> filteredList) {
-        Button addNewBtn = new BvButton(Labels.i18n("add.new"))
+        final FontIcon plusIcon = new FontIcon(PLUS);
+
+        final Button addNewBtn = new BvButton(Labels.i18n("add.new"), plusIcon)
                 .withDefaultSize()
                 .action(event -> showNewPassPopUp());
+        addNewBtn.setTooltip(new Tooltip(Labels.i18n("add.new.password")));
+
+        final TextColorComboBox<Category> categoriesDd = categoryDropdown();
+
+        categoriesDd.setOnAction(event -> {
+                    Category selectedItem = categoriesDd.getValue();
+                    if (selectedItem != null) {
+                        this.filterByCategory(selectedItem.id());
+                    }
+                }
+        );
+        JavaFxUtil.defaultSize(categoriesDd);
+
 
         TextField searchTf = createSearchTf(filteredList);
         VBox.setMargin(searchTf, BvInsets.right15);
 
-        HBox rightBox = new BitVaultHBox(addNewBtn);
+        final HBox rightBox = new BitVaultHBox(addNewBtn);
         rightBox.setAlignment(Pos.CENTER_LEFT);
-        BitVaultHBox leftBox = new BitVaultHBox(searchTf);
+
+        final BitVaultHBox leftBox = new BitVaultHBox(categoriesDd, searchTf);
         leftBox.setAlignment(Pos.CENTER_RIGHT);
+        leftBox.setSpacing(BvSpacing.SMALL);
         return new BitVaultHBox(rightBox, leftBox);
     }
 
@@ -170,8 +192,8 @@ public class PasswordTableView extends BorderPane {
             this.timerBar.start(30);
     }
 
-    public void filterByCategory(String id){
-        if("ALL".equals(id)){
+    public void filterByCategory(String id) {
+        if ("ALL".equals(id)) {
             this.filteredList.setPredicate(password -> true);
             return;
         }

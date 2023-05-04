@@ -5,9 +5,11 @@ import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.BvDoubleColumn;
 import com.bitvault.ui.components.BvScaffold;
 import com.bitvault.ui.components.TextColorComboBox;
+import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.components.validation.ValidateForm;
+import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
@@ -30,6 +32,8 @@ import java.util.function.Consumer;
 public class PasswordDetailsView extends VBox {
 
     private final PasswordDetailsVM passwordDetailsVM;
+
+    private final ValidateForm validatedForm = new ValidateForm();
 
 
     public static PasswordDetailsView editPassword(Password password, List<Category> categories, Profile profile, Consumer<Password> onAction) {
@@ -68,9 +72,6 @@ public class PasswordDetailsView extends VBox {
                 .defaultButton(true);
         BorderPane.setAlignment(okButton, Pos.CENTER);
 
-//        passwordDetailsVM.getValidatedForm().add(usernameTf);
-//        passwordDetailsVM.getValidatedForm().add(passwordTf);
-
 
         List<Node> list = List.of(
                 titleTf,
@@ -106,9 +107,12 @@ public class PasswordDetailsView extends VBox {
                 .required(true)
                 .withDefaultSize()
                 .withPromptText(Labels.i18n("username"));
+        validatedForm.add(usernameTf);
+
 
         final BvPasswordInput passwordInput = new BvPasswordInput()
                 .withBinding(passwordDetailsVM.passwordPropertyProperty());
+        validatedForm.add(passwordInput);
 
         return new BvDoubleColumn(List.of(usernameTf), List.of(passwordInput));
     }
@@ -142,11 +146,15 @@ public class PasswordDetailsView extends VBox {
 
 
     public void saveBtnAction() {
-        boolean valid = passwordDetailsVM.save();
-        if (valid) {
-            this.getScene().getWindow().hide();
+
+
+        ValidateResult validateResult = validatedForm.validate();
+
+        if (!validateResult.valid()) {
+            ErrorAlert.show("New Password", validateResult.errorMessages().toString());
+            return;
         }
+        passwordDetailsVM.save();
+        this.getScene().getWindow().hide();
     }
-
-
 }

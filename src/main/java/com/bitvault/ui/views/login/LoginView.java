@@ -40,8 +40,7 @@ public class LoginView extends VBox {
         final BvTextField username = getUserNameTf();
 
         final BvPasswordInput passwordSp = new BvPasswordInput()
-                .withBinding(loginVM.passwordProperty())
-                .required(true);
+                .withBinding(loginVM.passwordProperty());
 
         final BvTextField location = getLocationTf();
 

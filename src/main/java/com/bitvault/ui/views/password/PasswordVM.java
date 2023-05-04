@@ -20,17 +20,14 @@ public class PasswordVM {
     private final ObservableList<Password> passwords  = FXCollections.observableArrayList();
     private final IPasswordService passwordService;
     private final ICategoryService categoryService;
-    private final Profile profile;
     private final List<Category> categories;
 
     public PasswordVM(
-            final UserSession userSession,
-            final Profile profile
+            final UserSession userSession
     ) {
         this.userSession = userSession;
         this.passwordService = userSession.getServiceFactory().getPasswordService();
         this.categoryService = userSession.getServiceFactory().getCategoryService();
-        this.profile = profile;
         this.categories = new ArrayList<>();
         this.init();
     }
@@ -122,7 +119,7 @@ public class PasswordVM {
     }
 
     public Profile getProfile() {
-        return profile;
+        return userSession.getProfile();
     }
 
     public ICategoryService getCategoryService() {

@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Skin;
+import javafx.scene.control.TextFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,9 @@ import java.util.List;
 public class BvPasswordField extends PasswordField implements ValidateField {
 
     boolean required = false;
+
+    int minLength = 0;
+
 
     /**
      * Instantiates a default CustomTextField.
@@ -60,11 +64,21 @@ public class BvPasswordField extends PasswordField implements ValidateField {
         this.addRequiredListener();
         return this;
     }
+    public BvPasswordField maxLength(int maxLength) {
+        TextFormatter<String> formatter = LengthTextFormatter.createMaxLength(maxLength);
+        this.setTextFormatter(formatter);
+        return this;
+    }
+
+    public BvPasswordField minLength(int minLength) {
+        this.minLength = minLength;
+        return this;
+    }
 
     private void addRequiredListener() {
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
                     if (!newValue) {// when focus lost
-                        this.pseudoClassStateChanged(BvStyles.STATE_DANGER, this.getText().isBlank());
+                        this.pseudoClassStateChanged(BvStyles.STATE_DANGER, this.getText() != null && this.getText().isBlank());
                     }
                 }
         );
@@ -155,10 +169,11 @@ public class BvPasswordField extends PasswordField implements ValidateField {
         List<String> errorMessages = new ArrayList<>();
         boolean valid = true;
         if (required && (getText() == null || getText().isBlank())) {
-            errorMessages.add(getPromptText() + " is empty");
+            errorMessages.add(getPromptText() + " is required");
             valid = false;
+        } else if (getText() == null || minLength > getText().trim().length()) {
+            errorMessages.add(getPromptText() + " minLength:" + minLength);
         }
-
         if (!valid) {
             this.pseudoClassStateChanged(BvStyles.STATE_DANGER, true);
         }

@@ -81,5 +81,6 @@ module com.bitvault {
     opens com.bitvault.ui.async to javafx.fxml;
     exports com.bitvault.ui.views.sync;
     opens com.bitvault.ui.views.sync to javafx.fxml;
+    opens com.bitvault.util to javafx.fxml;
 
 }

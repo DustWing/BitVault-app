@@ -33,8 +33,6 @@ public class TextColorListCell<T extends ITextColorCell> extends ListCell<T> {
         if (item == null || empty) {
             setGraphic(null);
         } else {
-
-
             label.setText(item.getText());
             shape.setFill(Paint.valueOf(item.getColor()));
             setGraphic(hbox);

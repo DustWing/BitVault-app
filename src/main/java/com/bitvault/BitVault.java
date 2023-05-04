@@ -3,11 +3,14 @@ package com.bitvault;
 import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
+import com.bitvault.util.ResourceLoader;
 import com.bitvault.util.Theme;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -37,6 +40,11 @@ public class BitVault extends Application {
         BitVault.setUserAgentStylesheet(Theme.DARK);
 
         stage.setTitle("The Vault");
+
+        // Set the icon of the primary stage
+        final URL iconUrl = ResourceLoader.loadURL("/com.bitvault/icons/32moth.png");
+        stage.getIcons().add(new Image(iconUrl.toExternalForm()));
+
         //register on close
         stage.setOnCloseRequest(event -> runOnCloseActions());
 

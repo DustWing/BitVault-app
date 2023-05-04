@@ -6,6 +6,7 @@ import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.StackPane;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -34,12 +35,16 @@ public class BvPasswordInput extends StackPane implements ValidateField {
 
         this.passwordTf = new BvTextField()
                 .withDefaultSize()
+                .required(true)
+                .maxLength(100)
                 .withPromptText(Labels.i18n("password"))
                 .withRight(eyeOnBtn);
         passwordTf.setVisible(false);
 
         this.passwordPf = new BvPasswordField()
                 .withDefaultSize()
+                .required(true)
+                .maxLength(100)
                 .withPromptText(Labels.i18n("password"))
                 .withRight(eyeOffBtn);
         passwordPf.setVisible(true);
@@ -74,15 +79,12 @@ public class BvPasswordInput extends StackPane implements ValidateField {
         return this;
     }
 
-    public BvPasswordInput required(boolean required) {
-        this.passwordTf.required(required);
-        this.passwordPf.required(required);
-        return this;
-    }
 
     @Override
     public ValidateResult validate() {
         this.passwordPf.validate();
         return this.passwordTf.validate();
     }
+
+
 }

@@ -54,7 +54,12 @@ public class BvTextField extends TextField implements ValidateField {
     }
 
     public BvTextField withDefaultSize() {
-        JavaFxUtil.defaultSize(this);
+        JavaFxUtil.largeSize(this);
+        return this;
+    }
+
+    public BvTextField withMediumSize() {
+        JavaFxUtil.mediumSize(this);
         return this;
     }
 

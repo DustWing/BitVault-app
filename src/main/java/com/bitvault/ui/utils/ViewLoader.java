@@ -5,12 +5,32 @@ import com.bitvault.ui.exceptions.ViewLoadException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.IOException;
 import java.util.function.Supplier;
 
 public class ViewLoader {
+
+    public static Stage popUp(final Window owner, final Parent root, final String title) {
+
+        final Scene scene = new Scene(root);
+
+        final Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.initOwner(owner);
+        stage.setScene(scene);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setMinWidth(600);
+        stage.setMinHeight(600);
+
+        stage.setWidth(600);
+        stage.setHeight(600);
+        return stage;
+    }
+
 
     public static void load(Stage stage, double width, double height, Supplier<Parent> parentSupplier) {
         try {

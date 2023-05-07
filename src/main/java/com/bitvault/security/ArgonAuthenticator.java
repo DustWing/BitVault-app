@@ -25,5 +25,4 @@ public class ArgonAuthenticator implements Authenticator {
         return verify;
     }
 
-
 }

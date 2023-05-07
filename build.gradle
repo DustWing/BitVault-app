@@ -95,13 +95,14 @@ jlink {
     launcher {
         name = 'TheVault'
     }
+
+    jpackage {
+        icon = 'src/main/resources/com.bitvault/icons/moth.ico'
+    }
 }
 
 jlinkZip {
     group = 'distribution'
-}
-jpackage {
-
 }
 
 task dist {

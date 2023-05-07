@@ -65,7 +65,7 @@ public class PasswordTableView extends BorderPane {
 
         return new BvTextField()
                 .withPromptText(Labels.i18n("search"))
-                .withDefaultSize()
+                .withMediumSize()
                 .filter(filteredList, Password::contains);
     }
 
@@ -87,7 +87,7 @@ public class PasswordTableView extends BorderPane {
                 passwordVM::create
         );
 
-        JavaFxUtil.popUp(this.getScene().getWindow(), view).show();
+        ViewLoader.popUp(this.getScene().getWindow(), view, Labels.i18n("add.new.password")).show();
     }
 
     private HBox topBar(FilteredList<Password> filteredList) {
@@ -107,7 +107,7 @@ public class PasswordTableView extends BorderPane {
                     }
                 }
         );
-        JavaFxUtil.defaultSize(categoriesDd);
+        JavaFxUtil.mediumSize(categoriesDd);
 
 
         TextField searchTf = createSearchTf(filteredList);
@@ -162,11 +162,11 @@ public class PasswordTableView extends BorderPane {
         final PasswordDetailsView view = PasswordDetailsView.editPassword(
                 password,
                 new ArrayList<>(passwordVM.getCategories()),
-                passwordVM.getProfile(),
+                oldPass.getSecureDetails().getProfile(),//use old profile
                 passwordVM::update
         );
 
-        JavaFxUtil.popUp(this.getScene().getWindow(), view).show();
+        ViewLoader.popUp(this.getScene().getWindow(), view, Labels.i18n("edit.password")).show();
     }
 
     public void delete(Password password) {

@@ -134,5 +134,9 @@ public class PasswordUtils {
         return provider.getPassword(new char[length]);
     }
 
+    public static String generatePassString(int length){
+        char[] password = new DefaultProvider().getPassword(new char[length]);
+        return new String(password);
+    }
 
 }

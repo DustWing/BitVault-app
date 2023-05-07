@@ -24,18 +24,6 @@ import java.net.URISyntaxException;
 
 public class JavaFxUtil {
 
-    public static Stage popUp(final Window owner, final Parent root) {
-
-        final Scene scene = new Scene(root);
-        final Stage stage = new Stage();
-        stage.initOwner(owner);
-        stage.setScene(scene);
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.setMinWidth(600);
-        stage.setMinHeight(400);
-        return stage;
-    }
-
 
     public static File chooseFile(final Window owner, final String title) {
         FileChooser chooser = new FileChooser();
@@ -163,22 +151,37 @@ public class JavaFxUtil {
         );
     }
 
-    public static void defaultSize(Region region) {
-        region.setMaxWidth(BvWidths.MEDIUM);
+    public static void tinySize(Region region) {
+        region.setMinWidth(BvWidths.TINY);
+        region.setPrefWidth(BvWidths.TINY);
+        region.setMaxWidth(BvWidths.TINY);
+
+        region.setMinHeight(BvHeights.MEDIUM);
+        region.setPrefHeight(BvHeights.MEDIUM);
+        region.setMaxHeight(BvHeights.MEDIUM);
+
+    }
+
+    public static void mediumSize(Region region) {
         region.setMinWidth(BvWidths.SMALL);
         region.setPrefWidth(BvWidths.MEDIUM);
-        region.setPrefHeight(BvHeights.MEDIUM);
+        region.setMaxWidth(BvWidths.MEDIUM);
+
         region.setMinHeight(BvHeights.MEDIUM);
+        region.setPrefHeight(BvHeights.MEDIUM);
         region.setMaxHeight(BvHeights.MEDIUM);
+
     }
 
     public static void largeSize(Region region) {
-        region.setMaxWidth(BvWidths.LARGE);
         region.setMinWidth(BvWidths.SMALL);
         region.setPrefWidth(BvWidths.LARGE);
-        region.setPrefHeight(BvHeights.MEDIUM);
+        region.setMaxWidth(BvWidths.LARGE);
+
         region.setMinHeight(BvHeights.MEDIUM);
+        region.setPrefHeight(BvHeights.MEDIUM);
         region.setMaxHeight(BvHeights.MEDIUM);
+
     }
 
     public static void vboxArrangement(VBox vBox){

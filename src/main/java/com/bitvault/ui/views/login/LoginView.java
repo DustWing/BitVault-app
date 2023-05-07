@@ -17,7 +17,6 @@ import com.bitvault.ui.views.dashboard.DashBoardView;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -62,6 +61,7 @@ public class LoginView extends VBox {
         return new BvTextField()
                 .withBinding(loginVM.usernameProperty())
                 .withPromptText(Labels.i18n("username"))
+                .maxLength(50)
                 .withDefaultSize()
                 .required(true);
     }
@@ -127,7 +127,6 @@ public class LoginView extends VBox {
     }
 
     private void onException(AsyncTaskException asyncTaskException) {
-        asyncTaskException.printStackTrace();
         this.loginVM.loadingProperty().set(false);
     }
 

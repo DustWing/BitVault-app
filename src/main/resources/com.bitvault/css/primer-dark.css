@@ -1014,6 +1014,10 @@ Text {
     -fx-stroke: -color-border-default;
 }
 
+.color-picker{
+    -fx-color-label-visible: false;
+}
+
 .color-picker > .color-picker-label {
     -fx-padding: 8px 12px 8px 12px;
 }
@@ -1054,6 +1058,10 @@ Text {
     -fx-scale-y: 1.5;
     -fx-border-color: -color-accent-fg;
     -fx-border-insets: -1, -1;
+}
+
+.color-palette > .hyperlink {
+    visibility: hidden ;
 }
 
 .custom-color-dialog {
@@ -2894,6 +2902,18 @@ Text {
 .popover > .content > .title > .icon > .graphics > .line {
     -fx-stroke: -color-fg-default;
     -fx-stroke-width: 1px;
+}
+
+.progress-bar:danger{
+    -color-progress-bar-fill: -color-danger-emphasis;
+}
+
+.progress-bar:warning{
+    -color-progress-bar-fill: -color-warning-emphasis;
+}
+
+.progress-bar:success{
+    -color-progress-bar-fill: -color-success-emphasis;
 }
 
 .progress-bar {

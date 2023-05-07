@@ -3,6 +3,7 @@ package com.bitvault;
 import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
+import com.bitvault.ui.views.password.PasswordDetailsView;
 import com.bitvault.util.ResourceLoader;
 import com.bitvault.util.Theme;
 import javafx.application.Application;
@@ -37,7 +38,8 @@ public class BitVault extends Application {
     private void show(Stage stage) {
 
         //set default css
-        BitVault.setUserAgentStylesheet(Theme.DARK);
+        final URL themeUrl = ResourceLoader.loadURL(Theme.DARK);
+        BitVault.setUserAgentStylesheet(themeUrl.toExternalForm());
 
         stage.setTitle("The Vault");
 

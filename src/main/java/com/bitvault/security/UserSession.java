@@ -8,7 +8,6 @@ public class UserSession {
     private final String username;
     private final EncryptionProvider encryptionProvider;
     private final ServiceFactory serviceFactory;
-
     private Profile profile;
 
     public UserSession(String username, EncryptionProvider encryptionProvider, ServiceFactory serviceFactory) {
@@ -21,11 +20,9 @@ public class UserSession {
         this.encryptionProvider.destroy();
     }
 
-
     public String getUsername() {
         return username;
     }
-
 
     public EncryptionProvider getEncryptionProvider() {
         return encryptionProvider;

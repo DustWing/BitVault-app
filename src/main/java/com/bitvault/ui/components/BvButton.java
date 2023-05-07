@@ -8,8 +8,6 @@ import javafx.scene.control.Button;
 
 public class BvButton extends Button {
 
-    private final static String STYLE_CLASS = "bit-vault-flat-button";
-
     public BvButton() {
         super();
     }
@@ -33,12 +31,8 @@ public class BvButton extends Button {
         return this;
     }
     public BvButton withDefaultSize() {
-        JavaFxUtil.defaultSize(this);
+        JavaFxUtil.mediumSize(this);
         return this;
     }
 
-//    @Override
-//    public String getUserAgentStylesheet() {
-//        return STYLE_SHEET;
-//    }
 }

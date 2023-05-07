@@ -36,8 +36,7 @@ public class PasswordDetailsVM {
             List<Category> categories,
             Profile profile,
             Action action,
-            Consumer<Password> onAction,
-            ValidateForm validateForm
+            Consumer<Password> onAction
     ) {
         this.password = password;
         this.categories = categories;

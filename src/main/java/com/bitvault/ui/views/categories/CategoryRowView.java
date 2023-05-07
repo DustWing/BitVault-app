@@ -71,7 +71,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
         //color picker
         final ColorPicker colorPicker = new ColorPicker();
         colorPicker.disableProperty().bind(this.categoryRowVM.allowEditProperty());
-        JavaFxUtil.defaultSize(colorPicker);
+        JavaFxUtil.tinySize(colorPicker);
         if (this.categoryRowVM.getCategoryColor() != null) colorPicker.setValue(categoryRowVM.getCategoryColor());
         colorPicker.setOnAction(event -> this.categoryRowVM.categoryColorProperty().set(colorPicker.getValue()));
 

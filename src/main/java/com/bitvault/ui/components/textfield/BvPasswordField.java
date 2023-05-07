@@ -5,6 +5,7 @@ import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.utils.BvHeights;
 import com.bitvault.ui.utils.BvStyles;
 import com.bitvault.ui.utils.BvWidths;
+import com.bitvault.ui.utils.JavaFxUtil;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -47,10 +48,7 @@ public class BvPasswordField extends PasswordField implements ValidateField {
     }
 
     public BvPasswordField withDefaultSize() {
-        this.setMaxWidth(BvWidths.MEDIUM);
-        this.setPrefWidth(BvWidths.MEDIUM);
-        this.setPrefHeight(BvHeights.MEDIUM);
-
+        JavaFxUtil.largeSize(this);
         return this;
     }
 

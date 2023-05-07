@@ -5,6 +5,7 @@ import com.bitvault.security.UserSession;
 import com.bitvault.ui.async.AsyncTask;
 import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.alert.ErrorAlert;
+import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
 import com.bitvault.ui.views.password.PasswordVM;
@@ -87,9 +88,12 @@ public final class DashBoardView extends BorderPane {
 
 
     private void logout() {
-        BitVault.runOnCloseActions();
+
+        this.dashBoardVM.logout();
+
         final Stage stage = (Stage) this.getScene().getWindow();
-        ViewLoader.load(stage, 840, 600, WelcomeView::new);
+        final BvSceneSize aDefault = BvSceneSize.Default;
+        ViewLoader.load(stage, aDefault.width(), aDefault.height(), WelcomeView::new);
     }
 
     private void createPasswordView() {

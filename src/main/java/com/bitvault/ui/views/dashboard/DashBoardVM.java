@@ -1,8 +1,11 @@
 package com.bitvault.ui.views.dashboard;
 
+import com.bitvault.BitVault;
 import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.ServiceFactory;
+import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.model.Profile;
+import com.bitvault.util.Messages;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -36,9 +39,20 @@ public final class DashBoardVM {
 
         profiles = profilesResult.get();
 
-        if (!profiles.isEmpty())
-            selectedProfileProperty().set(profiles.get(0));
+        if (profiles.isEmpty()) {
+            ErrorAlert.show("Dashboard", Messages.i18n("no.profiles.found"));
+            throw new RuntimeException("Dashboard no profile, do not recover");
+        }
 
+        Profile profile = profiles.get(0);
+        selectedProfileProperty().set(profile);
+        this.userSession.setProfile(profile);
+
+    }
+
+    public void logout() {
+        BitVault.runOnCloseActions();
+        this.userSession.discard();
     }
 
     public Profile getSelectedProfile() {

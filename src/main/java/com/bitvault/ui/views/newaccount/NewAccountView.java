@@ -13,11 +13,15 @@ import com.bitvault.ui.views.dashboard.DashBoardView;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
 import java.io.IOException;
+
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FOLDER;
 
 
 public class NewAccountView extends VBox {
@@ -37,32 +41,43 @@ public class NewAccountView extends VBox {
         BvPasswordInput password = new BvPasswordInput()
                 .withBinding(newAccountVM.passwordProperty());
 
-        BvTextField fileName = new BvTextField()
+
+        final Label fileFolderLbl = new Label();
+        newAccountVM.locationProperty().addListener((observable, oldValue, newValue) ->
+                {
+                    if (newValue != null) {
+                        fileFolderLbl.setText(newValue);
+                    }
+                }
+        );
+
+        final FontIcon folderIcon = new FontIcon(FOLDER);
+        final BvButton chooseFileBtn = new BvButton("",folderIcon);
+        chooseFileBtn.setOnAction(event -> chooseFileAction());
+
+        final BvTextField fileName = new BvTextField()
                 .withBinding(newAccountVM.fileNameProperty())
                 .withPromptText(Labels.i18n("file.name"))
                 .withDefaultSize()
+                .withLeft(fileFolderLbl)
+                .withRight(chooseFileBtn)
                 .required(true);
-
-        BvButton chooseFileBtn = new BvButton(Labels.i18n("choose.file")).withDefaultSize();
-        chooseFileBtn.setOnAction(event -> chooseFileAction());
-
 
         BvButton loginButton = new BvButton(Labels.i18n("create")).withDefaultSize();
         loginButton.setOnAction(event -> createBtnAction());
         loginButton.setDefaultButton(true);
 
 
-//        newAccountVM.getValidatedForm().addAll(
-//                username,
-//                password,
-//                fileName
-//        );
+        newAccountVM.getValidatedForm().addAll(
+                username,
+                password,
+                fileName
+        );
 
         this.getChildren().addAll(
                 username,
                 password,
                 fileName,
-                chooseFileBtn,
                 loginButton
         );
 

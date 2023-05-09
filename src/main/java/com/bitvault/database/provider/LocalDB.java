@@ -1,5 +1,6 @@
 package com.bitvault.database.provider;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,6 +14,12 @@ public class LocalDB implements ConnectionProvider {
 
 
     public LocalDB(String location) {
+
+        boolean exists = new File(location).exists();
+        if (!exists) {
+            throw new IllegalArgumentException("no.local.db.found");
+        }
+
         this.location = location;
     }
 
@@ -23,6 +30,11 @@ public class LocalDB implements ConnectionProvider {
     }
 
     public Connection connect() throws SQLException {
+        boolean exists = new File(location).exists();
+        if (!exists) {
+            throw new IllegalArgumentException("no.local.db.found");
+        }
+
         String dbPrefix = "jdbc:sqlite:";
         Connection connection;
         try {
@@ -39,6 +51,11 @@ public class LocalDB implements ConnectionProvider {
 
     @Override
     public void connect(ConnectionConsumer<Connection> connectionConsumer) {
+
+        boolean exists = new File(location).exists();
+        if (!exists) {
+            throw new IllegalArgumentException("no.local.db.found");
+        }
 
         try (Connection connection = connect()) {
             connection.setAutoCommit(false);

@@ -50,11 +50,12 @@ public class AesEncryptionProvider implements EncryptionProvider {
 
     @Override
     public void destroy() {
-        try {
-            this.secretKey.destroy();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        //cannot destroy secret key it throws exception
+//        try {
+//            this.secretKey.destroy();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
 }

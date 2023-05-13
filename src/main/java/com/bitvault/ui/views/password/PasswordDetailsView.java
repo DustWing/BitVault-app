@@ -23,7 +23,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -108,7 +107,6 @@ public class PasswordDetailsView extends BorderPane {
         vBox.setSpacing(BvSpacing.SMALL);
         vBox.setAlignment(Pos.CENTER);
         vBox.setMaxWidth(BvWidths.LARGE);
-//        vBox.setFillWidth(true);
         BorderPane.setMargin(vBox, BvInsets.top10);
 
         final Button saveButton = saveButton();

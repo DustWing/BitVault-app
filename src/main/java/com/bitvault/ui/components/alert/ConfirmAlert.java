@@ -15,11 +15,11 @@ public class ConfirmAlert {
 
     public static boolean deleteConfirm(UserSession userSession, boolean requiresMp) {
 
-        String title = Labels.i18n("delete.title");
-        String header = Labels.i18n("delete.header");
+        final String title = Labels.i18n("delete.title");
+        final String header = Labels.i18n("delete.header");
 
         if (requiresMp) {
-            return authenticate(userSession, title, header);
+            return userSession.authWithCoolDown(() -> authenticate(userSession, title, header));
         }
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -39,7 +39,8 @@ public class ConfirmAlert {
         }
         String title = Labels.i18n("edit.record");
         String header = Labels.i18n("edit.header");
-        return authenticate(userSession, title, header);
+
+        return userSession.authWithCoolDown(() -> authenticate(userSession, title, header));
     }
 
     public static boolean authenticate(UserSession userSession, String titleText, String headerText) {

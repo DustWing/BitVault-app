@@ -11,6 +11,7 @@ import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
+import com.bitvault.util.Messages;
 import com.bitvault.util.Result;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -79,13 +80,28 @@ public class PasswordVM {
     }
 
     public void update(Password password) {
-        passwordService.update(password);
-        passwords.replaceAll(oldPass -> {
-            if (oldPass.getId().equals(password.getId())) {
-                return password;
+        Result<Password> update = passwordService.update(password);
+
+        if (update.isFail()) {
+            ErrorAlert.show(Labels.i18n("error"), update.getError());
+        }
+
+        final Password updatedPassword = update.get();
+
+        //replace password in list
+        int index = -1;
+        for (Password oldPassword : passwords) {
+            if (oldPassword.getId().equals(updatedPassword.getId())) {
+                index++;
+                break;
             }
-            return oldPass;
-        });
+        }
+        if (index == -1) {
+            ErrorAlert.show(Labels.i18n("error"), Messages.i18n("no.record.found"));
+            return;
+        }
+
+        passwords.set(index, updatedPassword);
     }
 
     public boolean copyPassword(Password selectedItem) {

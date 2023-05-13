@@ -173,7 +173,21 @@ public class PasswordService implements IPasswordService {
 
                 connection.commit();
 
-                return Result.ok(password);
+                //Rebuild password
+                final SecureDetails secureDetails = SecureDetailsDM.convert(
+                        secureDetailsDM,
+                        password.getSecureDetails().getCategory(),
+                        password.getSecureDetails().getProfile()
+                );
+
+                final Password passwordResult = new Password(
+                        passwordDM.id(),
+                        password.getUsername(),
+                        passwordDM.password(),
+                        secureDetails
+                );
+
+                return Result.ok(passwordResult);
 
             } catch (SQLException e) {
                 connection.rollback();

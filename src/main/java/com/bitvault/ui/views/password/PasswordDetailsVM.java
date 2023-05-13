@@ -6,6 +6,7 @@ import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.model.SecureDetails;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -30,6 +31,8 @@ public class PasswordDetailsVM {
     private final SimpleStringProperty descriptionProperty = new SimpleStringProperty();
     private final SimpleObjectProperty<Category> selectedCat = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<LocalDate> expiresOn = new SimpleObjectProperty<>();
+
+    private final SimpleBooleanProperty requiredMp = new SimpleBooleanProperty();
 
     public PasswordDetailsVM(
             Password password,
@@ -59,6 +62,7 @@ public class PasswordDetailsVM {
         this.descriptionProperty.set(password.getSecureDetails().getDescription());
         this.expiresOn.set(password.getSecureDetails().getExpiresOn() == null ? null : password.getSecureDetails().getExpiresOn().toLocalDate());
         this.selectedCat.set(password.getSecureDetails().getCategory());
+        this.requiredMp.set(password.getSecureDetails().isRequiresMp());
     }
 
 
@@ -83,7 +87,7 @@ public class PasswordDetailsVM {
                 modifiedOn,
                 getExpiresOn() == null ? null : getExpiresOn().atStartOfDay(),
                 null,
-                false,
+                this.requiredMp.get(),
                 false
         );
 
@@ -164,5 +168,10 @@ public class PasswordDetailsVM {
 
     public SimpleStringProperty titlePropertyProperty() {
         return titleProperty;
+    }
+
+
+    public SimpleBooleanProperty requiredMpProperty() {
+        return requiredMp;
     }
 }

@@ -16,8 +16,6 @@ public interface IPasswordService {
         return Result.ok(password);
     }
 
-    ;
-
     default Result<Boolean> delete(Password password) {
         return Result.Success;
     }

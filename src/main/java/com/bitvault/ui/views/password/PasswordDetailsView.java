@@ -14,6 +14,7 @@ import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.utils.*;
 import com.bitvault.util.Labels;
+import com.bitvault.util.Messages;
 import com.bitvault.util.PasswordUtils;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -22,6 +23,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -89,7 +91,8 @@ public class PasswordDetailsView extends BorderPane {
         final TextColorComboBox<Category> categoriesDd = categoryDd();
         final BvDoubleColumn expiryCategory = BvDoubleColumn.createSingle(expiresOn, categoriesDd);
 
-        final Button saveButton = saveButton();
+        final CheckBox masterPassword = masterPassword();
+
 
         VBox vBox = new VBox(
                 titleTf,
@@ -98,7 +101,8 @@ public class PasswordDetailsView extends BorderPane {
                 progressBar,
                 domainTf,
                 descriptionTf,
-                expiryCategory
+                expiryCategory,
+                masterPassword
         );
 
         vBox.setSpacing(BvSpacing.SMALL);
@@ -106,6 +110,8 @@ public class PasswordDetailsView extends BorderPane {
         vBox.setMaxWidth(BvWidths.LARGE);
 //        vBox.setFillWidth(true);
         BorderPane.setMargin(vBox, BvInsets.top10);
+
+        final Button saveButton = saveButton();
 
         this.setCenter(vBox);
         this.setBottom(saveButton);
@@ -185,6 +191,13 @@ public class PasswordDetailsView extends BorderPane {
         categoriesDd.valueProperty().bindBidirectional(passwordDetailsVM.selectedCatProperty());
         JavaFxUtil.mediumSize(categoriesDd);
         return categoriesDd;
+    }
+
+    private CheckBox masterPassword() {
+        CheckBox checkBox = new CheckBox(Labels.i18n("master.password"));
+        checkBox.selectedProperty().bindBidirectional(passwordDetailsVM.requiredMpProperty());
+        checkBox.setTooltip(new Tooltip(Messages.i18n("master.password.tooltip")));
+        return checkBox;
     }
 
     private Button saveButton() {

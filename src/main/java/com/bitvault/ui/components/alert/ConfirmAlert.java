@@ -25,7 +25,7 @@ public class ConfirmAlert {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(header);
-        alert.setContentText("delete.context");
+        alert.setContentText(Labels.i18n("delete.context"));
         Optional<ButtonType> buttonType = alert.showAndWait();
 
         return buttonType.filter(ButtonType.OK::equals).isPresent();

@@ -1,14 +1,17 @@
 package com.bitvault.ui.views.login;
 
 import com.bitvault.security.UserSession;
+import com.bitvault.services.interfaces.IUserService;
 import com.bitvault.ui.async.AsyncTask;
 import com.bitvault.ui.async.AsyncTaskException;
 import com.bitvault.ui.components.BvButton;
+import com.bitvault.ui.components.PasswordInputDialog;
 import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.components.validation.ValidateResult;
+import com.bitvault.ui.model.User;
 import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.JavaFxUtil;
@@ -23,6 +26,7 @@ import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
+import java.util.Optional;
 
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FOLDER;
 
@@ -96,8 +100,9 @@ public class LoginView extends VBox {
 
     private void loginBtnAction() {
 
+
         ValidateResult validate = validateForm.validate();
-        if(!validate.valid()){
+        if (!validate.valid()) {
             return;
         }
 
@@ -112,7 +117,7 @@ public class LoginView extends VBox {
 
         if (loginResults.isFail()) {
             this.loginVM.loadingProperty().set(false);
-            ErrorAlert.show("woops",loginResults.getError());
+            ErrorAlert.show("woops", loginResults.getError());
             return;
         }
 

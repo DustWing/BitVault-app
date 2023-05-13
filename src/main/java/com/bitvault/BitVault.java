@@ -3,7 +3,6 @@ package com.bitvault;
 import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
-import com.bitvault.ui.views.password.PasswordDetailsView;
 import com.bitvault.util.ResourceLoader;
 import com.bitvault.util.Theme;
 import javafx.application.Application;
@@ -49,7 +48,6 @@ public class BitVault extends Application {
 
         //register on close
         stage.setOnCloseRequest(event -> runOnCloseActions());
-
         BvSceneSize aDefault = BvSceneSize.Default;
         ViewLoader.load(stage, aDefault.width(), aDefault.height(), WelcomeView::new);
     }

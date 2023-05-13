@@ -14,12 +14,6 @@ public class LocalDB implements ConnectionProvider {
 
 
     public LocalDB(String location) {
-
-        boolean exists = new File(location).exists();
-        if (!exists) {
-            throw new IllegalArgumentException("no.local.db.found");
-        }
-
         this.location = location;
     }
 

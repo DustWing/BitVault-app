@@ -10,6 +10,7 @@ public class UserSession {
     private final ServiceFactory serviceFactory;
     private Profile profile;
 
+
     public UserSession(String username, EncryptionProvider encryptionProvider, ServiceFactory serviceFactory) {
         this.username = username;
         this.encryptionProvider = encryptionProvider;

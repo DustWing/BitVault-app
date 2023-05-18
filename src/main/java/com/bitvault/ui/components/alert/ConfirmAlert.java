@@ -18,7 +18,7 @@ public class ConfirmAlert {
         final String title = Labels.i18n("delete.title");
         final String header = Labels.i18n("delete.header");
 
-        if (requiresMp) {
+        if (requiresMp && !userSession.isAuthOnCoolDown()) {
             return userSession.authWithCoolDown(() -> authenticate(userSession, title, header));
         }
 

@@ -23,15 +23,18 @@ public class PasswordVM {
 
     private final UserSession userSession;
     private final ObservableList<Password> passwords = FXCollections.observableArrayList();
+    private final ObservableList<Category> categories = FXCollections.observableArrayList();
+    private final List<Category> categoriesList = new ArrayList<>();  //to pass to new category window
+    private final Category fakeCategory = Category.createFake("ALL", "ALL", "#000000");
+
     private final IPasswordService passwordService;
     private final ICategoryService categoryService;
-    private final List<Category> categories;
 
     public PasswordVM(final UserSession userSession) {
         this.userSession = userSession;
         this.passwordService = userSession.getServiceFactory().getPasswordService();
         this.categoryService = userSession.getServiceFactory().getCategoryService();
-        this.categories = new ArrayList<>();
+
         this.init();
     }
 
@@ -52,7 +55,13 @@ public class PasswordVM {
             ErrorAlert.show(Labels.i18n("error"), passwordsRes.getError());
             return;
         }
+
+
+        categoriesList.clear();
+        categoriesList.addAll(categoriesResult.get());
+
         categories.clear();
+        categories.add(fakeCategory);
         categories.addAll(categoriesResult.get());
     }
 
@@ -140,8 +149,16 @@ public class PasswordVM {
         return passwords;
     }
 
-    public List<Category> getCategories() {
+    public ObservableList<Category> getCategories() {
         return categories;
+    }
+
+    public List<Category> getCategoriesList() {
+        return categoriesList;
+    }
+
+    public Category getFakeCategory() {
+        return fakeCategory;
     }
 
     public Profile getProfile() {

@@ -71,25 +71,11 @@ public class PasswordTableView extends BorderPane {
     }
 
     private TextColorComboBox<Category> categoryDropdown() {
-        Category fake = Category.createFake("ALL", "ALL", "#000000");
-        ObservableList<Category> list = FXCollections.observableArrayList(fake);
-        list.addAll(this.passwordVM.getCategories());
-        ObservableList<Category> categories = FXCollections.observableArrayList(list);
-        final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withCircle(categories);
-        categoriesDd.setValue(fake);
+        final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withCircle(this.passwordVM.getCategories());
+        categoriesDd.setValue(this.passwordVM.getFakeCategory());
         return categoriesDd;
     }
 
-    private void showNewPassPopUp() {
-
-        final PasswordDetailsView view = PasswordDetailsView.newPassword(
-                new ArrayList<>(passwordVM.getCategories()),
-                passwordVM.getProfile(),
-                passwordVM::create
-        );
-
-        ViewLoader.popUp(this.getScene().getWindow(), view, Labels.i18n("add.new.password")).show();
-    }
 
     private HBox topBar(FilteredList<Password> filteredList) {
         final FontIcon plusIcon = new FontIcon(PLUS);
@@ -156,6 +142,17 @@ public class PasswordTableView extends BorderPane {
         return tableView;
     }
 
+    private void showNewPassPopUp() {
+
+        final PasswordDetailsView view = PasswordDetailsView.newPassword(
+                new ArrayList<>(passwordVM.getCategoriesList()),
+                passwordVM.getProfile(),
+                passwordVM::create
+        );
+
+        ViewLoader.popUp(this.getScene().getWindow(), view, Labels.i18n("add.new.password")).show();
+    }
+
     public void showEditPopUp(Password oldPass) {
 
         Result<Password> passwordResult = passwordVM.prepareForEdit(oldPass);
@@ -167,7 +164,7 @@ public class PasswordTableView extends BorderPane {
 
         final PasswordDetailsView view = PasswordDetailsView.editPassword(
                 password,
-                new ArrayList<>(passwordVM.getCategories()),
+                new ArrayList<>(passwordVM.getCategoriesList()),
                 oldPass.getSecureDetails().getProfile(),//use old profile
                 passwordVM::update
         );

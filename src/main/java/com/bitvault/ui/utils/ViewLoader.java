@@ -2,14 +2,17 @@ package com.bitvault.ui.utils;
 
 import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.exceptions.ViewLoadException;
+import com.bitvault.util.ResourceLoader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.function.Supplier;
 
 public class ViewLoader {
@@ -19,6 +22,10 @@ public class ViewLoader {
         final Scene scene = new Scene(root);
 
         final Stage stage = new Stage();
+
+        final URL iconUrl = ResourceLoader.loadURL("/com.bitvault/icons/32moth.png");
+        stage.getIcons().add(new Image(iconUrl.toExternalForm()));
+
         stage.setTitle(title);
         stage.initOwner(owner);
         stage.setScene(scene);

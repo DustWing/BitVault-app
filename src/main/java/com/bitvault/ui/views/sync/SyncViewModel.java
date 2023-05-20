@@ -45,7 +45,7 @@ public class SyncViewModel {
                 .getPasswordService()
                 .getPasswords();
 
-        if (passwords.isFail()) {
+        if (passwords.hasError()) {
             throw new RuntimeException(passwords.getError());
         }
         oldPasswords = passwords.get();
@@ -54,14 +54,14 @@ public class SyncViewModel {
     public Result<Image> createQrdImage(int port) {
 
         final Result<String> localHostResult = getLocalHost();
-        if (localHostResult.isFail()) {
+        if (localHostResult.hasError()) {
             return Result.error(localHostResult.getError());
         }
 
         final LocalServerInfo localServerInfo = new LocalServerInfo("v1.0", localHostResult.get(), port);
 
         final Result<String> serialized = Json.serialize(localServerInfo);
-        if (serialized.isFail()) {
+        if (serialized.hasError()) {
             throw new ViewLoadException(serialized.getError());
         }
 
@@ -69,7 +69,7 @@ public class SyncViewModel {
 
         final Result<BufferedImage> bufferedImageResult = QrUtils.generateQRCode(serialized.get(), 200, 200);
 
-        if (bufferedImageResult.isFail()) {
+        if (bufferedImageResult.hasError()) {
             return Result.error(bufferedImageResult.getError());
         }
         final BufferedImage bufferedImage = bufferedImageResult.get();
@@ -102,7 +102,7 @@ public class SyncViewModel {
         stopServer();
 
         final Result<Integer> portResult = getRandomPort();
-        if (portResult.isFail()) {
+        if (portResult.hasError()) {
             return Result.error(portResult.getError());
         }
 
@@ -112,7 +112,7 @@ public class SyncViewModel {
         httpServer = HttpServer.create(portResult.get(), endpointResolver);
         httpServer.addListener(
                 msg -> {
-                    if (msg.isFail()) {
+                    if (msg.hasError()) {
                         appendText(msg.getError().getMessage());
                     } else {
                         appendText(msg.get());

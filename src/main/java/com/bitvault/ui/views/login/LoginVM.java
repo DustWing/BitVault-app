@@ -5,26 +5,42 @@ import com.bitvault.security.EncryptionProvider;
 import com.bitvault.security.UserSession;
 import com.bitvault.services.factory.LocalServiceFactory;
 import com.bitvault.services.factory.ServiceFactory;
-import com.bitvault.ui.components.validation.ValidateForm;
+import com.bitvault.services.interfaces.ISettingsService;
+import com.bitvault.services.local.SettingsService;
+import com.bitvault.ui.model.Settings;
 import com.bitvault.ui.model.User;
+import com.bitvault.ui.model.UserNameFile;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginVM {
+
+    private static final Logger logger = LoggerFactory.getLogger(LoginVM.class);
 
     private final SimpleBooleanProperty offline = new SimpleBooleanProperty(true);
     private final SimpleStringProperty username = new SimpleStringProperty();
     private final SimpleStringProperty password = new SimpleStringProperty();
     private final SimpleStringProperty location = new SimpleStringProperty();
-    private final ValidateForm validateForm = new ValidateForm();
     private final SimpleBooleanProperty loading = new SimpleBooleanProperty();
+    private Settings settings;
 
     public LoginVM() {
-        //TODO for testing - remove later
-        this.usernameProperty().set("a");
-        this.passwordProperty().set("a");
-        this.locationProperty().set("F:/Documents/TestFiles/test2.vault");
+
+        ISettingsService settingsService = new SettingsService();
+
+        Result<Settings> settingsResult = settingsService.load();
+
+        if (!settingsResult.hasError()) {
+            this.settings = settingsResult.get();
+            username.set(settings.lastUserNameFile().username());
+            location.set(settings.lastUserNameFile().filePath());
+        }
     }
 
     public Result<UserSession> login() {
@@ -42,22 +58,42 @@ public class LoginVM {
         final Result<User> authResult = serviceFactory.getUserService()
                 .authenticate(username, password);
 
-        if (authResult.isFail()) {
+        if (authResult.hasError()) {
             return Result.error(authResult.getError());
         }
 
         final UserSession userSession = new UserSession(username, encryptionProvider, serviceFactory);
 
+        Settings settings = createSettings();
+
+        Result<Boolean> saveSettings = userSession.getServiceFactory().getSettingsService().save(settings);
+
+        if (saveSettings.hasError()) {
+            logger.error("", saveSettings.getError());
+        }
+
         return Result.ok(userSession);
+    }
+
+    private Settings createSettings() {
+
+        UserNameFile userNameFile = new UserNameFile(username.get(), location.get());
+
+        if (this.settings == null) {
+
+            return Settings.createOnLogin(userNameFile);
+        }
+
+        List<UserNameFile> userNameFiles = new ArrayList<>(this.settings.userNameFiles());
+        userNameFiles.add(userNameFile);
+        List<UserNameFile> list = userNameFiles.stream().distinct().toList();
+        return this.settings.copyOnLogin(userNameFile, list);
     }
 
     public boolean isOffline() {
         return offline.get();
     }
 
-    public ValidateForm getValidatedForm() {
-        return validateForm;
-    }
 
     public SimpleBooleanProperty offlineProperty() {
         return offline;

@@ -41,7 +41,7 @@ class SecureItemControllerTest {
     public void get() {
 
         Result<KeyDto> keyDtoResult = secureItemController.get();
-        if (keyDtoResult.isFail()) {
+        if (keyDtoResult.hasError()) {
             fail(keyDtoResult.getError());
         }
 
@@ -53,7 +53,7 @@ class SecureItemControllerTest {
     @Test
     public void post() {
         Result<KeyDto> keyDtoResult = secureItemController.get();
-        if (keyDtoResult.isFail()) {
+        if (keyDtoResult.hasError()) {
             fail(keyDtoResult.getError());
         }
 
@@ -93,7 +93,7 @@ class SecureItemControllerTest {
 
         Result<String> serialize = Json.serialize(localPasswordDto);
 
-        if (serialize.isFail()) {
+        if (serialize.hasError()) {
             fail(serialize.getError());
             return;
         }
@@ -116,13 +116,13 @@ class SecureItemControllerTest {
         );
 
         Result<String> body = Json.serialize(secureItemRqDto);
-        if (body.isFail()) {
+        if (body.hasError()) {
             fail(body.getError());
             return;
         }
 
         Result<ResultRsDto> post = secureItemController.post(body.get());
-        if (post.isFail()) {
+        if (post.hasError()) {
             fail(post.getError());
             return;
         }

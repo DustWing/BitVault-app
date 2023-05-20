@@ -27,7 +27,7 @@ public class CategoryServiceCached implements ICategoryService {
         if (this.cache.isEmpty()) {
 
             final Result<List<Category>> categoriesResult = categoryService.getCategories();
-            if (categoriesResult.isFail()) {
+            if (categoriesResult.hasError()) {
                 return categoriesResult;
             }
 
@@ -46,7 +46,7 @@ public class CategoryServiceCached implements ICategoryService {
 
         Result<Category> categoryResult = categoryService.create(category);
 
-        if (categoryResult.isFail()) {
+        if (categoryResult.hasError()) {
             return categoryResult;
         }
 
@@ -60,7 +60,7 @@ public class CategoryServiceCached implements ICategoryService {
     public Result<Category> update(Category category) {
         Result<Category> categoryResult = categoryService.update(category);
 
-        if (categoryResult.isFail()) {
+        if (categoryResult.hasError()) {
             return categoryResult;
         }
 
@@ -73,7 +73,7 @@ public class CategoryServiceCached implements ICategoryService {
     @Override
     public Result<Boolean> delete(String id) {
         Result<Boolean> deleteResult = categoryService.delete(id);
-        if (deleteResult.isFail()) {
+        if (deleteResult.hasError()) {
             return deleteResult;
         }
         this.cache.remove(id);

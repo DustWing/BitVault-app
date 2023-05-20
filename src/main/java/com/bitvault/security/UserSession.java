@@ -1,6 +1,7 @@
 package com.bitvault.security;
 
 import com.bitvault.services.factory.ServiceFactory;
+import com.bitvault.services.factory.TestServiceFactory;
 import com.bitvault.ui.model.Profile;
 
 import java.time.Duration;
@@ -16,6 +17,15 @@ public class UserSession {
 
     private final Duration coolDown = Duration.ofSeconds(10);
     private LocalDateTime previousAuthTime;
+
+    public static UserSession createTest(){
+        final String username = "Test";
+        final String password = "Test";
+
+        final EncryptionProvider encryptionProvider = new AesEncryptionProvider(password.toCharArray());
+        final ServiceFactory serviceFactory = new TestServiceFactory(encryptionProvider);
+        return new UserSession(username, encryptionProvider, serviceFactory);
+    }
 
     public UserSession(String username, EncryptionProvider encryptionProvider, ServiceFactory serviceFactory) {
         this.username = username;
@@ -49,13 +59,15 @@ public class UserSession {
     }
 
     public synchronized boolean authWithCoolDown(Supplier<Boolean> action) {
+        final LocalDateTime now = LocalDateTime.now();
 
         if (previousAuthTime == null) {
-            previousAuthTime = LocalDateTime.now();
-            return action.get();
+            boolean actionSuccess = action.get();
+            if(actionSuccess){
+                previousAuthTime = now;
+            }
+            return actionSuccess;
         }
-
-        final LocalDateTime now = LocalDateTime.now();
 
         boolean askForPassword = now.isAfter(previousAuthTime.plus(coolDown));
 
@@ -64,11 +76,17 @@ public class UserSession {
         }
 
         boolean actionSuccess = action.get();
-
         if(actionSuccess){
             previousAuthTime = now;
         }
         return actionSuccess;
+    }
 
+    public synchronized boolean isAuthOnCoolDown(){
+        if (previousAuthTime == null) {
+            return false;
+        }
+        final LocalDateTime now = LocalDateTime.now();
+        return now.isBefore(previousAuthTime.plus(coolDown));
     }
 }

@@ -1,9 +1,6 @@
 package com.bitvault.services.factory;
 
-import com.bitvault.services.interfaces.ICategoryService;
-import com.bitvault.services.interfaces.IPasswordService;
-import com.bitvault.services.interfaces.IProfileService;
-import com.bitvault.services.interfaces.IUserService;
+import com.bitvault.services.interfaces.*;
 
 public interface ServiceFactory {
 
@@ -14,4 +11,6 @@ public interface ServiceFactory {
     IUserService getUserService();
 
     IProfileService getProfileService();
+
+    ISettingsService getSettingsService();
 }

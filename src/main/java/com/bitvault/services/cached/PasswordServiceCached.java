@@ -24,7 +24,7 @@ public class PasswordServiceCached implements IPasswordService {
 
         if (cache.isEmpty()) {
             Result<List<Password>> passwordsResult = passwordService.getPasswords();
-            if (passwordsResult.isFail()) {
+            if (passwordsResult.hasError()) {
                 return passwordsResult;
             }
             final Map<String, Password> map = passwordsResult.get().stream()
@@ -41,7 +41,7 @@ public class PasswordServiceCached implements IPasswordService {
     @Override
     public Result<Password> create(Password password) {
         Result<Password> passwordResult = passwordService.create(password);
-        if (passwordResult.isFail()) {
+        if (passwordResult.hasError()) {
             return passwordResult;
         }
         Password newPass = passwordResult.get();
@@ -52,7 +52,7 @@ public class PasswordServiceCached implements IPasswordService {
     @Override
     public Result<Password> update(Password password) {
         Result<Password> passwordResult = passwordService.update(password);
-        if (passwordResult.isFail()) {
+        if (passwordResult.hasError()) {
             return passwordResult;
         }
         Password newPass = passwordResult.get();
@@ -64,7 +64,7 @@ public class PasswordServiceCached implements IPasswordService {
     public Result<Boolean> delete(Password password) {
 
         Result<Boolean> deleteResult = passwordService.delete(password);
-        if (deleteResult.isFail()) {
+        if (deleteResult.hasError()) {
             return deleteResult;
         }
         this.cache.remove(password.getId());

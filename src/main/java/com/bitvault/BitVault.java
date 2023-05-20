@@ -3,6 +3,7 @@ package com.bitvault;
 import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
+import com.bitvault.ui.views.settings.SettingsView;
 import com.bitvault.util.ResourceLoader;
 import com.bitvault.util.Theme;
 import javafx.application.Application;

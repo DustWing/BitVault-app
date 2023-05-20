@@ -60,7 +60,7 @@ public class SecureItemController implements IGetEndpoint<KeyDto>, IPostEndpoint
         Result<SecureItemRqDto.LocalPasswordDto> deserialize =
                 Json.deserialize(decrypted, SecureItemRqDto.LocalPasswordDto.class);
 
-        if (deserialize.isFail()) {
+        if (deserialize.hasError()) {
             return Result.error(new Exception("Failed to parse password"));
         }
 
@@ -69,7 +69,7 @@ public class SecureItemController implements IGetEndpoint<KeyDto>, IPostEndpoint
 
         Result<Boolean> addResult = importCache.add(localPasswordDto);
 
-        if (addResult.isFail()) {
+        if (addResult.hasError()) {
             return Result.error(addResult.getError());
         }
         return Result.Success;
@@ -78,14 +78,14 @@ public class SecureItemController implements IGetEndpoint<KeyDto>, IPostEndpoint
     public Result<ResultRsDto> post(String body) {
 
         Result<SecureItemRqDto> result = Json.deserialize(body, SecureItemRqDto.class);
-        if (result.isFail()) {
+        if (result.hasError()) {
             return Result.error(new Exception("Failed to parse SecureItem"));
         }
 
         SecureItemRqDto secureItemRqDto = result.get();
 
         Result<String> stringResult = decryptPayload(secureItemRqDto.encryptedPayload());
-        if (stringResult.isFail()) {
+        if (stringResult.hasError()) {
             return Result.error(new Exception("Failed to decrypt Payload", stringResult.getError()));
         }
 
@@ -95,7 +95,7 @@ public class SecureItemController implements IGetEndpoint<KeyDto>, IPostEndpoint
 
             Result<Boolean> booleanResult = addToPasswordCache(decrypted);
 
-            if (booleanResult.isFail()) {
+            if (booleanResult.hasError()) {
                 return Result.error(booleanResult.getError());
             }
 

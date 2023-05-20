@@ -2,6 +2,7 @@ package com.bitvault.ui.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 public final class SecureDetails {
     private final String id;
@@ -86,6 +87,10 @@ public final class SecureDetails {
 
     public LocalDateTime getExpiresOn() {
         return expiresOn;
+    }
+
+    public Optional<LocalDateTime> getExpiresOnOpt() {
+        return Optional.ofNullable(expiresOn);
     }
 
     public LocalDateTime getImportedOn() {

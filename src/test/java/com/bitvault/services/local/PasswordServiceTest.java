@@ -46,7 +46,7 @@ class PasswordServiceTest {
 
         Result<List<Category>> resultCat = userSession.getServiceFactory().getCategoryService().getCategories();
 
-        if (resultCat.isFail()) {
+        if (resultCat.hasError()) {
             fail(resultCat.getError());
             return;
         }
@@ -56,7 +56,7 @@ class PasswordServiceTest {
 
         Result<List<Profile>> profilesResult = userSession.getServiceFactory().getProfileService().getProfiles();
 
-        if (profilesResult.isFail()) {
+        if (profilesResult.hasError()) {
             fail(resultCat.getError());
             return;
         }
@@ -88,7 +88,7 @@ class PasswordServiceTest {
         );
 
         Result<Password> passwordResult = userSession.getServiceFactory().getPasswordService().create(password);
-        if (passwordResult.isFail()) {
+        if (passwordResult.hasError()) {
             fail(resultCat.getError());
             return;
         }
@@ -105,7 +105,7 @@ class PasswordServiceTest {
     void getPasswords() {
 
         Result<List<Password>> passwordsResult = userSession.getServiceFactory().getPasswordService().getPasswords();
-        if (passwordsResult.isFail()) {
+        if (passwordsResult.hasError()) {
             fail(passwordsResult.getError());
             return;
         }
@@ -154,7 +154,7 @@ class PasswordServiceTest {
 
         Result<Password> updateResult = userSession.getServiceFactory().getPasswordService().update(passwordUpdated);
 
-        if (updateResult.isFail()) {
+        if (updateResult.hasError()) {
             fail(updateResult.getError());
         }
 
@@ -175,7 +175,7 @@ class PasswordServiceTest {
 
         Result<Boolean> deleteResult = userSession.getServiceFactory().getPasswordService().delete(passwordList.get(0));
 
-        if (deleteResult.isFail()) {
+        if (deleteResult.hasError()) {
             fail(deleteResult.getError());
         }
     }

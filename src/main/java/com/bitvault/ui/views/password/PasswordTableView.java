@@ -9,7 +9,6 @@ import com.bitvault.ui.utils.*;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Pos;
@@ -156,7 +155,7 @@ public class PasswordTableView extends BorderPane {
     public void showEditPopUp(Password oldPass) {
 
         Result<Password> passwordResult = passwordVM.prepareForEdit(oldPass);
-        if(passwordResult.isFail()){
+        if(passwordResult.hasError()){
             return;
         }
 

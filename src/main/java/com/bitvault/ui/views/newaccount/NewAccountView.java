@@ -104,7 +104,7 @@ public class NewAccountView extends VBox {
 
         final Result<UserSession> userSessionResult = newAccountVM.create();
 
-        if (userSessionResult.isFail()) {
+        if (userSessionResult.hasError()) {
             ErrorAlert.show("New account error", userSessionResult.getError());
             return;
         }

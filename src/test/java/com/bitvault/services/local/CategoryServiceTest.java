@@ -50,7 +50,7 @@ class CategoryServiceTest {
 
         Result<Category> categoryResult = categoryService.create(category1);
 
-        if (categoryResult.isFail()) {
+        if (categoryResult.hasError()) {
             fail(categoryResult.getError());
         }
 
@@ -71,7 +71,7 @@ class CategoryServiceTest {
 
         Result<Category> categoryResult2 = categoryService.create(category2);
 
-        if (categoryResult2.isFail()) {
+        if (categoryResult2.hasError()) {
             fail(categoryResult2.getError());
         }
 
@@ -85,7 +85,7 @@ class CategoryServiceTest {
     void getCategories() {
         Result<List<Category>> resultCat = categoryService.getCategories();
 
-        if (resultCat.isFail()) {
+        if (resultCat.hasError()) {
             fail(resultCat.getError());
         }
 
@@ -97,7 +97,7 @@ class CategoryServiceTest {
     void update() {
         Result<List<Category>> resultCat = categoryService.getCategories();
 
-        if (resultCat.isFail()) {
+        if (resultCat.hasError()) {
             fail(resultCat.getError());
             return;
         }
@@ -121,7 +121,7 @@ class CategoryServiceTest {
                 )
         );
 
-        if (update.isFail()) {
+        if (update.hasError()) {
             fail(update.getError());
         }
 
@@ -133,7 +133,7 @@ class CategoryServiceTest {
 
         Result<List<Category>> resultCat = categoryService.getCategories();
 
-        if (resultCat.isFail()) {
+        if (resultCat.hasError()) {
             fail(resultCat.getError());
             return;
         }
@@ -146,7 +146,7 @@ class CategoryServiceTest {
 
         Category category = categories.get(0);
         Result<Boolean> delete = categoryService.delete(category.id());
-        if (delete.isFail()) {
+        if (delete.hasError()) {
             fail(delete.getError());
         }
 

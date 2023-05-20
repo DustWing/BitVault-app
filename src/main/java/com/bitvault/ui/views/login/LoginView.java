@@ -111,7 +111,7 @@ public class LoginView extends VBox {
 
     private void onLoginSuccess(Result<UserSession> loginResults) {
 
-        if (loginResults.isFail()) {
+        if (loginResults.hasError()) {
             this.loginVM.loadingProperty().set(false);
             ErrorAlert.show("woops", loginResults.getError());
             return;

@@ -45,7 +45,7 @@ class ProfileServiceTest {
 
         Result<Profile> profileResult = profileService.create(profile);
 
-        if (profileResult.isFail()) {
+        if (profileResult.hasError()) {
             fail(profileResult.getError());
         }
 
@@ -60,7 +60,7 @@ class ProfileServiceTest {
 
         Result<List<Profile>> profilesResult = profileService.getProfiles();
 
-        if (profilesResult.isFail()) {
+        if (profilesResult.hasError()) {
             fail(profilesResult.getError());
         }
 
@@ -70,7 +70,7 @@ class ProfileServiceTest {
     void update() {
 
         Result<List<Profile>> profilesResult = profileService.getProfiles();
-        if (profilesResult.isFail()) {
+        if (profilesResult.hasError()) {
             fail(profilesResult.getError());
         }
 
@@ -88,7 +88,7 @@ class ProfileServiceTest {
                 )
         );
 
-        if (updateResult.isFail()) {
+        if (updateResult.hasError()) {
             fail(updateResult.getError());
         }
     }
@@ -98,7 +98,7 @@ class ProfileServiceTest {
 
         Result<List<Profile>> profilesResult = profileService.getProfiles();
 
-        if (profilesResult.isFail()) {
+        if (profilesResult.hasError()) {
             fail(profilesResult.getError());
         }
         List<Profile> profiles = profilesResult.get();
@@ -108,7 +108,7 @@ class ProfileServiceTest {
         final Profile profile1 = profiles.get(0);
 
         Result<Boolean> deleteRes = profileService.delete(profile1);
-        if (deleteRes.isFail()) {
+        if (deleteRes.hasError()) {
             fail(deleteRes.getError());
         }
     }

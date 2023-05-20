@@ -2,10 +2,8 @@ package com.bitvault.services.factory;
 
 import com.bitvault.security.EncryptionProvider;
 import com.bitvault.services.cached.PasswordServiceCached;
-import com.bitvault.services.interfaces.ICategoryService;
-import com.bitvault.services.interfaces.IPasswordService;
-import com.bitvault.services.interfaces.IProfileService;
-import com.bitvault.services.interfaces.IUserService;
+import com.bitvault.services.interfaces.*;
+import com.bitvault.services.local.SettingsService;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.SecureDetails;
@@ -19,18 +17,19 @@ public class TestServiceFactory implements ServiceFactory {
 
     private final IPasswordService passwordService;
 
+    private final ISettingsService settingsService;
+
 
     public TestServiceFactory(EncryptionProvider encryptionProvider) {
 
         IPasswordService passwordService = () -> Result.ok(List.of(createPassword(encryptionProvider)));
 
-        IPasswordService passwordServiceCached = new PasswordServiceCached(passwordService);
-
-        this.passwordService = passwordServiceCached;
+        this.passwordService = new PasswordServiceCached(passwordService);
+        this.settingsService = new SettingsService();
 
     }
 
-    private Password createPassword(EncryptionProvider encryptionProvider){
+    private Password createPassword(EncryptionProvider encryptionProvider) {
         String id = UUID.randomUUID().toString();
         LocalDateTime now = LocalDateTime.now();
 
@@ -92,5 +91,9 @@ public class TestServiceFactory implements ServiceFactory {
         throw new IllegalStateException("Not implemented");
     }
 
+    @Override
+    public ISettingsService getSettingsService() {
+        return this.settingsService;
+    }
 
 }

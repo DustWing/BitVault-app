@@ -33,7 +33,7 @@ public final class DashBoardVM {
 
         Result<List<Profile>> profilesResult = serviceFactory.getProfileService().getProfiles();
 
-        if (profilesResult.isFail()) {
+        if (profilesResult.hasError()) {
             return;
         }
 

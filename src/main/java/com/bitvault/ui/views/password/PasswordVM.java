@@ -41,7 +41,7 @@ public class PasswordVM {
     public void init() {
 
         Result<List<Password>> passwordsRes = passwordService.getPasswords();
-        if (passwordsRes.isFail()) {
+        if (passwordsRes.hasError()) {
             ErrorAlert.show(Labels.i18n("error"), passwordsRes.getError());
             return;
         }
@@ -51,7 +51,7 @@ public class PasswordVM {
 
         Result<List<Category>> categoriesResult = categoryService.getCategories();
 
-        if (categoriesResult.isFail()) {
+        if (categoriesResult.hasError()) {
             ErrorAlert.show(Labels.i18n("error"), passwordsRes.getError());
             return;
         }
@@ -68,7 +68,7 @@ public class PasswordVM {
     public void create(Password password) {
         Result<Password> passwordResult = passwordService.create(password);
 
-        if (passwordResult.isFail()) {
+        if (passwordResult.hasError()) {
             ErrorAlert.show(Labels.i18n("error"), passwordResult.getError());
             return;
         }
@@ -91,7 +91,7 @@ public class PasswordVM {
     public void update(Password password) {
         Result<Password> update = passwordService.update(password);
 
-        if (update.isFail()) {
+        if (update.hasError()) {
             ErrorAlert.show(Labels.i18n("error"), update.getError());
         }
 

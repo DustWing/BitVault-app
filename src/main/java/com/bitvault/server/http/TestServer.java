@@ -47,7 +47,7 @@ public class TestServer {
 
         Result<KeyDto> keyDtoResult = Json.deserialize(response.body(), KeyDto.class);
 
-        if (keyDtoResult.isFail()) {
+        if (keyDtoResult.hasError()) {
             throw keyDtoResult.getError();
         }
         KeyDto keyDto = keyDtoResult.get();
@@ -81,7 +81,7 @@ public class TestServer {
                 SecureItemRqDto.SecureItemSharedType.PRIVATE
         );
         Result<String> serialize = Json.serialize(localPasswordDto);
-        if (serialize.isFail()) {
+        if (serialize.hasError()) {
             throw serialize.getError();
         }
 
@@ -104,7 +104,7 @@ public class TestServer {
 
         Result<String> body = Json.serialize(secureItemRqDto);
 
-        if (body.isFail()) {
+        if (body.hasError()) {
             throw body.getError();
         }
 

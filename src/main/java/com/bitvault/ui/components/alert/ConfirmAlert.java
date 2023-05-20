@@ -61,7 +61,7 @@ public class ConfirmAlert {
 
         Result<User> authenticate = userService.authenticate(username, input.get());
 
-        if (authenticate.isFail()) {
+        if (authenticate.hasError()) {
             ErrorAlert.show(Labels.i18n("invalid.password"), authenticate.getError());
             return false;
         }

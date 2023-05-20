@@ -2,7 +2,7 @@ package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
 import com.bitvault.ui.components.BvButton;
-import com.bitvault.ui.components.BvDoubleColumn;
+import com.bitvault.ui.components.grid.BvSimpleGrid;
 import com.bitvault.ui.components.TextColorComboBox;
 import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
@@ -71,7 +71,7 @@ public class PasswordDetailsView extends BorderPane {
         final BvPasswordInput passwordInput = getPassword(passwordDetailsVM.passwordPropertyProperty());
         validatedForm.add(passwordInput);
         final Button generatePassBtn = generatePassBtn(passwordDetailsVM.passwordPropertyProperty());
-        final BvDoubleColumn passwordGenerate = BvDoubleColumn.createSingle(passwordInput, generatePassBtn);
+        final BvSimpleGrid passwordGenerate = BvSimpleGrid.createSingleDoubleColumn(passwordInput, generatePassBtn);
 
         //bind password property string -> password complexity
         passwordDetailsVM.passwordPropertyProperty()
@@ -88,7 +88,7 @@ public class PasswordDetailsView extends BorderPane {
 
         final DatePicker expiresOn = getExpiryDp();
         final TextColorComboBox<Category> categoriesDd = categoryDd();
-        final BvDoubleColumn expiryCategory = BvDoubleColumn.createSingle(expiresOn, categoriesDd);
+        final BvSimpleGrid expiryCategory = BvSimpleGrid.createSingleDoubleColumn(expiresOn, categoriesDd);
 
         final CheckBox masterPassword = masterPassword();
 

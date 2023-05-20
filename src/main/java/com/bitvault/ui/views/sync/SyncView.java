@@ -1,10 +1,6 @@
 package com.bitvault.ui.views.sync;
 
-import com.bitvault.security.AesEncryptionProvider;
-import com.bitvault.security.EncryptionProvider;
 import com.bitvault.security.UserSession;
-import com.bitvault.services.factory.ServiceFactory;
-import com.bitvault.services.factory.TestServiceFactory;
 import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.model.Password;
@@ -30,13 +26,7 @@ public class SyncView extends VBox {
 
 
     public static SyncView createTest() {
-
-        final String username = "Test";
-        final String password = "Test";
-
-        final EncryptionProvider encryptionProvider = new AesEncryptionProvider(password.toCharArray());
-        final ServiceFactory serviceFactory = new TestServiceFactory(encryptionProvider);
-        final UserSession userSession = new UserSession(username, encryptionProvider, serviceFactory);
+        final UserSession userSession = UserSession.createTest();
         final SyncViewModel syncViewModel1 = new SyncViewModel(userSession);
         return new SyncView(syncViewModel1);
     }
@@ -117,12 +107,12 @@ public class SyncView extends VBox {
     public void start() {
         Result<Integer> portResult = this.syncViewModel.startServer();
 
-        if (portResult.isFail()) {
+        if (portResult.hasError()) {
             ErrorAlert.show("Error SyncView", portResult.getError());
         }
 
         Result<Image> qrdImage = this.syncViewModel.createQrdImage(portResult.get());
-        if (qrdImage.isFail()) {
+        if (qrdImage.hasError()) {
             ErrorAlert.show("Error SyncView Image", portResult.getError());
         }
         this.imageView.setImage(qrdImage.get());

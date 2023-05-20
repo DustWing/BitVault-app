@@ -65,7 +65,7 @@ public class CategoryRowVM {
         this.loading.set(false);
         this.allowSave.set(false);
         this.allowEdit.set(true);
-        if (!newId.isFail()) {
+        if (!newId.hasError()) {
             this.id = newId.get();
         }
     }

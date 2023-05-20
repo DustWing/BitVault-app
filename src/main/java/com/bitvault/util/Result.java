@@ -9,7 +9,7 @@ public final class Result<T> {
 
     private final T value;
     private final Exception exception;
-    private final boolean isFail;
+    private final boolean hasError;
 
     public static <T> Result<T> error(final Exception exception) {
         return new Result<>(null, exception);
@@ -23,30 +23,30 @@ public final class Result<T> {
 
         this.value = value;
         this.exception = exception;
-        this.isFail = exception != null;
+        this.hasError = exception != null;
     }
 
     public T get() {
-        if (isFail) {
+        if (hasError) {
             throw new IllegalStateException(exception);
         }
         return value;
     }
 
     public Optional<T> getOpt() {
-        if (isFail) {
+        if (hasError) {
             return Optional.empty();
         }
 
         return Optional.ofNullable(value);
     }
 
-    public boolean isFail() {
-        return isFail;
+    public boolean hasError() {
+        return hasError;
     }
 
     public boolean isSuccess() {
-        return !isFail;
+        return !hasError;
     }
 
     public Exception getError() {

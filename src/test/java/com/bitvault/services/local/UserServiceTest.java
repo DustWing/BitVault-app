@@ -53,13 +53,13 @@ class UserServiceTest {
         final User user = new User("id1", "name1", "credentials1");
         Result<User> registerResult = userService.register(user);
 
-        if (registerResult.isFail()) {
+        if (registerResult.hasError()) {
             fail(registerResult.getError());
         }
 
         Result<User> authenticateRes = userService.authenticate(user.name(), user.credentials());
 
-        if (authenticateRes.isFail()) {
+        if (authenticateRes.hasError()) {
             fail(authenticateRes.getError());
         }
 

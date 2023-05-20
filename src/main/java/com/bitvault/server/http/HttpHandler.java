@@ -94,7 +94,7 @@ class HttpHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     private Response createResponseBody(Result<?> result) {
-        if (result.isFail()) {
+        if (result.hasError()) {
 
             Exception error = result.getError();
 
@@ -107,7 +107,7 @@ class HttpHandler extends SimpleChannelInboundHandler<Object> {
         }
 
         Result<String> serializeResult = Json.serialize(result.get());
-        if (serializeResult.isFail()) {
+        if (serializeResult.hasError()) {
             return Response.createServerError(serializeResult.getError().getMessage());
         }
         String body = serializeResult.get();
@@ -190,7 +190,7 @@ class HttpHandler extends SimpleChannelInboundHandler<Object> {
             ErrorDto errorDto = endpointException.convertToDto();
 
             Result<String> serializeResult = Json.serialize(errorDto);
-            if (serializeResult.isFail()) {
+            if (serializeResult.hasError()) {
                 return Response.createServerError(serializeResult.getError().getMessage());
             }
 

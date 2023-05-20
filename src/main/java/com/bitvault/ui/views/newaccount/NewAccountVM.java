@@ -52,7 +52,7 @@ public class NewAccountVM {
         Result<User> userResult = serviceFactory.getUserService()
                 .register(user);
 
-        if (userResult.isFail()) {
+        if (userResult.hasError()) {
             return Result.error(userResult.getError());
         }
 

@@ -49,7 +49,7 @@ public class CategoryVM {
         loading.set(true);
 
         Result<List<Category>> categoriesResult = this.categoryService.getCategories();
-        if (categoriesResult.isFail()) {
+        if (categoriesResult.hasError()) {
             //TODO handle error
             throw new RuntimeException(categoriesResult.getError());
         }
@@ -71,7 +71,7 @@ public class CategoryVM {
         }
 
         Result<Boolean> booleanResult = categoryService.delete(categoryRowView.getUniqueId());
-        if (booleanResult.isFail()) {
+        if (booleanResult.hasError()) {
             Platform.runLater(()->ErrorAlert.show("Category Deletion", booleanResult.getError()));
             return false;
         }
@@ -89,7 +89,7 @@ public class CategoryVM {
         if (foundInOld.isPresent()) {
             Category updateCat = Category.createUpdate(foundInOld.get().id(), categoryRowView.getCategoryName(), categoryRowView.getColor(), "Password");
             Result<Category> updateResult = categoryService.update(updateCat);
-            if (updateResult.isFail()) {
+            if (updateResult.hasError()) {
                 updateResult.getError().printStackTrace();
                 //TODO
                 return Result.error(updateResult.getError());
@@ -101,7 +101,7 @@ public class CategoryVM {
         Category category = Category.createNew(categoryRowView.getCategoryName(), categoryRowView.getColor(), "Password");
         Result<Category> categoryResult = categoryService.create(category);
 
-        if (categoryResult.isFail()) {
+        if (categoryResult.hasError()) {
             categoryResult.getError().printStackTrace();
             //TODO
             return Result.error(categoryResult.getError());

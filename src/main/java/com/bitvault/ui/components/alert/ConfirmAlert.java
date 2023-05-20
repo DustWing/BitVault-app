@@ -19,7 +19,12 @@ public class ConfirmAlert {
         final String header = Labels.i18n("delete.header");
 
         if (requiresMp && !userSession.isAuthOnCoolDown()) {
-            return userSession.authWithCoolDown(() -> authenticate(userSession, title, header));
+            boolean authenticate = authenticate(userSession, title, header);
+            if (authenticate) {
+                userSession.putOnAuthCoolDown();
+            }
+
+            return authenticate;
         }
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -34,13 +39,17 @@ public class ConfirmAlert {
 
     public static boolean editAuthenticate(UserSession userSession, boolean requiresMp) {
 
-        if (!requiresMp) {
-            return true;
-        }
-        String title = Labels.i18n("edit.record");
-        String header = Labels.i18n("edit.header");
+        if (requiresMp && !userSession.isAuthOnCoolDown()) {
+            String title = Labels.i18n("edit.record");
+            String header = Labels.i18n("edit.header");
+            boolean authenticate = authenticate(userSession, title, header);
+            if (authenticate) {
+                userSession.putOnAuthCoolDown();
+            }
 
-        return userSession.authWithCoolDown(() -> authenticate(userSession, title, header));
+            return authenticate;
+        }
+        return true;
     }
 
     public static boolean authenticate(UserSession userSession, String titleText, String headerText) {

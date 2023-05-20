@@ -3,6 +3,7 @@ package com.bitvault.security;
 import com.bitvault.services.factory.ServiceFactory;
 import com.bitvault.services.factory.TestServiceFactory;
 import com.bitvault.ui.model.Profile;
+import com.bitvault.ui.model.Settings;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -14,9 +15,9 @@ public class UserSession {
     private final EncryptionProvider encryptionProvider;
     private final ServiceFactory serviceFactory;
     private Profile profile;
-
-    private final Duration coolDown = Duration.ofSeconds(10);
+    private final Duration coolDown = Duration.ofMinutes(10);
     private LocalDateTime previousAuthTime;
+    private Settings settings;
 
     public static UserSession createTest(){
         final String username = "Test";
@@ -58,7 +59,7 @@ public class UserSession {
         this.profile = profile;
     }
 
-    public synchronized boolean authWithCoolDown(Supplier<Boolean> action) {
+    public boolean authWithCoolDown(Supplier<Boolean> action) {
         final LocalDateTime now = LocalDateTime.now();
 
         if (previousAuthTime == null) {
@@ -82,7 +83,10 @@ public class UserSession {
         return actionSuccess;
     }
 
-    public synchronized boolean isAuthOnCoolDown(){
+    public void putOnAuthCoolDown(){
+        previousAuthTime = LocalDateTime.now();
+    }
+    public boolean isAuthOnCoolDown(){
         if (previousAuthTime == null) {
             return false;
         }

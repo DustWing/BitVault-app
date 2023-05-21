@@ -2,6 +2,7 @@ package com.bitvault.ui.views.password;
 
 import com.bitvault.ui.components.*;
 import com.bitvault.ui.components.textfield.BvTextField;
+import com.bitvault.ui.components.textfield.TextFieldUtils;
 import com.bitvault.ui.hyperlink.HyperLinkCell;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
@@ -63,10 +64,14 @@ public class PasswordTableView extends BorderPane {
 
     private BvTextField createSearchTf(FilteredList<Password> filteredList) {
 
-        return new BvTextField()
+
+        BvTextField bvTextField = new BvTextField()
                 .withPromptText(Labels.i18n("search"))
-                .withMediumSize()
-                .filter(filteredList, Password::contains);
+                .withMediumSize();
+
+        TextFieldUtils.addFilter(bvTextField, filteredList, Password::contains);
+
+        return bvTextField;
     }
 
     private TextColorComboBox<Category> categoryDropdown() {

@@ -111,13 +111,6 @@ public class BvTextField extends TextField implements ValidateField {
         });
     }
 
-    public <E> BvTextField filter(FilteredList<E> filteredList, BiFunction<E, String, Boolean> onFilter) {
-        PauseTransition delay = new PauseTransition(Duration.millis(200));
-        TextFieldFilterListener<E> listener = new TextFieldFilterListener<>(delay, filteredList, onFilter);
-        this.textProperty().addListener(listener);
-        return this;
-    }
-
     ///////////////////////////////////////////////////////////////////////////
     // Properties                                                            //
     ///////////////////////////////////////////////////////////////////////////

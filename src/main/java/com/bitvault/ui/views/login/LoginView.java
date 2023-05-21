@@ -7,6 +7,7 @@ import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
+import com.bitvault.ui.components.textfield.TextFieldUtils;
 import com.bitvault.ui.components.validation.ValidateForm;
 import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.utils.BvInsets;
@@ -23,6 +24,7 @@ import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
+import java.util.List;
 
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FOLDER;
 
@@ -58,12 +60,17 @@ public class LoginView extends VBox {
 
     private BvTextField getUserNameTf() {
 
-        return new BvTextField()
+        BvTextField username = new BvTextField()
                 .withBinding(loginVM.usernameProperty())
                 .withPromptText(Labels.i18n("username"))
                 .maxLength(50)
                 .withDefaultSize()
                 .required(true);
+
+        List<String> settingsUsernames = loginVM.getSettingsUsernames();
+        TextFieldUtils.addAutoComplete(username, settingsUsernames, loginVM::setFilePathFromUsername);
+
+        return username;
     }
 
     private BvTextField getLocationTf() {

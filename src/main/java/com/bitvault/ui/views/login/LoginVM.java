@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class LoginVM {
 
@@ -80,7 +81,6 @@ public class LoginVM {
         UserNameFile userNameFile = new UserNameFile(username.get(), location.get());
 
         if (this.settings == null) {
-
             return Settings.createOnLogin(userNameFile);
         }
 
@@ -88,6 +88,26 @@ public class LoginVM {
         userNameFiles.add(userNameFile);
         List<UserNameFile> list = userNameFiles.stream().distinct().toList();
         return this.settings.copyOnLogin(userNameFile, list);
+    }
+
+    public void setFilePathFromUsername(String username) {
+        if (settings == null) {//do nothing
+            return;
+        }
+
+        Optional<UserNameFile> any = settings.userNameFiles()
+                .stream()
+                .filter(userNameFile -> userNameFile.username().equals(username))
+                .findAny();
+
+        any.ifPresent(userNameFile -> this.location.setValue(userNameFile.filePath()));
+    }
+
+    public List<String> getSettingsUsernames() {
+        if (settings == null) {
+            return List.of();
+        }
+        return settings.userNameFiles().stream().map(UserNameFile::username).toList();
     }
 
     public boolean isOffline() {
@@ -130,4 +150,5 @@ public class LoginVM {
     public SimpleBooleanProperty loadingProperty() {
         return loading;
     }
+
 }

@@ -31,7 +31,7 @@ public class NewAccountVM {
         ValidateResult validateResult = validatedForm.validate();
 
         if (!validateResult.valid()) {
-            return Result.error(new Exception(""));
+            return Result.error(new Exception(validateResult.errorMessages().toString()));
         }
 
         final String location = this.location.get()+"/" + getFileName() + ".vault";

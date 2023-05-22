@@ -19,7 +19,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.ArrayList;
 
-import static org.kordamp.ikonli.materialdesign2.MaterialDesignP.PACKAGE_VARIANT_CLOSED;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignP.PLAYLIST_PLUS;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignP.PLUS;
 
 
@@ -90,7 +90,7 @@ public class PasswordView extends BorderPane {
 
     public Button categoriesBtn() {
 
-        final FontIcon catIcon = new FontIcon(PACKAGE_VARIANT_CLOSED);
+        final FontIcon catIcon = new FontIcon(PLAYLIST_PLUS);
         BvButton btn = new BvButton("", catIcon)
                 .withOnlyIconDefaultSize()
                 .action(event -> onNewCatAction());

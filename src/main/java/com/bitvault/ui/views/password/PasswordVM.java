@@ -102,8 +102,8 @@ public class PasswordVM {
         //replace password in list
         int index = -1;
         for (Password oldPassword : passwords) {
+            index++;
             if (oldPassword.getId().equals(updatedPassword.getId())) {
-                index++;
                 break;
             }
         }

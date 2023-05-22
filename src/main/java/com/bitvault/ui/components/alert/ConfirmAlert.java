@@ -27,7 +27,7 @@ public class ConfirmAlert {
             return authenticate;
         }
 
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(Labels.i18n("delete.context"));

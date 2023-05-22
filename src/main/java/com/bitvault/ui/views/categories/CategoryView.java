@@ -4,32 +4,29 @@ import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.utils.BvColors;
-import com.bitvault.ui.utils.BvSpacing;
-import com.bitvault.ui.utils.BvStyles;
+import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignK.KEYBOARD_BACKSPACE;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignP.PLUS;
 
-public class CategoryView extends VBox {
+public class CategoryView extends BorderPane {
 
     private final CategoryVM categoryVM;
 
     private final ListView<CategoryRowView> listView;
     private final ProgressIndicator progressIndicator = new ProgressIndicator();
     private final Label noRecordLbl = new Label(Labels.i18n("no.records"));
-    private final BvButton addNewBtn;
+    private final Runnable backAction;
 
     public static CategoryView createTest() {
 
@@ -42,46 +39,80 @@ public class CategoryView extends VBox {
 
         CategoryVM categoryVM = new CategoryVM(categoryService);
 
-        return new CategoryView(categoryVM);
+        return new CategoryView(categoryVM, () -> {
+        });
 
     }
 
 
-    public CategoryView(CategoryVM categoryVM) {
+    public CategoryView(CategoryVM categoryVM, Runnable backAction) {
         this.categoryVM = categoryVM;
-        this.listView = new ListView<>(this.categoryVM.getCategories());
-        this.listView.setPlaceholder(new Label(Labels.i18n("no.records")));
-        this.listView.setFixedCellSize(60);
+        this.backAction = backAction;
+        this.listView = createListView();
+
+        this.categoryVM.load();
+
+        this.setTop(createToolBar());
+        this.setCenter(listView);
+    }
+
+    private ListView<CategoryRowView> createListView() {
+        ListView<CategoryRowView> listView = new ListView<>(this.categoryVM.getCategories());
+        listView.setPlaceholder(new Label(Labels.i18n("no.records")));
+        listView.setFixedCellSize(60);
 //        this.listView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
-
-        final FontIcon plusIcon = new FontIcon(PLUS);
-        this.addNewBtn = new BvButton(Labels.i18n("add.new"), plusIcon)
-                .withDefaultSize()
-                .action(actionEvent -> addNew());
-
 
         this.categoryVM.loadingProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) loading();
             else onLoaded();
         });
 
-        this.categoryVM.load();
+        BorderPane.setMargin(listView, BvInsets.all10);
 
-        this.getChildren().addAll(this.listView, this.addNewBtn);
-        this.setFillWidth(true);
-        this.setAlignment(Pos.CENTER);
-        this.setSpacing(BvSpacing.SMALL);
-        JavaFxUtil.vGrowAlways(this);
+        return listView;
+    }
+
+    private ToolBar createToolBar() {
+
+        ToolBar toolBar = new ToolBar(
+                backBtn(),
+                new Separator(),
+                createAddNewBtn()
+        );
+
+        return toolBar;
+    }
+
+    private Button createAddNewBtn() {
+        final FontIcon plusIcon = new FontIcon(PLUS);
+
+        BvButton btn = new BvButton(Labels.i18n("add.new"), plusIcon)
+                .withDefaultSize()
+                .action(actionEvent -> addNew());
+        btn.setTooltip(new Tooltip(Labels.i18n("add.new.category")));
+
+        btn.disableProperty().bind(this.categoryVM.loadingProperty());
+        return btn;
+    }
+
+    public Button backBtn() {
+        final FontIcon backIcon = new FontIcon(KEYBOARD_BACKSPACE);
+
+
+        BvButton btn = new BvButton(Labels.i18n("back"), backIcon)
+                .withOnlyIconDefaultSize()
+                .action(event -> backAction.run());
+        btn.setTooltip(new Tooltip(Labels.i18n("back")));
+
+        return btn;
     }
 
 
     private void loading() {
-        this.addNewBtn.setDisable(true);
         this.listView.setPlaceholder(this.progressIndicator);
     }
 
     private void onLoaded() {
-        this.addNewBtn.setDisable(false);
         this.listView.setPlaceholder(this.noRecordLbl);
     }
 

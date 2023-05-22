@@ -170,8 +170,16 @@ public class JavaFxUtil {
         region.setMinHeight(BvHeights.MEDIUM);
         region.setPrefHeight(BvHeights.MEDIUM);
         region.setMaxHeight(BvHeights.MEDIUM);
-
     }
+
+    public static void mediumIconSize(Region region) {
+        region.setMinWidth(BvWidths.SMALL);
+
+        region.setMinHeight(BvHeights.MEDIUM);
+        region.setPrefHeight(BvHeights.MEDIUM);
+        region.setMaxHeight(BvHeights.MEDIUM);
+    }
+
 
     public static void largeSize(Region region) {
         region.setMinWidth(BvWidths.SMALL);

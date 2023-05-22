@@ -35,4 +35,10 @@ public class BvButton extends Button {
         return this;
     }
 
+    public BvButton withOnlyIconDefaultSize() {
+        JavaFxUtil.mediumIconSize(this);
+        return this;
+    }
+
+
 }

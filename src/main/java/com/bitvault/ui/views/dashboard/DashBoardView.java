@@ -1,6 +1,5 @@
 package com.bitvault.ui.views.dashboard;
 
-import com.bitvault.BitVault;
 import com.bitvault.security.UserSession;
 import com.bitvault.ui.async.AsyncTask;
 import com.bitvault.ui.components.BvButton;

@@ -11,10 +11,12 @@ import com.bitvault.ui.utils.BvColors;
 import com.bitvault.ui.utils.BvSpacing;
 import com.bitvault.ui.utils.BvWidths;
 import com.bitvault.ui.utils.JavaFxUtil;
+import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -92,6 +94,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
         //delete btn
         final FontIcon deleteIcon = new FontIcon(DELETE);
         final BvButton deleteButton = new BvButton("", deleteIcon);
+        deleteButton.setTooltip(new Tooltip(Labels.i18n("delete")));
         deleteButton.setOnAction(actionEvent -> this.categoryRowVM.delete(this));
         deleteButton.disableProperty().bind(this.categoryRowVM.loadingProperty());
 
@@ -99,6 +102,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
         final FontIcon editIcon = new FontIcon(PENCIL);
         final BvButton edit = new BvButton("", editIcon);
         edit.setOnAction(actionEvent -> this.categoryRowVM.edit());
+        edit.setTooltip(new Tooltip(Labels.i18n("edit")));
         edit.visibleProperty().bind(this.categoryRowVM.allowEditProperty());
         edit.managedProperty().bind(this.categoryRowVM.allowEditProperty());
         edit.disableProperty().bind(this.categoryRowVM.loadingProperty());
@@ -108,6 +112,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
         final FontIcon saveIcon = new FontIcon(CHECK_BOLD);
         final BvButton saveBtn = new BvButton("", saveIcon);
         saveBtn.setOnAction(actionEvent -> save());
+        saveBtn.setTooltip(new Tooltip(Labels.i18n("save")));
         saveBtn.visibleProperty().bind(this.categoryRowVM.allowSaveProperty());
         saveBtn.managedProperty().bind(this.categoryRowVM.allowSaveProperty());
         saveBtn.disableProperty().bind(this.categoryRowVM.loadingProperty());

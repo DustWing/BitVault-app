@@ -1,7 +1,6 @@
 package com.bitvault.ui.components;
 
 import com.bitvault.ui.components.textfield.BvPasswordField;
-import com.bitvault.util.Labels;
 import javafx.application.Platform;
 import javafx.beans.NamedArg;
 import javafx.geometry.Pos;
@@ -9,8 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-
-import java.util.Optional;
 
 public class PasswordInputDialog extends Dialog<String> {
 

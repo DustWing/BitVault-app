@@ -6,7 +6,6 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.util.StringConverter;
 
 /**

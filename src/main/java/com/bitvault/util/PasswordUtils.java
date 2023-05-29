@@ -1,6 +1,8 @@
 package com.bitvault.util;
 
 import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class PasswordUtils {
@@ -18,6 +20,7 @@ public class PasswordUtils {
     }
 
     public static class DefaultProvider implements PasswordProvider {
+
         public char[] getPassword(char[] chars) {
 
             for (int i = 0; i < chars.length; i++) {
@@ -134,9 +137,95 @@ public class PasswordUtils {
         return provider.getPassword(new char[length]);
     }
 
-    public static String generatePassString(int length){
+    public static String generatePassString(int length) {
         char[] password = new DefaultProvider().getPassword(new char[length]);
         return new String(password);
+    }
+
+    /**
+     * Complexity value between 0 and 1. 0 means worse.
+     */
+    public static double passwordComplexity(char[] value) {
+
+
+        return 0;
+    }
+
+    private double charContainsScore(char[] value) {
+        boolean hasUpperCase = false;
+        boolean hasLowerCase = false;
+        boolean hasDigit = false;
+        boolean hasSymbol = false;
+        for (char c : value) {
+            if (!hasUpperCase && Character.isUpperCase(c)) {
+                hasUpperCase = true;
+                continue;
+            }
+            if (!hasLowerCase && Character.isLowerCase(c)) {
+                hasLowerCase = true;
+                continue;
+            }
+            if (!hasDigit && Character.isDigit(c)) {
+                hasDigit = true;
+                continue;
+            }
+
+            if (!hasSymbol && isSymbol(c)) {
+                hasSymbol = true;
+            }
+        }
+
+        return 0.0;
+    }
+
+    private static boolean isSymbol(char c) {
+        for (char symbol : SYMBOLS) {
+            if (symbol == c) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private double lengthScore(char[] value) {
+        if (value.length <= 4) {
+            return 0.0;
+        } else if (value.length <= 8) {
+            return 0.4;
+        } else if (value.length <= 12) {
+            return 0.6;
+        } else if (value.length < 16) {
+            return 0.8;
+        }
+        return 1.0;
+
+    }
+
+    public static double shannonEntropyCalculator(char[] value) {
+        if (value.length == 0) {
+            return 0.0;
+        }
+
+        Map<Character, Integer> frequency = new HashMap<>();
+        for (char c : value) {
+            frequency.compute(c, (character, times) -> times == null ? 1 : times + 1);
+        }
+
+        double valueLength = ALL_CHARS.length;
+        double entropy = 0.0;
+
+        for (Integer times : frequency.values()) {
+            double term = (double) times / valueLength;
+            entropy -= term * log2(term);
+        }
+        return entropy * value.length;
+    }
+
+    /**
+     * Function to calculate the log base 2 of an integer
+     */
+    private static double log2(double num) {
+        return Math.log(num) / Math.log(2);
     }
 
 }

@@ -5,6 +5,7 @@ import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.utils.BvColors;
 import com.bitvault.ui.utils.BvInsets;
+import com.bitvault.ui.utils.BvStyles;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
@@ -60,7 +61,7 @@ public class CategoryView extends BorderPane {
         ListView<CategoryRowView> listView = new ListView<>(this.categoryVM.getCategories());
         listView.setPlaceholder(new Label(Labels.i18n("no.records")));
         listView.setFixedCellSize(60);
-//        this.listView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
+        listView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
 
         this.categoryVM.loadingProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) loading();

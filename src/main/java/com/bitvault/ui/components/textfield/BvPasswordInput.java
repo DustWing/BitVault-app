@@ -6,7 +6,6 @@ import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.StackPane;
 import org.kordamp.ikonli.javafx.FontIcon;
 

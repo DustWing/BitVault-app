@@ -6,6 +6,7 @@ import com.bitvault.database.daos.ISecureDetailsDao;
 import com.bitvault.database.daos.SecureDetailsDao;
 import com.bitvault.database.models.CategoryDM;
 import com.bitvault.database.provider.ConnectionProvider;
+import com.bitvault.services.exceptions.CategoryException;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.ui.model.Category;
 import com.bitvault.util.Result;
@@ -72,7 +73,7 @@ public class CategoryService implements ICategoryService {
             final CategoryDM categoryDM = categoryDao.get(category.id());
 
             if (categoryDM == null) {
-                return Result.error(new Exception("No category found"));
+                return Result.error(new CategoryException("no.category.found"));
             }
 
             final CategoryDM tpUpdate = CategoryDM.convertUpdate(category);
@@ -97,7 +98,7 @@ public class CategoryService implements ICategoryService {
             int count = secureDetailsDao.countByCategoryId(id);
 
             if (count > 0) {
-                return Result.error(new Exception("Category must be empty to delete."));
+                return Result.error(new CategoryException("category.must.be.empty.to.delete"));
             }
 
             final ICategoryDao categoryDao = new CategoryDao(connection);
@@ -105,7 +106,7 @@ public class CategoryService implements ICategoryService {
             final CategoryDM categoryDM = categoryDao.get(id);
 
             if (categoryDM == null) {
-                return Result.error(new Exception("No category found"));
+                return Result.error(new CategoryException("no.category.found"));
             }
 
             categoryDao.delete(id);

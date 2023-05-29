@@ -4,20 +4,16 @@ import com.bitvault.ui.components.validation.ValidateField;
 import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.utils.BvStyles;
 import com.bitvault.ui.utils.JavaFxUtil;
-import javafx.animation.PauseTransition;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.transformation.FilteredList;
 import javafx.scene.Node;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 
 public class BvTextField extends TextField implements ValidateField {
 

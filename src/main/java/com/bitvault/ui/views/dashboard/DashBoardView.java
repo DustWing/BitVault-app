@@ -33,8 +33,6 @@ public final class DashBoardView extends BorderPane {
 
     private final DashBoardVM dashBoardVM;
 
-    private final MenuBar menuBar;
-
     private Button button;
 
     public static DashBoardView create(UserSession userSession) {
@@ -44,7 +42,7 @@ public final class DashBoardView extends BorderPane {
 
     DashBoardView(final DashBoardVM dashBoardVM) {
         this.dashBoardVM = dashBoardVM;
-        this.menuBar = menuBar();
+        MenuBar menuBar = menuBar();
 
         final URL iconUrl = ResourceLoader.loadURL("/com.bitvault/icons/256moth.png");
 

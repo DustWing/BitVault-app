@@ -2,9 +2,9 @@ package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
 import com.bitvault.ui.components.BvButton;
-import com.bitvault.ui.components.grid.BvSimpleGrid;
 import com.bitvault.ui.components.TextColorComboBox;
 import com.bitvault.ui.components.alert.ErrorAlert;
+import com.bitvault.ui.components.grid.BvSimpleGrid;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
 import com.bitvault.ui.components.validation.ValidateForm;
@@ -25,6 +25,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +36,8 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignR.REFRESH;
 
 
 public class PasswordDetailsView extends BorderPane {
+
+    private static Logger logger = LoggerFactory.getLogger(PasswordDetailsView.class);
 
     private final PasswordDetailsVM passwordDetailsVM;
 
@@ -245,17 +249,12 @@ public class PasswordDetailsView extends BorderPane {
     }
 
     private double calculatePasswordComplexity(String password) {
-        double value = 0.0;
         if (password == null || password.isBlank()) {
-            value = 0.0;
-        } else if (password.length() >= 16) {
-            value = 1.0;
-        } else if (password.length() >= 8) {
-            value = 0.5;
-        } else if (password.length() >= 3) {
-            value = 0.3;
+            return 0.0;
         }
-        return value;
+
+
+        return 0.0;
     }
 
     public void saveBtnAction() {

@@ -13,6 +13,7 @@ import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Messages;
 import com.bitvault.util.Result;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -26,6 +27,7 @@ public class PasswordVM {
     private final ObservableList<Password> passwords = FXCollections.observableArrayList();
     private final FilteredList<Password> filteredList = new FilteredList<>(passwords, s -> true);
     private final ObservableList<Category> categories = FXCollections.observableArrayList();
+    private final SimpleObjectProperty<Category> selectedCategory = new SimpleObjectProperty<>();
     private final List<Category> categoriesList = new ArrayList<>();  //to pass to new category window
     private final Category fakeCategory = Category.createFake("ALL", "ALL", "#000000");
 
@@ -65,6 +67,8 @@ public class PasswordVM {
         categories.clear();
         categories.add(fakeCategory);
         categories.addAll(categoriesResult.get());
+        selectedCategory.set(fakeCategory);//reset to all, order matters
+
     }
 
     public void create(Password password) {
@@ -153,6 +157,10 @@ public class PasswordVM {
 
     public FilteredList<Password> getFilteredList() {
         return filteredList;
+    }
+
+    public SimpleObjectProperty<Category> selectedCategoryProperty() {
+        return selectedCategory;
     }
 
     public ObservableList<Category> getCategories() {

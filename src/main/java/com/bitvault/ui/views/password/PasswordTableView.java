@@ -1,7 +1,6 @@
 package com.bitvault.ui.views.password;
 
 import com.bitvault.ui.components.BitVaultHBox;
-import com.bitvault.ui.components.CardBuilder;
 import com.bitvault.ui.components.TimerBar;
 import com.bitvault.ui.hyperlink.HyperLinkCell;
 import com.bitvault.ui.model.Password;
@@ -18,7 +17,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
@@ -32,16 +30,13 @@ public class PasswordTableView extends BorderPane {
 
         final TableView<Password> tableView = createTable(this.passwordVM.getFilteredList());
 
-        VBox vBox = new CardBuilder().add(tableView).build();
-
-
         this.timerBar = new TimerBar(new ProgressBar(), JavaFxUtil::clearClipBoard);
         timerBar.getProgressBar().setVisible(false);
 
         final BitVaultHBox bottomHBox = new BitVaultHBox(timerBar.getProgressBar())
                 .maxH(20);
 
-        this.setCenter(vBox);
+        this.setCenter(tableView);
         this.setBottom(bottomHBox);
 
         this.setOnKeyPressed(event -> {
@@ -56,11 +51,13 @@ public class PasswordTableView extends BorderPane {
         TableView<Password> tableView = new TableView<>(passwords);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.setRowFactory(param -> new PasswordTableRowFactory(
-                this::copyUsername,
-                this::copyPassword,
-                this::showEditPopUp,
-                this::delete
-        ));
+                        this::copyUsername,
+                        this::copyPassword,
+                        this::showEditPopUp,
+                        this::delete,
+                        this.passwordVM::create
+                )
+        );
 
         final TableColumn<Password, String> titleC = new TableColumn<>("Title");
         titleC.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getSecureDetails().getTitle()));
@@ -125,5 +122,6 @@ public class PasswordTableView extends BorderPane {
         if (copied)
             this.timerBar.start(30);
     }
+
 
 }

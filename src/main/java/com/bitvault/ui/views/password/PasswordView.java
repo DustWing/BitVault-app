@@ -51,7 +51,6 @@ public class PasswordView extends BorderPane {
     private void onBackAction() {
         passwordVM.init();// to reload passwords
         this.setTop(toolBar);
-
         PasswordTableView passwordTableView = new PasswordTableView(this.passwordVM);
         this.setCenter(passwordTableView);
         BorderPane.setMargin(passwordTableView, BvInsets.all10);
@@ -102,7 +101,7 @@ public class PasswordView extends BorderPane {
 
     private TextColorComboBox<Category> categoryDropdown() {
         final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withCircle(this.passwordVM.getCategories());
-        categoriesDd.setValue(this.passwordVM.getFakeCategory());
+        categoriesDd.valueProperty().bindBidirectional(this.passwordVM.selectedCategoryProperty());
 
         categoriesDd.setOnAction(event -> {
                     Category selectedItem = categoriesDd.getValue();

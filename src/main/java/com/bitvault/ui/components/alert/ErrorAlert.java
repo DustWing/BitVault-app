@@ -1,6 +1,6 @@
 package com.bitvault.ui.components.alert;
 
-import com.bitvault.util.Icons;
+import com.bitvault.ui.utils.IconUtils;
 import com.bitvault.util.Messages;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
@@ -22,7 +22,7 @@ public class ErrorAlert {
         alert.setTitle(title);
         alert.setContentText(msg);
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(Icons.STAGE_ICON);
+        stage.getIcons().add(IconUtils.STAGE_ICON);
         alert.showAndWait();
     }
 

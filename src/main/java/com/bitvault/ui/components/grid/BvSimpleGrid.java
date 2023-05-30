@@ -15,12 +15,17 @@ public class BvSimpleGrid extends GridPane {
 
         final GridRow gridRow = new GridRow(List.of(left, right));
 
-        return createDoubleColumn(List.of(gridRow));
+        return createDoubleColumnCentered(List.of(gridRow));
     }
 
-    public static BvSimpleGrid createDoubleColumn(List<GridRow> rows) {
+    public static BvSimpleGrid createDoubleColumnCentered(List<GridRow> rows) {
 
         final BvSimpleGrid bvSimpleGrid = new BvSimpleGrid(rows);
+
+        int columnCount = bvSimpleGrid.getColumnCount();
+        if (columnCount != 2) {
+            throw new IllegalArgumentException("Must have 2 columns to use this method");
+        }
 
         // set the alignment of the first column to the right
         final ColumnConstraints column1Constraints = new ColumnConstraints();
@@ -34,6 +39,7 @@ public class BvSimpleGrid extends GridPane {
 
         return bvSimpleGrid;
     }
+
 
     public BvSimpleGrid(List<GridRow> rows) {
         int rowIndex = 0;

@@ -72,7 +72,6 @@ public class JavaFxUtil {
 
     public static void copyToClipBoard(final String value) {
         try {
-            System.out.println(value);
             StringSelection selection = new StringSelection(value);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);

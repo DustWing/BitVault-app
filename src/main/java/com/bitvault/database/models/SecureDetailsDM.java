@@ -7,6 +7,7 @@ import com.bitvault.util.DateTimeUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public record SecureDetailsDM(
         String id,
@@ -52,10 +53,10 @@ public record SecureDetailsDM(
                 secureDetails.getTitle(),
                 secureDetails.getDescription(),
                 secureDetails.isFavourite(),
-                DateTimeUtils.formatToUtc(secureDetails.getCreatedOn()),
-                DateTimeUtils.formatToUtc(secureDetails.getModifiedOn()),
+                DateTimeUtils.formatToUtc(LocalDateTime.now()),
+                null,
                 DateTimeUtils.formatToUtc(secureDetails.getExpiresOn()),
-                DateTimeUtils.formatToUtc(secureDetails.getImportedOn()),
+                null,
                 secureDetails.isRequiresMp(),
                 secureDetails.isShared()
         );

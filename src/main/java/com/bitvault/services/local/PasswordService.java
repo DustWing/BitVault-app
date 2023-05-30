@@ -13,8 +13,6 @@ import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.model.SecureDetails;
 import com.bitvault.util.Result;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -25,8 +23,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class PasswordService implements IPasswordService {
-
-    private static final Logger logger = LoggerFactory.getLogger(PasswordService.class);
 
     private final ConnectionProvider connectionProvider;
 

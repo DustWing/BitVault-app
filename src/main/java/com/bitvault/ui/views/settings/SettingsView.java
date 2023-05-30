@@ -40,7 +40,7 @@ public class SettingsView extends BorderPane {
         GridRow masterPasswordCoolDown = masterPasswordCoolDown();
         GridRow passwordGenerationLength = passwordGenerationLength();
 
-        BvSimpleGrid settingsGrid = BvSimpleGrid.createDoubleColumn(
+        BvSimpleGrid settingsGrid = BvSimpleGrid.createDoubleColumnCentered(
                 List.of(masterPasswordCoolDown, passwordGenerationLength)
         );
 

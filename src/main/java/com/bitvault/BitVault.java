@@ -1,9 +1,9 @@
 package com.bitvault;
 
 import com.bitvault.ui.utils.BvSceneSize;
+import com.bitvault.ui.utils.IconUtils;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
-import com.bitvault.util.Icons;
 import com.bitvault.util.ResourceLoader;
 import com.bitvault.util.Theme;
 import javafx.application.Application;
@@ -48,7 +48,7 @@ public class BitVault extends Application {
         BitVault.setUserAgentStylesheet(themeUrl.toExternalForm());
 
         stage.setTitle("The Vault");
-        stage.getIcons().add(Icons.STAGE_ICON);
+        stage.getIcons().add(IconUtils.STAGE_ICON);
 
         //register on close
         stage.setOnCloseRequest(event -> runOnCloseActions());

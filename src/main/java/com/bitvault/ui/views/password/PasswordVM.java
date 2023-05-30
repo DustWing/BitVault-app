@@ -171,10 +171,6 @@ public class PasswordVM {
         return categoriesList;
     }
 
-    public Category getFakeCategory() {
-        return fakeCategory;
-    }
-
     public Profile getProfile() {
         return userSession.getProfile();
     }

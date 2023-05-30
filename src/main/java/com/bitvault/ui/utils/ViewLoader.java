@@ -2,10 +2,10 @@ package com.bitvault.ui.utils;
 
 import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.exceptions.ViewLoadException;
-import com.bitvault.util.Icons;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -21,16 +21,22 @@ public class ViewLoader {
 
         final Stage stage = new Stage();
 
-        stage.getIcons().add(Icons.STAGE_ICON);
+        stage.getIcons().add(IconUtils.STAGE_ICON);
         stage.setTitle(title);
         stage.initOwner(owner);
         stage.setScene(scene);
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setMinWidth(600);
         stage.setMinHeight(600);
-
         stage.setWidth(600);
         stage.setHeight(600);
+
+
+        scene.setOnKeyPressed(event -> {
+            if (KeyCode.ESCAPE.equals(event.getCode())) {
+                stage.close();
+            }
+        });
         return stage;
     }
 

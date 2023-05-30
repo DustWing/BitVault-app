@@ -5,6 +5,7 @@ import com.bitvault.ui.components.grid.BvSimpleGrid;
 import com.bitvault.ui.components.grid.GridRow;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.utils.BvInsets;
+import com.bitvault.ui.utils.KeyCombinationConst;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.util.DateTimeUtils;
 import com.bitvault.util.Labels;
@@ -44,8 +45,8 @@ public class PasswordTableRowFactory extends TableRow<Password> {
         }
 
         addContextMenu(this);
-    }
 
+    }
 
     private void addContextMenu(TableRow<Password> row) {
 
@@ -120,14 +121,14 @@ public class PasswordTableRowFactory extends TableRow<Password> {
 
 
         Button usernameBtn = new BvButton("", new FontIcon(CONTENT_COPY))
-                .action(event -> this.passwordVM.copyUsername(selectedItem));
+                .action(event -> copyUsername(selectedItem));
 
         GridRow usernameRow = new GridRow(List.of(
                 new Label(Labels.i18n("username")), new Label(selectedItem.getSecureDetails().getTitle()), usernameBtn
         ));
 
         Button passwordBtn = new BvButton("", new FontIcon(CONTENT_COPY))
-                .action(event -> this.passwordVM.copyPassword(selectedItem));
+                .action(event -> copyPassword(selectedItem));
 
         GridRow passwordRow = new GridRow(List.of(
                 new Label(Labels.i18n("password")), new Label("********"), passwordBtn

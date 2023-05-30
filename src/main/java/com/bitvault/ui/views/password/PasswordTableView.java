@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
 public class PasswordTableView extends BorderPane {
@@ -33,12 +34,6 @@ public class PasswordTableView extends BorderPane {
 
         this.setCenter(tableView);
         this.setBottom(bottomHBox);
-
-        this.setOnKeyPressed(event -> {
-            if (KeyCombinationConst.ctrlC.match(event)) {
-                copyPassword(tableView);
-            }
-        });
     }
 
     private TableView<Password> createTable(ObservableList<Password> passwords) {
@@ -70,7 +65,25 @@ public class PasswordTableView extends BorderPane {
         tableView.getColumns().add(categoryC);
         tableView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
 
+        setTableEvents(tableView);
+
         return tableView;
+    }
+
+    private void setTableEvents(TableView<Password> tableView) {
+        tableView.setOnKeyPressed(event -> {
+            if (KeyCombinationConst.ctrlC.match(event)) {
+                copyPassword(tableView);
+            }
+
+            if (KeyCombinationConst.ctrlB.match(event)) {
+                copyUsername(tableView);
+            }
+
+            if (KeyCode.DELETE.equals(event.getCode())) {
+                deleteRecord(tableView);
+            }
+        });
     }
 
 
@@ -79,6 +92,19 @@ public class PasswordTableView extends BorderPane {
         final boolean copied = passwordVM.copyPassword(selectedItem);
         if (copied)
             this.timerBar.start(30);
+    }
+
+    private void copyUsername(TableView<Password> tableView) {
+        final Password selectedItem = tableView.getSelectionModel().getSelectedItem();
+        final boolean copied = passwordVM.copyUsername(selectedItem);
+        if (copied)
+            this.timerBar.start(30);
+    }
+
+    private void deleteRecord(TableView<Password> tableView) {
+        final Password selectedItem = tableView.getSelectionModel().getSelectedItem();
+        passwordVM.delete(selectedItem);
+
     }
 
 

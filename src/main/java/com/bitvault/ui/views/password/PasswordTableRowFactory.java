@@ -1,29 +1,19 @@
 package com.bitvault.ui.views.password;
 
-import com.bitvault.ui.components.BvButton;
-import com.bitvault.ui.components.grid.BvSimpleGrid;
-import com.bitvault.ui.components.grid.GridRow;
 import com.bitvault.ui.model.Password;
-import com.bitvault.ui.utils.BvInsets;
-import com.bitvault.ui.utils.KeyCombinationConst;
 import com.bitvault.ui.utils.ViewLoader;
-import com.bitvault.util.DateTimeUtils;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import org.kordamp.ikonli.javafx.FontIcon;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableRow;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.kordamp.ikonli.materialdesign2.MaterialDesignC.CONTENT_COPY;
+import static com.bitvault.ui.views.password.PasswordDetailsPopUp.showDetailsPopup;
 
 
 public class PasswordTableRowFactory extends TableRow<Password> {
-
 
     private final PasswordVM passwordVM;
 
@@ -53,16 +43,22 @@ public class PasswordTableRowFactory extends TableRow<Password> {
         Password selectedItem = row.getItem();
 
         MenuItem copyUserName = new MenuItem(Labels.i18n("copy.username"));
-        copyUserName.setOnAction(event -> copyUsername(selectedItem));
+        copyUserName.setOnAction(event -> copyUsername(selectedItem.getUsername()));
 
         MenuItem copyPassword = new MenuItem(Labels.i18n("copy.password"));
-        copyPassword.setOnAction(event -> copyPassword(selectedItem));
+        copyPassword.setOnAction(event -> copyPassword(selectedItem.getPassword()));
 
         MenuItem edit = new MenuItem(Labels.i18n("edit"));
         edit.setOnAction(event -> showEditPopUp(selectedItem));
 
         MenuItem detail = new MenuItem(Labels.i18n("details"));
-        detail.setOnAction(event -> showDetailsPopup(selectedItem));
+        detail.setOnAction(event -> showDetailsPopup(
+                        this.getScene(),
+                        selectedItem,
+                        this::copyUsername,
+                        this::copyPassword
+                )
+        );
 
         MenuItem delete = new MenuItem(Labels.i18n("delete"));
         delete.setOnAction(event -> delete(selectedItem));
@@ -80,13 +76,13 @@ public class PasswordTableRowFactory extends TableRow<Password> {
     }
 
 
-    private void copyPassword(Password selectedItem) {
-        final boolean copied = passwordVM.copyPassword(selectedItem);
+    private void copyPassword(String password) {
+        final boolean copied = passwordVM.copyPassword(password);
         if (copied) onCopy.run();
     }
 
-    private void copyUsername(Password selectedItem) {
-        final boolean copied = passwordVM.copyUsername(selectedItem);
+    private void copyUsername(String username) {
+        final boolean copied = passwordVM.copyUsername(username);
         if (copied) onCopy.run();
     }
 
@@ -111,97 +107,6 @@ public class PasswordTableRowFactory extends TableRow<Password> {
         );
 
         ViewLoader.popUp(this.getScene().getWindow(), view, Labels.i18n("edit.password")).show();
-    }
-
-    private void showDetailsPopup(Password selectedItem) {
-
-        GridRow titleRow = new GridRow(List.of(
-                new Label(Labels.i18n("title")), new Label(selectedItem.getSecureDetails().getTitle())
-        ));
-
-
-        Button usernameBtn = new BvButton("", new FontIcon(CONTENT_COPY))
-                .action(event -> copyUsername(selectedItem));
-
-        GridRow usernameRow = new GridRow(List.of(
-                new Label(Labels.i18n("username")), new Label(selectedItem.getSecureDetails().getTitle()), usernameBtn
-        ));
-
-        Button passwordBtn = new BvButton("", new FontIcon(CONTENT_COPY))
-                .action(event -> copyPassword(selectedItem));
-
-        GridRow passwordRow = new GridRow(List.of(
-                new Label(Labels.i18n("password")), new Label("********"), passwordBtn
-        ));
-
-        GridRow domain = new GridRow(List.of(
-                new Label(Labels.i18n("domain")), new Label(selectedItem.getSecureDetails().getDomain())
-        ));
-
-        Text descrText = new Text(selectedItem.getSecureDetails().getDescription());
-        descrText.setWrappingWidth(300);
-
-        GridRow description = new GridRow(List.of(
-                new Label(Labels.i18n("description")), descrText)
-        );
-
-        GridRow category = new GridRow(List.of(
-                new Label(Labels.i18n("category")), new Label(selectedItem.getSecureDetails().getCategory().name())
-        ));
-
-        String expiresOn = DateTimeUtils.formatNoTime(selectedItem.getSecureDetails().getExpiresOn());
-        GridRow expiry = new GridRow(List.of(
-                new Label(Labels.i18n("expires.on")), new Label(expiresOn)
-        ));
-
-        String createdOn = DateTimeUtils.format(selectedItem.getSecureDetails().getCreatedOn());
-        GridRow created = new GridRow(List.of(
-                new Label(Labels.i18n("created.on")), new Label(createdOn)
-        ));
-
-        String updatedOn = DateTimeUtils.format(selectedItem.getSecureDetails().getModifiedOn());
-        GridRow updated = new GridRow(List.of(
-                new Label(Labels.i18n("modified.on")), new Label(updatedOn)
-        ));
-
-        GridRow masterP = new GridRow(List.of(
-                new Label(Labels.i18n("master.password")), new Label(selectedItem.getSecureDetails().isRequiresMp() ? "Y" : "N")
-        ));
-
-        GridRow fav = new GridRow(List.of(
-                new Label(Labels.i18n("favourite")), new Label(selectedItem.getSecureDetails().isFavourite() ? "Y" : "N")
-        ));
-
-        GridRow shared = new GridRow(List.of(
-                new Label(Labels.i18n("shared")), new Label(selectedItem.getSecureDetails().isShared() ? "Y" : "N")
-        ));
-
-
-        BvSimpleGrid grid = new BvSimpleGrid(List.of(
-                titleRow,
-                usernameRow,
-                passwordRow,
-                domain,
-                description,
-                category,
-                expiry,
-                created,
-                updated,
-                masterP,
-                fav,
-                shared
-        ));
-
-
-        ScrollPane scrollPane = new ScrollPane(grid);
-        scrollPane.setFitToWidth(true);
-
-        VBox vBox = new VBox(scrollPane);
-        vBox.setAlignment(Pos.CENTER);
-        vBox.setPadding(BvInsets.all10);
-
-        ViewLoader.popUp(this.getScene().getWindow(), vBox, Labels.i18n("details")).show();
-
     }
 
 

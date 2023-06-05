@@ -62,7 +62,7 @@ public record SecureDetailsDM(
         );
     }
 
-    public static SecureDetailsDM convert(final SecureDetails secureDetails) {
+    public static SecureDetailsDM convertForUpdate(final SecureDetails secureDetails) {
         return new SecureDetailsDM(
                 secureDetails.getId(),
                 secureDetails.getCategory().id(),
@@ -72,7 +72,7 @@ public record SecureDetailsDM(
                 secureDetails.getDescription(),
                 secureDetails.isFavourite(),
                 DateTimeUtils.formatToUtc(secureDetails.getCreatedOn()),
-                DateTimeUtils.formatToUtc(secureDetails.getModifiedOn()),
+                DateTimeUtils.formatToUtc(LocalDateTime.now()),
                 DateTimeUtils.formatToUtc(secureDetails.getExpiresOn()),
                 DateTimeUtils.formatToUtc(secureDetails.getImportedOn()),
                 secureDetails.isRequiresMp(),

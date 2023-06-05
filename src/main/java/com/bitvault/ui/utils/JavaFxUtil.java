@@ -190,7 +190,7 @@ public class JavaFxUtil {
 
     }
 
-    public static void vboxArrangement(VBox vBox){
+    public static void vboxArrangement(VBox vBox) {
         vBox.setFillWidth(true);
         vBox.setPadding(BvInsets.all10);
         vBox.setSpacing(BvSpacing.SMALL);

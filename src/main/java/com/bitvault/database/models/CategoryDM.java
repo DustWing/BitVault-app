@@ -14,7 +14,8 @@ public record CategoryDM(
         String color,
         String createdOn,
         String modifiedOn,
-        String type
+        String type,
+        boolean deleted
 
 ) {
 
@@ -30,7 +31,8 @@ public record CategoryDM(
                 rs.getString(3),
                 rs.getString(4),
                 rs.getString(5),
-                rs.getString(6)
+                rs.getString(6),
+                rs.getInt(7) != 0
         );
     }
 
@@ -47,7 +49,8 @@ public record CategoryDM(
                 category.color(),
                 DateTimeUtils.formatToUtc(LocalDateTime.now()),
                 null,
-                category.type()
+                category.type(),
+                false
         );
     }
 
@@ -58,7 +61,8 @@ public record CategoryDM(
                 category.color(),
                 null,
                 DateTimeUtils.formatToUtc(LocalDateTime.now()),
-                null
+                null,
+                category.deleted()
         );
     }
 
@@ -70,7 +74,8 @@ public record CategoryDM(
                 cat.color(),
                 DateTimeUtils.parseToLocal(cat.createdOn()),
                 DateTimeUtils.parseToLocal(cat.modifiedOn()),
-                cat.type()
+                cat.type(),
+                cat.deleted()
         );
     }
 }

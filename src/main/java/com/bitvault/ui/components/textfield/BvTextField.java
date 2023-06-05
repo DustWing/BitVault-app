@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Tooltip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,11 @@ public class BvTextField extends TextField implements ValidateField {
 
     public BvTextField minLength(int minLength) {
         this.minLength = minLength;
+        return this;
+    }
+
+    public BvTextField toolTip(String value){
+        this.setTooltip(new Tooltip(value));
         return this;
     }
 

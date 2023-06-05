@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class ProfileDao implements IProfileDao {
     private static final String sGetQ = "SELECT * FROM t_profiles";
     private static final String sGetByIdQ = "SELECT * FROM t_profiles WHERE ID=?";
-    private static final String sCreateQ = "INSERT INTO t_profiles VALUES (?,?,?,?)";
+    private static final String sCreateQ = "INSERT INTO t_profiles VALUES (?,?,?,?,?)";
     private static final String sUpdateQ = "UPDATE t_profiles SET name=?, modified_on=? WHERE ID=?";
     private static final String sDeleteQ = "DELETE FROM t_profiles WHERE ID=?";
 
@@ -54,6 +54,7 @@ public class ProfileDao implements IProfileDao {
             stm.setString(2, profile.name());
             stm.setString(3, profile.createdOn());
             stm.setString(4, null);
+            stm.setInt(5, 0);
 
             stm.execute();
 

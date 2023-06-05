@@ -32,10 +32,10 @@ public class CategoryView extends BorderPane {
     public static CategoryView createTest() {
 
         ICategoryService categoryService = () -> Result.ok(List.of(
-                new Category(UUID.randomUUID().toString(), "Cat1", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password"),
-                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password"),
-                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password"),
-                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password")
+                new Category(UUID.randomUUID().toString(), "Cat1", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password",false),
+                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password",false),
+                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password",false),
+                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password",false)
         ));
 
         CategoryVM categoryVM = new CategoryVM(categoryService);

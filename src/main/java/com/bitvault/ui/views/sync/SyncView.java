@@ -8,9 +8,11 @@ import com.bitvault.ui.model.SyncValue;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -18,10 +20,7 @@ import javafx.scene.layout.VBox;
 public class SyncView extends VBox {
 
     private final SyncViewModel syncViewModel;
-
-    private final TextArea textArea;
     private final ImageView imageView;
-
     final TableView<SyncValue<Password>> tableView;
 
 
@@ -31,20 +30,20 @@ public class SyncView extends VBox {
         return new SyncView(syncViewModel1);
     }
 
+    public static SyncView create(UserSession userSession) {
+        final SyncViewModel syncViewModel1 = new SyncViewModel(userSession);
+        return new SyncView(syncViewModel1);
+    }
+
     public SyncView(SyncViewModel syncViewModel) {
         this.syncViewModel = syncViewModel;
 
         ButtonBar buttonBar = createButtonBar();
 
-        textArea = new TextArea();
-        this.syncViewModel.logTestProperty().addListener((observable, oldValue, newValue) ->
-                textArea.appendText(newValue)
-        );
-        ScrollPane scrollPane = addScrollPane(textArea);
-
-        tableView = createTable(this.syncViewModel.getPasswords());
+        tableView = createTable();
         Tab tab = new Tab("Password", tableView);
         tab.setClosable(false);
+
         Tab tabc = new Tab("Card", new TableView<String>());
         tabc.setClosable(false);
         TabPane tabPane = new TabPane(tab, tabc);
@@ -54,7 +53,6 @@ public class SyncView extends VBox {
         this.getChildren().addAll(
                 imageView,
                 tabPane,
-                scrollPane,
                 buttonBar
         );
 
@@ -73,35 +71,19 @@ public class SyncView extends VBox {
                 .defaultButton(false)
                 .withDefaultSize();
 
-        final BvButton clearLog = new BvButton(Labels.i18n("clear"))
-                .action(event -> clear())
-                .defaultButton(false)
-                .withDefaultSize();
-
-        final BvButton showCache = new BvButton("Show Cache")
-                .action(event -> this.syncViewModel.showCache())
-                .defaultButton(false)
-                .withDefaultSize();
-
         final ButtonBar buttonBar = new ButtonBar();
         buttonBar.getButtons()
-                .addAll(start, stop, clearLog, showCache);
+                .addAll(start, stop);
 
         return buttonBar;
     }
 
-    private ScrollPane addScrollPane(TextArea textArea) {
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(textArea);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-
-        return scrollPane;
-    }
-
-
-    private TableView<SyncValue<Password>> createTable(ObservableList<SyncValue<Password>> passwords) {
-        return new PasswordSyncTable(passwords);
+    private TableView<SyncValue<Password>> createTable() {
+        return PasswordSyncTable.createTable(
+                this.syncViewModel.getPasswords(),
+                this.syncViewModel.getCategories(),
+                this.syncViewModel.getEncryptionProvider()
+        );
     }
 
     public void start() {
@@ -121,11 +103,5 @@ public class SyncView extends VBox {
 
     public void stop() {
         this.syncViewModel.stopServer();
-
     }
-
-    public void clear() {
-        this.textArea.clear();
-    }
-
 }

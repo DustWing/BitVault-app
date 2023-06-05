@@ -1,6 +1,15 @@
 package com.bitvault.services.exceptions;
 
 public class CategoryException extends RuntimeException{
+
+    public static CategoryException notFound(){
+       return new CategoryException("no.category.found");
+    }
+
+    public static CategoryException cannotDelete(){
+        return new CategoryException("category.must.be.empty.to.delete");
+    }
+
     public CategoryException() {
         super();
     }

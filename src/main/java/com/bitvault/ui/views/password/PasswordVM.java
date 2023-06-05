@@ -20,6 +20,7 @@ import javafx.collections.transformation.FilteredList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PasswordVM {
 
@@ -103,32 +104,29 @@ public class PasswordVM {
 
         final Password updatedPassword = update.get();
 
-        //replace password in list
-        int index = -1;
-        for (Password oldPassword : passwords) {
-            index++;
-            if (oldPassword.getId().equals(updatedPassword.getId())) {
-                break;
-            }
-        }
-        if (index == -1) {
+        Optional<Password> passwordOpt = passwords
+                .stream()
+                .filter(password1 -> password1.getId().equals(updatedPassword.getId()))
+                .findAny();
+
+        if(passwordOpt.isEmpty()){
             ErrorAlert.show(Labels.i18n("error"), Messages.i18n("no.record.found"));
             return;
         }
 
-        passwords.set(index, updatedPassword);
+        Password passwordOld = passwordOpt.get();
+        passwordOld.update(update.get());
+
     }
 
-    public boolean copyPassword(Password selectedItem) {
-        if (selectedItem == null) return false;
-        final String decrypt = userSession.getEncryptionProvider().decrypt(selectedItem.getPassword());
+    public boolean copyPassword(String password) {
+        final String decrypt = userSession.getEncryptionProvider().decrypt(password);
         JavaFxUtil.copyToClipBoard(decrypt);
         return true;
     }
 
-    public boolean copyUsername(Password selectedItem) {
-        if (selectedItem == null) return false;
-        JavaFxUtil.copyToClipBoard(selectedItem.getUsername());
+    public boolean copyUsername(String username) {
+        JavaFxUtil.copyToClipBoard(username);
         return true;
     }
 

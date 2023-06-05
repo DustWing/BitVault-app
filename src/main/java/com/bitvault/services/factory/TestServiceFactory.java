@@ -39,7 +39,8 @@ public class TestServiceFactory implements ServiceFactory {
                 "#FFFFFF",
                 LocalDateTime.now(),
                 null,
-                "PASSWORD"
+                "Password",
+                false
         );
 
         SecureDetails secureDetails = new SecureDetails(

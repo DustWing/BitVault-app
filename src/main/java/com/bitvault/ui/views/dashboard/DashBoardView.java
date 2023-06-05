@@ -4,24 +4,25 @@ import com.bitvault.security.UserSession;
 import com.bitvault.ui.async.AsyncTask;
 import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.alert.ErrorAlert;
+import com.bitvault.ui.utils.BvInsets;
 import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
 import com.bitvault.ui.views.password.PasswordVM;
 import com.bitvault.ui.views.password.PasswordView;
+import com.bitvault.ui.views.sync.SyncView;
+import com.bitvault.ui.views.sync.SyncViewModel;
 import com.bitvault.util.Labels;
-import com.bitvault.util.ResourceLoader;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
-
-import java.net.URL;
 
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignC.COG;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignH.HOME;
@@ -33,7 +34,7 @@ public final class DashBoardView extends BorderPane {
 
     private final DashBoardVM dashBoardVM;
 
-    private Button button;
+    private final TilePane tilePane;
 
     public static DashBoardView create(UserSession userSession) {
         DashBoardVM dashBoardVM = new DashBoardVM(userSession);
@@ -44,13 +45,10 @@ public final class DashBoardView extends BorderPane {
         this.dashBoardVM = dashBoardVM;
         MenuBar menuBar = menuBar();
 
-        final URL iconUrl = ResourceLoader.loadURL("/com.bitvault/icons/256moth.png");
-
-        button = new BvButton("", new ImageView(iconUrl.toExternalForm()))
-                .action(event -> createPasswordView());
+        this.tilePane = createButtons();
 
         this.setTop(menuBar);
-        this.setCenter(button);
+        this.setCenter(tilePane);
     }
 
 
@@ -79,8 +77,33 @@ public final class DashBoardView extends BorderPane {
         return menuBar;
     }
 
+
+    private TilePane createButtons() {
+
+        Button passBtn = new BvButton("Passwords")
+                .action(event -> createPasswordView())
+                .withDefaultSize();
+
+        Button syncBtn = new BvButton("Sync")
+                .action(event -> createSyncView())
+                .withDefaultSize();
+
+        TilePane tilePane = new TilePane();
+        tilePane.getChildren().add(passBtn);
+        tilePane.getChildren().add(syncBtn);
+
+        tilePane.setTileAlignment(Pos.CENTER);
+        tilePane.setHgap(10);
+        tilePane.setVgap(10);
+
+        BorderPane.setAlignment(tilePane, Pos.CENTER);
+        BorderPane.setMargin(tilePane, BvInsets.all10);
+
+        return tilePane;
+    }
+
     private void homeAction() {
-        this.setCenter(button);
+        this.setCenter(tilePane);
     }
 
 
@@ -95,10 +118,16 @@ public final class DashBoardView extends BorderPane {
 
     private void createPasswordView() {
 
-        AsyncTask.toRun(() -> {
-                            final PasswordVM passwordVM = new PasswordVM(dashBoardVM.getUserSession());
-                            return new PasswordView(passwordVM);
-                        }
+        AsyncTask.toRun(() -> new PasswordView(new PasswordVM(dashBoardVM.getUserSession()))
+                ).onFailure(asyncTaskException -> ErrorAlert.show("DashBoard", asyncTaskException))
+                .onSuccess(passwordView -> Platform.runLater(() -> this.setCenter(passwordView)))
+                .start();
+
+    }
+
+    private void createSyncView() {
+
+        AsyncTask.toRun(() -> new SyncView(new SyncViewModel(this.dashBoardVM.getUserSession()))
                 ).onFailure(asyncTaskException -> ErrorAlert.show("DashBoard", asyncTaskException))
                 .onSuccess(passwordView -> Platform.runLater(() -> this.setCenter(passwordView)))
                 .start();

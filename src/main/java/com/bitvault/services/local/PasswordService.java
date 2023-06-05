@@ -7,6 +7,7 @@ import com.bitvault.database.models.ProfileDM;
 import com.bitvault.database.models.SecureDetailsDM;
 import com.bitvault.database.provider.ConnectionProvider;
 import com.bitvault.security.EncryptionProvider;
+import com.bitvault.services.exceptions.CategoryException;
 import com.bitvault.services.interfaces.IPasswordService;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
@@ -25,7 +26,6 @@ import java.util.stream.Collectors;
 public class PasswordService implements IPasswordService {
 
     private final ConnectionProvider connectionProvider;
-
     private final EncryptionProvider encryptionProvider;
 
     public PasswordService(final ConnectionProvider connectionProvider, EncryptionProvider encryptionProvider) {
@@ -68,42 +68,46 @@ public class PasswordService implements IPasswordService {
 
             checkCategory(connection, password.getSecureDetails().getCategory());
 
-            try {
-
-                final String id = UUID.randomUUID().toString();
-
-                //save details
-                final SecureDetailsDM secureDetailsDM = saveSecureDetails(connection, id, password.getSecureDetails());
-
-                //save pass
-                final PasswordDM passwordDM = savePasswordDM(connection, id, password);
-
-                connection.commit();
-
-                final SecureDetails secureDetails = SecureDetailsDM.convert(
-                        secureDetailsDM,
-                        password.getSecureDetails().getCategory(),
-                        password.getSecureDetails().getProfile()
-                );
-
-                final Password passwordResult = new Password(
-                        passwordDM.id(),
-                        password.getUsername(),
-                        passwordDM.password(),
-                        secureDetails);
-
-                return Result.ok(passwordResult);
-
-            } catch (SQLException e) {
-                connection.rollback();
-                throw e;
-            }
+            return save(password, connection);
 
         } catch (SQLException e) {
             return Result.error(e);
         }
-
     }
+
+    private Result<Password> save(Password password, Connection connection) throws SQLException {
+        try {
+
+            final String id = UUID.randomUUID().toString();
+
+            //save details
+            final SecureDetailsDM secureDetailsDM = saveSecureDetails(connection, id, password.getSecureDetails());
+
+            //save pass
+            final PasswordDM passwordDM = savePasswordDM(connection, id, password);
+
+            connection.commit();
+
+            final SecureDetails secureDetails = SecureDetailsDM.convert(
+                    secureDetailsDM,
+                    password.getSecureDetails().getCategory(),
+                    password.getSecureDetails().getProfile()
+            );
+
+            final Password passwordResult = new Password(
+                    passwordDM.id(),
+                    password.getUsername(),
+                    passwordDM.password(),
+                    secureDetails);
+
+            return Result.ok(passwordResult);
+
+        } catch (SQLException e) {
+            connection.rollback();
+            return Result.error(e);
+        }
+    }
+
 
     private void checkProfile(Connection connection, String id) {
 
@@ -123,7 +127,7 @@ public class PasswordService implements IPasswordService {
 
         if (categoryDM == null) {
             //Applicable only if file was edited by hand or error in code
-            throw new IllegalArgumentException("No category found");
+            throw CategoryException.notFound();
         }
 
     }
@@ -157,43 +161,48 @@ public class PasswordService implements IPasswordService {
 
             checkCategory(connection, password.getSecureDetails().getCategory());
 
-            try {
-                final SecureDetailsDM secureDetailsDM = SecureDetailsDM.convert(password.getSecureDetails());
-
-                final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
-                secureDetailsDao.update(secureDetailsDM);
-
-                final String encryptUsername = encryptionProvider.encrypt(password.getUsername());
-                final String encryptPassword = encryptionProvider.encrypt(password.getPassword());
-                final PasswordDM passwordDM = new PasswordDM(password.getId(), encryptUsername, encryptPassword, password.getId());
-
-                final IPasswordDao passwordDao = new PasswordDao(connection);
-                passwordDao.update(passwordDM);
-
-                connection.commit();
-
-                //Rebuild password
-                final SecureDetails secureDetails = SecureDetailsDM.convert(
-                        secureDetailsDM,
-                        password.getSecureDetails().getCategory(),
-                        password.getSecureDetails().getProfile()
-                );
-
-                final Password passwordResult = new Password(
-                        passwordDM.id(),
-                        password.getUsername(),
-                        passwordDM.password(),
-                        secureDetails
-                );
-
-                return Result.ok(passwordResult);
-
-            } catch (SQLException e) {
-                connection.rollback();
-                return Result.error(e);
-            }
+            return saveUpdate(password, connection);
 
         } catch (SQLException e) {
+            return Result.error(e);
+        }
+    }
+
+    private Result<Password> saveUpdate(Password password, Connection connection) throws SQLException {
+        try {
+            final SecureDetailsDM secureDetailsDM = SecureDetailsDM.convertForUpdate(password.getSecureDetails());
+
+            final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
+            secureDetailsDao.update(secureDetailsDM);
+
+            final String encryptUsername = encryptionProvider.encrypt(password.getUsername());
+
+            final String encryptPassword = encryptionProvider.encrypt(password.getPassword());
+
+            final PasswordDM passwordDM = new PasswordDM(password.getId(), encryptUsername, encryptPassword, password.getId());
+
+            final IPasswordDao passwordDao = new PasswordDao(connection);
+            passwordDao.update(passwordDM);
+
+            connection.commit();
+
+            final SecureDetails secureDetails = SecureDetailsDM.convert(
+                    secureDetailsDM,
+                    password.getSecureDetails().getCategory(),
+                    password.getSecureDetails().getProfile()
+            );
+
+            final Password passwordResult = new Password(
+                    passwordDM.id(),
+                    password.getUsername(),
+                    passwordDM.password(),
+                    secureDetails
+            );
+
+            return Result.ok(passwordResult);
+
+        } catch (SQLException e) {
+            connection.rollback();
             return Result.error(e);
         }
     }
@@ -202,7 +211,6 @@ public class PasswordService implements IPasswordService {
     public Result<Boolean> delete(Password password) {
 
         try (Connection connection = connectionProvider.connect()) {
-
 
             final ISecureDetailsDao secureDetailsDao = new SecureDetailsDao(connection);
             secureDetailsDao.delete(password.getSecureDetails().getId());
@@ -215,7 +223,6 @@ public class PasswordService implements IPasswordService {
         } catch (SQLException e) {
             return Result.error(e);
         }
-
     }
 
     private List<Password> convert(

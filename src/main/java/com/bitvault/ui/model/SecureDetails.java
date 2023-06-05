@@ -1,23 +1,44 @@
 package com.bitvault.ui.model;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Optional;
 
 public final class SecureDetails {
     private final String id;
-    private final Category category;
-    private final Profile profile;
-    private final String domain;
-    private final String title;
-    private final String description;
-    private final boolean favourite;
-    private final LocalDateTime createdOn;
-    private final LocalDateTime modifiedOn;
-    private final LocalDateTime expiresOn;
-    private final LocalDateTime importedOn;
-    private final boolean requiresMp;
-    private final boolean shared;
+    private final SimpleObjectProperty<Category> category;
+    private final SimpleObjectProperty<Profile> profile;
+    private final SimpleStringProperty domain;
+    private final SimpleStringProperty title;
+    private final SimpleStringProperty description;
+    private final SimpleBooleanProperty favourite;
+    private final SimpleObjectProperty<LocalDateTime> createdOn;
+    private final SimpleObjectProperty<LocalDateTime> modifiedOn;
+    private final SimpleObjectProperty<LocalDateTime> expiresOn;
+    private final SimpleObjectProperty<LocalDateTime> importedOn;
+    private final SimpleBooleanProperty requiresMp;
+    private final SimpleBooleanProperty shared;
+
+
+    public static SecureDetails prepareNew(String id, Category category, Profile profile) {
+        return new SecureDetails(
+                id,
+                category,
+                profile,
+                "",
+                "",
+                "",
+                false,
+                null,
+                null,
+                null,
+                null,
+                false,
+                false
+        );
+    }
 
     public SecureDetails(
             String id,
@@ -35,18 +56,51 @@ public final class SecureDetails {
             boolean shared
     ) {
         this.id = id;
-        this.category = category;
-        this.profile = profile;
-        this.domain = domain;
-        this.title = title;
-        this.description = description;
-        this.favourite = favourite;
-        this.createdOn = createdOn;
-        this.modifiedOn = modifiedOn;
-        this.expiresOn = expiresOn;
-        this.importedOn = importedOn;
-        this.requiresMp = requiresMp;
-        this.shared = shared;
+        this.category = new SimpleObjectProperty<>(category);
+        this.profile = new SimpleObjectProperty<>(profile);
+        this.domain = new SimpleStringProperty(domain);
+        this.title = new SimpleStringProperty(title);
+        this.description = new SimpleStringProperty(description);
+        this.favourite = new SimpleBooleanProperty(favourite);
+        this.createdOn = new SimpleObjectProperty<>(createdOn);
+        this.modifiedOn = new SimpleObjectProperty<>(modifiedOn);
+        this.expiresOn = new SimpleObjectProperty<>(expiresOn);
+        this.importedOn = new SimpleObjectProperty<>(importedOn);
+        this.requiresMp = new SimpleBooleanProperty(requiresMp);
+        this.shared = new SimpleBooleanProperty(shared);
+    }
+
+    public SecureDetails deepCopy() {
+        return new SecureDetails(
+                this.getId(),
+                this.getCategory(), // not deep copy
+                this.getProfile(),// not deep copy
+                this.getDomain(),
+                this.getTitle(),
+                this.getDescription(),
+                this.isFavourite(),
+                this.getCreatedOn(),
+                this.getModifiedOn(),
+                this.getExpiresOn(),
+                this.getImportedOn(),
+                this.isRequiresMp(),
+                this.isShared()
+        );
+    }
+
+    public void update(SecureDetails secureDetails) {
+        this.categoryProperty().set(secureDetails.getCategory());
+        this.profileProperty().set(secureDetails.getProfile());
+        this.domainProperty().set(secureDetails.getDomain());
+        this.titleProperty().set(secureDetails.getTitle());
+        this.descriptionProperty().set(secureDetails.getDescription());
+        this.favouriteProperty().set(secureDetails.isFavourite());
+        this.createdOnProperty().set(secureDetails.getCreatedOn());
+        this.modifiedOnProperty().set(secureDetails.getModifiedOn());
+        this.expiresOnProperty().set(secureDetails.getExpiresOn());
+        this.importedOnProperty().set(secureDetails.getImportedOn());
+        this.requiresMpProperty().set(secureDetails.isRequiresMp());
+        this.sharedProperty().set(secureDetails.isShared());
     }
 
     public String getId() {
@@ -54,99 +108,99 @@ public final class SecureDetails {
     }
 
     public Category getCategory() {
+        return category.get();
+    }
+
+    public SimpleObjectProperty<Category> categoryProperty() {
         return category;
     }
 
     public Profile getProfile() {
+        return profile.get();
+    }
+
+    public SimpleObjectProperty<Profile> profileProperty() {
         return profile;
     }
 
     public String getDomain() {
+        return domain.get();
+    }
+
+    public SimpleStringProperty domainProperty() {
         return domain;
     }
 
     public String getTitle() {
+        return title.get();
+    }
+
+    public SimpleStringProperty titleProperty() {
         return title;
     }
 
     public String getDescription() {
+        return description.get();
+    }
+
+    public SimpleStringProperty descriptionProperty() {
         return description;
     }
 
     public boolean isFavourite() {
+        return favourite.get();
+    }
+
+    public SimpleBooleanProperty favouriteProperty() {
         return favourite;
     }
 
     public LocalDateTime getCreatedOn() {
+        return createdOn.get();
+    }
+
+    public SimpleObjectProperty<LocalDateTime> createdOnProperty() {
         return createdOn;
     }
 
     public LocalDateTime getModifiedOn() {
+        return modifiedOn.get();
+    }
+
+    public SimpleObjectProperty<LocalDateTime> modifiedOnProperty() {
         return modifiedOn;
     }
 
     public LocalDateTime getExpiresOn() {
+        return expiresOn.get();
+    }
+
+    public SimpleObjectProperty<LocalDateTime> expiresOnProperty() {
         return expiresOn;
     }
 
-    public Optional<LocalDateTime> getExpiresOnOpt() {
-        return Optional.ofNullable(expiresOn);
+    public LocalDateTime getImportedOn() {
+        return importedOn.get();
     }
 
-    public LocalDateTime getImportedOn() {
+    public SimpleObjectProperty<LocalDateTime> importedOnProperty() {
         return importedOn;
     }
 
     public boolean isRequiresMp() {
+        return requiresMp.get();
+    }
+
+    public SimpleBooleanProperty requiresMpProperty() {
         return requiresMp;
     }
 
     public boolean isShared() {
+        return shared.get();
+    }
+
+    public SimpleBooleanProperty sharedProperty() {
         return shared;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (SecureDetails) obj;
-        return Objects.equals(this.id, that.id) &&
-                Objects.equals(this.category, that.category) &&
-                Objects.equals(this.profile, that.profile) &&
-                Objects.equals(this.domain, that.domain) &&
-                Objects.equals(this.title, that.title) &&
-                Objects.equals(this.description, that.description) &&
-                this.favourite == that.favourite &&
-                Objects.equals(this.createdOn, that.createdOn) &&
-                Objects.equals(this.modifiedOn, that.modifiedOn) &&
-                Objects.equals(this.expiresOn, that.expiresOn) &&
-                Objects.equals(this.importedOn, that.importedOn) &&
-                this.requiresMp == that.requiresMp &&
-                this.shared == that.shared;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, category, profile, domain, title, description, favourite, createdOn, modifiedOn, expiresOn, importedOn, requiresMp, shared);
-    }
-
-    @Override
-    public String toString() {
-        return "SecureDetails[" +
-                "id=" + id + ", " +
-                "category=" + category + ", " +
-                "profile=" + profile + ", " +
-                "domain=" + domain + ", " +
-                "title=" + title + ", " +
-                "description=" + description + ", " +
-                "favourite=" + favourite + ", " +
-                "createdOn=" + createdOn + ", " +
-                "modifiedOn=" + modifiedOn + ", " +
-                "expiresOn=" + expiresOn + ", " +
-                "importedOn=" + importedOn + ", " +
-                "requiresMp=" + requiresMp + ", " +
-                "shared=" + shared + ']';
-    }
-
 
 }

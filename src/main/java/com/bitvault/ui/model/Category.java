@@ -11,7 +11,8 @@ public record Category(
         String color,
         LocalDateTime createdOn,
         LocalDateTime modifiedOn,
-        String type
+        String type,
+        boolean deleted
 
 ) implements ITextColorCell, Identifiable {
 
@@ -25,7 +26,8 @@ public record Category(
                 color,
                 null,
                 null,
-                null
+                null,
+                false
         );
     }
 
@@ -40,7 +42,8 @@ public record Category(
                 color,
                 null,
                 null,
-                type
+                type,
+                false
         );
     }
 
@@ -56,7 +59,8 @@ public record Category(
                 color,
                 null,
                 null,
-                type
+                type,
+                false
         );
     }
 

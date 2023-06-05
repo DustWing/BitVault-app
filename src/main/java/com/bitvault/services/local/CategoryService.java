@@ -73,7 +73,7 @@ public class CategoryService implements ICategoryService {
             final CategoryDM categoryDM = categoryDao.get(category.id());
 
             if (categoryDM == null) {
-                return Result.error(new CategoryException("no.category.found"));
+                return Result.error(CategoryException.notFound());
             }
 
             final CategoryDM tpUpdate = CategoryDM.convertUpdate(category);
@@ -98,7 +98,7 @@ public class CategoryService implements ICategoryService {
             int count = secureDetailsDao.countByCategoryId(id);
 
             if (count > 0) {
-                return Result.error(new CategoryException("category.must.be.empty.to.delete"));
+                return Result.error(CategoryException.cannotDelete());
             }
 
             final ICategoryDao categoryDao = new CategoryDao(connection);
@@ -106,7 +106,7 @@ public class CategoryService implements ICategoryService {
             final CategoryDM categoryDM = categoryDao.get(id);
 
             if (categoryDM == null) {
-                return Result.error(new CategoryException("no.category.found"));
+                return Result.error(CategoryException.notFound());
             }
 
             categoryDao.delete(id);

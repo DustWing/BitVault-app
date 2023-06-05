@@ -1,5 +1,9 @@
 package com.bitvault.ui.hyperlink;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public interface IWebLocation {
-     String getUrl();
+     String getDomain();
+
+     SimpleStringProperty domainProperty();
 }

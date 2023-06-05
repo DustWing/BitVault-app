@@ -13,7 +13,7 @@ public class CategoryDao implements ICategoryDao {
 
     private static final String sGetQ = "SELECT * FROM t_categories";
     private static final String sGetByIdQ = "SELECT * FROM t_categories WHERE ID=?";
-    private static final String sCreateQ = "INSERT INTO t_categories VALUES (?,?,?,?,?,?)";
+    private static final String sCreateQ = "INSERT INTO t_categories VALUES (?,?,?,?,?,?,?)";
     private static final String sUpdateQ = "UPDATE t_categories SET name=?, color=?, modified_on=? WHERE ID=?";
     private static final String sDeleteQ = "DELETE FROM t_categories WHERE ID=?";
 
@@ -57,6 +57,7 @@ public class CategoryDao implements ICategoryDao {
             stm.setString(4, category.createdOn());
             stm.setString(5, null);
             stm.setString(6, category.type());
+            stm.setInt(7, 0);
 
             stm.execute();
 

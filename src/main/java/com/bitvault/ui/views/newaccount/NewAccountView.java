@@ -5,12 +5,10 @@ import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.components.textfield.BvPasswordInput;
 import com.bitvault.ui.components.textfield.BvTextField;
-import com.bitvault.ui.utils.BvInsets;
-import com.bitvault.ui.utils.BvSceneSize;
-import com.bitvault.ui.utils.JavaFxUtil;
-import com.bitvault.ui.utils.ViewLoader;
+import com.bitvault.ui.utils.*;
 import com.bitvault.ui.views.dashboard.DashBoardView;
 import com.bitvault.util.Labels;
+import com.bitvault.util.Messages;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -52,16 +50,23 @@ public class NewAccountView extends VBox {
         );
 
         final FontIcon folderIcon = new FontIcon(FOLDER);
-        final BvButton chooseFileBtn = new BvButton("",folderIcon);
+        final BvButton chooseFileBtn = new BvButton("", folderIcon);
         chooseFileBtn.setOnAction(event -> chooseFileAction());
+
+        final BvTextField filePath = new BvTextField()
+                .withBinding(newAccountVM.locationProperty())
+                .withPromptText(Labels.i18n("file.path"))
+                .withDefaultSize()
+                .withRight(chooseFileBtn)
+                .required(true)
+                .toolTip(Messages.i18n("choose.database.file.location"));
 
         final BvTextField fileName = new BvTextField()
                 .withBinding(newAccountVM.fileNameProperty())
                 .withPromptText(Labels.i18n("file.name"))
                 .withDefaultSize()
-                .withLeft(fileFolderLbl)
-                .withRight(chooseFileBtn)
-                .required(true);
+                .required(true)
+                .toolTip(Messages.i18n("choose.database.name"));
 
         BvButton loginButton = new BvButton(Labels.i18n("create")).withDefaultSize();
         loginButton.setOnAction(event -> createBtnAction());
@@ -71,17 +76,19 @@ public class NewAccountView extends VBox {
         newAccountVM.getValidatedForm().addAll(
                 username,
                 password,
+                filePath,
                 fileName
         );
 
         this.getChildren().addAll(
                 username,
                 password,
+                filePath,
                 fileName,
                 loginButton
         );
 
-        this.setSpacing(10);
+        this.setSpacing(BvSpacing.SMALL);
         this.setAlignment(Pos.CENTER);
         this.setFillWidth(true);
         this.setPadding(BvInsets.all10);

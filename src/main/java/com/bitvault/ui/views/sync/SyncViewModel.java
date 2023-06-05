@@ -1,6 +1,7 @@
 package com.bitvault.ui.views.sync;
 
 import com.bitvault.BitVault;
+import com.bitvault.security.EncryptionProvider;
 import com.bitvault.security.UserSession;
 import com.bitvault.server.cache.ImportCache;
 import com.bitvault.server.dto.SecureItemRqDto;
@@ -8,15 +9,10 @@ import com.bitvault.server.endpoints.EndpointResolver;
 import com.bitvault.server.http.HttpServer;
 import com.bitvault.ui.exceptions.ViewLoadException;
 import com.bitvault.ui.model.*;
-import com.bitvault.util.DateTimeUtils;
-import com.bitvault.util.Json;
-import com.bitvault.util.QrUtils;
-import com.bitvault.util.Result;
-import javafx.beans.property.SimpleStringProperty;
+import com.bitvault.util.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
-import org.sqlite.util.StringUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -29,14 +25,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class SyncViewModel {
-
-    private static final String newLine = System.getProperty("line.separator");
     private HttpServer httpServer;
-    private ImportCache importCache;
-    private final ObservableList<SyncValue<Password>> passwords = FXCollections.observableList(new ArrayList<>());
-    private final SimpleStringProperty log = new SimpleStringProperty();
     private final UserSession userSession;
     private final List<Password> oldPasswords;
+    private final List<Category> categories;
+
+    private final ObservableList<SyncValue<Password>> passwords = FXCollections.observableList(new ArrayList<>());
+
 
     public SyncViewModel(UserSession userSession) {
         this.userSession = userSession;
@@ -48,7 +43,18 @@ public class SyncViewModel {
         if (passwords.hasError()) {
             throw new RuntimeException(passwords.getError());
         }
+
         oldPasswords = passwords.get();
+
+        final Result<List<Category>> categoriesRes = this.userSession.getServiceFactory()
+                .getCategoryService()
+                .getCategories();
+
+        if (categoriesRes.hasError()) {
+            throw new RuntimeException(passwords.getError());
+        }
+        categories = categoriesRes.get();
+
     }
 
     public Result<Image> createQrdImage(int port) {
@@ -64,8 +70,6 @@ public class SyncViewModel {
         if (serialized.hasError()) {
             throw new ViewLoadException(serialized.getError());
         }
-
-        appendText("Host: %s".formatted(serialized.get()));
 
         final Result<BufferedImage> bufferedImageResult = QrUtils.generateQRCode(serialized.get(), 200, 200);
 
@@ -94,9 +98,7 @@ public class SyncViewModel {
         }
     }
 
-    /**
-     * @return the Port of the local server
-     */
+
     public Result<Integer> startServer() {
 
         stopServer();
@@ -106,71 +108,33 @@ public class SyncViewModel {
             return Result.error(portResult.getError());
         }
 
-        importCache = ImportCache.createDefault(this::onAddPassword);
-
-        EndpointResolver endpointResolver = EndpointResolver.create(importCache);
+        final ImportCache importCache = ImportCache.createDefault(this::onAddPassword);
+        final EndpointResolver endpointResolver = EndpointResolver.create(importCache);
         httpServer = HttpServer.create(portResult.get(), endpointResolver);
-        httpServer.addListener(
-                msg -> {
-                    if (msg.hasError()) {
-                        appendText(msg.getError().getMessage());
-                    } else {
-                        appendText(msg.get());
-                    }
-                }
-        );
 
         Thread thread = new Thread(() -> httpServer.start());
         thread.start();
         BitVault.addCloseAction(this::stopServer);
 
-        appendText("SERVER STARTED");
-
         return Result.ok(portResult.get());
     }
 
-    private void appendText(String text) {
-        var log = "%s-->%s".formatted(DateTimeUtils.getTimeNow(), text) + newLine;
-        this.log.set(log);
-    }
 
-    public void stopServer() {
-        if (httpServer != null) {
-            httpServer.stop();
-        }
-    }
-
-    public void showCache() {
-
-        if (importCache == null) {
-            appendText("You need to start the server to initialize the cache.");
-            return;
-        }
-
-        List<String> strings = importCache.getCache()
-                .stream()
-                .map(Object::toString)
-                .toList();
-        String join = StringUtils.join(strings, newLine);
-        appendText("===CACHE====" + newLine + join);
-    }
-
-
-    private void onAddPassword(SecureItemRqDto.LocalPasswordDto localPasswordDto) {
+    public void onAddPassword(SecureItemRqDto.LocalPasswordDto localPasswordDto) {
         final Password passwordNew = fromDto(localPasswordDto);
 
         final Optional<Password> passwordOpt = oldPasswords.stream()
                 .filter(old -> passwordNew.getUsername().equals(old.getUsername())
                         && passwordNew.getSecureDetails().getDomain().equals(old.getSecureDetails().getDomain())
-                        && passwordNew.getSecureDetails().getProfile().id().equals(old.getSecureDetails().getProfile().id())
                 )
                 .findAny();
 
         final SyncValue<Password> syncValue;
+
         if (passwordOpt.isPresent()) {
-            appendText("Already found CHANGED:" + passwordNew);
-            appendText("Already found OLD:" + passwordOpt.get());
             syncValue = SyncValue.createConflict(passwordOpt.get(), passwordNew);
+        } else if (passwordNew.getSecureDetails().getCategory() == null) {
+            syncValue = SyncValue.createWarning(passwordNew, Messages.i18n("category.not.found"));
         } else {
             syncValue = SyncValue.createNew(passwordNew);
         }
@@ -180,19 +144,16 @@ public class SyncViewModel {
 
     private Password fromDto(SecureItemRqDto.LocalPasswordDto localPasswordDto) {
 
-        final Category category = new Category(
-                localPasswordDto.category(),
-                localPasswordDto.category(),
-                "",
-                null,
-                null,
-                null
-        );
+        Optional<Category> categoryOpt = categories.stream()
+                .filter(category -> category.name().equals(localPasswordDto.category()))
+                .findAny();
+
+        final Category category = categoryOpt.orElse(null);
 
         final SecureDetails secureDetails = new SecureDetails(
                 localPasswordDto.id(),
                 category,
-                null,
+                userSession.getProfile(),
                 localPasswordDto.domainDetails() == null ? null : localPasswordDto.domainDetails().domain(),
                 "No title",
                 localPasswordDto.description(),
@@ -214,12 +175,20 @@ public class SyncViewModel {
         return password;
     }
 
-
-    public SimpleStringProperty logTestProperty() {
-        return log;
+    public void stopServer() {
+        if (httpServer != null) {
+            httpServer.stop();
+        }
     }
 
     public ObservableList<SyncValue<Password>> getPasswords() {
         return passwords;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+    public EncryptionProvider getEncryptionProvider(){
+        return userSession.getEncryptionProvider();
     }
 }

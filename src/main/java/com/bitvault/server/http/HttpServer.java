@@ -11,11 +11,16 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class HttpServer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(HttpServer.class);
+
     private final int mPort;
     private final EventLoopGroup mBossGroup;
     private final EventLoopGroup mWorkerGroup;
@@ -70,6 +75,8 @@ public class HttpServer {
 
     public void start() {
         try {
+            onMsg("-------- STARTING Server Port %d--------".formatted(mPort));
+
             mChannelFuture.sync();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -82,12 +89,13 @@ public class HttpServer {
 
 
     public void stop() {
-        onMsg("SHUTTING DOWN - fu");
+        onMsg("-------- SHUTTING DOWN Server Port %d--------".formatted(mPort));
         mBossGroup.shutdownGracefully();
         mWorkerGroup.shutdownGracefully();
     }
 
     private void onMsg(String msg) {
+        LOG.info(msg);
         serverListeners.forEach(e -> e.onMessage(Result.ok(msg)));
     }
 

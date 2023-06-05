@@ -9,7 +9,7 @@ import javafx.util.Callback;
 public class HyperLinkCell<S extends IWebLocation> implements Callback<TableColumn<S, String>, TableCell<S, String>> {
     @Override
     public TableCell<S, String> call(TableColumn<S, String> param) {
-        TableCell<S, String> cell = new TableCell<>() {
+        return new TableCell<>() {
 
             private final Hyperlink hyperlink = new Hyperlink();
 
@@ -32,7 +32,6 @@ public class HyperLinkCell<S extends IWebLocation> implements Callback<TableColu
                 }
             }
         };
-        return cell;
 
     }
 }

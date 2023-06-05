@@ -1,34 +1,45 @@
 package com.bitvault.ui.model;
 
 import com.bitvault.ui.hyperlink.IWebLocation;
-
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 
 public class SyncValue<T extends IWebLocation> implements IWebLocation {
 
-    public enum Action {
+    public enum ActionState {
         SAVE,
         DISCARD,
-        NONE
+        REQUIRED,
+        NON_REQUIRED
 
     }
 
 
-    private Action action = Action.NONE;
     private final T oldValue;
     private final T newValue;
 
+
+    private final SimpleObjectProperty<ActionState> actionState;
+    private final SimpleStringProperty warningMsg;
+
     public static <T extends IWebLocation> SyncValue<T> createNew(T newValue) {
-        return new SyncValue<>(null, newValue);
+        return new SyncValue<>(null, newValue, ActionState.NON_REQUIRED, "");
     }
 
     public static <T extends IWebLocation> SyncValue<T> createConflict(T oldValue, T newValue) {
-        return new SyncValue<>(oldValue, newValue);
+        return new SyncValue<>(oldValue, newValue, ActionState.REQUIRED, "conflict");
     }
 
-    private SyncValue(T oldValue, T newValue) {
+    public static <T extends IWebLocation> SyncValue<T> createWarning(T newValue, String warning) {
+        return new SyncValue<>(null, newValue, ActionState.REQUIRED, warning);
+    }
+
+    private SyncValue(T oldValue, T newValue, ActionState actionState, String warning) {
         this.oldValue = oldValue;
         this.newValue = newValue;
+        this.actionState = new SimpleObjectProperty<>(actionState);
+        this.warningMsg = new SimpleStringProperty(warning);
     }
 
     public T getOldValue() {
@@ -43,22 +54,31 @@ public class SyncValue<T extends IWebLocation> implements IWebLocation {
         return oldValue == null;
     }
 
-    public void setAction(Action action) {
-        this.action = action;
+
+    public ActionState getActionState() {
+        return actionState.get();
     }
 
-    public Action getAction() {
-        return action;
+    public SimpleObjectProperty<ActionState> actionStateProperty() {
+        return actionState;
     }
 
-    public boolean warning() {
-        return !isNew() && action.equals(Action.NONE);
+
+    public String getWarningMsg() {
+        return warningMsg.get();
+    }
+
+    public SimpleStringProperty warningMsgProperty() {
+        return warningMsg;
     }
 
     @Override
-    public String getUrl() {
-        return this.getNewValue().getUrl();
+    public String getDomain() {
+        return this.getNewValue().getDomain();
     }
 
-
+    @Override
+    public SimpleStringProperty domainProperty() {
+        return this.getNewValue().domainProperty();
+    }
 }

@@ -1,52 +1,67 @@
 package com.bitvault.ui.views.sync;
 
+import com.bitvault.security.EncryptionProvider;
 import com.bitvault.ui.hyperlink.HyperLinkCell;
-import com.bitvault.ui.model.Password;
-import com.bitvault.ui.model.SyncValue;
+import com.bitvault.ui.model.*;
 import com.bitvault.ui.utils.BvStyles;
-import javafx.beans.property.SimpleObjectProperty;
+import com.bitvault.util.Labels;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class PasswordSyncTable extends TableView<SyncValue<Password>> {
+import java.util.List;
+
+public class PasswordSyncTable extends TableView<SyncValue<Password>>{
+
+    private final SyncViewModel syncViewModel;
+
+    public PasswordSyncTable(SyncViewModel syncViewModel) {
+        this.syncViewModel = syncViewModel;
+    }
 
 
+    public static TableView<SyncValue<Password>> createTable(
+            ObservableList<SyncValue<Password>> passwords,
+            List<Category> categories,
+            EncryptionProvider encryptionProvider
+    ) {
 
-    public PasswordSyncTable(ObservableList<SyncValue<Password>> passwords) {
+        TableView<SyncValue<Password>> tableView = new TableView<>();
 
-        this.setItems(passwords);
-        this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        this.setRowFactory(param -> new SyncTableRowFactory<>());
+        tableView.setItems(passwords);
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableView.setRowFactory(param -> new SyncPasswordTableRowFactory(categories, encryptionProvider));
 
-        final TableColumn<SyncValue<Password>, Boolean> iconC = new TableColumn<>("");
-        iconC.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().warning()));
+        final TableColumn<SyncValue<Password>, SyncValue.ActionState> iconC = new TableColumn<>("");
+        iconC.setCellValueFactory(cellData -> cellData.getValue().actionStateProperty());
         iconC.setCellFactory(param -> new SyncTableIconCellFactory<>());
+        iconC.setPrefWidth(10);
 
-        final TableColumn<SyncValue<Password>, String> titleC = new TableColumn<>("Title");
-        titleC.setCellValueFactory(cellData ->
-                new SimpleObjectProperty<>(cellData.getValue().getNewValue().getSecureDetails().getTitle())
-        );
+        final TableColumn<SyncValue<Password>, String> titleC = new TableColumn<>(Labels.i18n("title"));
+        titleC.setCellValueFactory(cellData -> cellData.getValue().getNewValue().getSecureDetails().titleProperty());
 
-        final TableColumn<SyncValue<Password>, String> userNameC = new TableColumn<>("Username");
-        userNameC.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getNewValue().getUsername()));
+        final TableColumn<SyncValue<Password>, String> userNameC = new TableColumn<>(Labels.i18n("username"));
+        userNameC.setCellValueFactory(cellData -> cellData.getValue().getNewValue().usernameProperty());
 
-        final TableColumn<SyncValue<Password>, String> descriptionC = new TableColumn<>("Description");
-        descriptionC.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getNewValue().getSecureDetails().getDescription()));
+        final TableColumn<SyncValue<Password>, String> descriptionC = new TableColumn<>(Labels.i18n("description"));
+        descriptionC.setCellValueFactory(cellData -> cellData.getValue().getNewValue().getSecureDetails().descriptionProperty());
 
-        final TableColumn<SyncValue<Password>, String> domainC = new TableColumn<>("Domain");
-        domainC.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getNewValue().getUrl()));
+        final TableColumn<SyncValue<Password>, String> domainC = new TableColumn<>(Labels.i18n("domain"));
+        domainC.setCellValueFactory(cellData -> cellData.getValue().getNewValue().domainProperty());
         domainC.setCellFactory(new HyperLinkCell<>());
 
-        this.getColumns().add(iconC);
-        this.getColumns().add(titleC);
-        this.getColumns().add(userNameC);
-        this.getColumns().add(descriptionC);
-        this.getColumns().add(domainC);
+        tableView.getColumns().add(iconC);
+        tableView.getColumns().add(titleC);
+        tableView.getColumns().add(userNameC);
+        tableView.getColumns().add(descriptionC);
+        tableView.getColumns().add(domainC);
 
         //to remove border
-        this.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
+        tableView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
+
+        return tableView;
 
     }
+
 
 }

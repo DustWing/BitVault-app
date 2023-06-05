@@ -37,7 +37,10 @@ public class UserService implements IUserService {
         final String newCred = authenticator.hash((user.name() + user.credentials()).toCharArray());
 
         final IDbCreator dbCreator = new DbCreator(connectionProvider);
-        dbCreator.create();
+        final Result<Boolean> booleanResult = dbCreator.create();
+        if (booleanResult.hasError()) {
+            return Result.error(booleanResult.getError());
+        }
 
         try (Connection connection = connectionProvider.connect()) {
             final UserDM convert = UserDM.convert(user.withNewCredentials(newCred));
@@ -68,7 +71,8 @@ public class UserService implements IUserService {
                 BvColors.toHex(Color.AQUA),
                 DateTimeUtils.formatToUtc(LocalDateTime.now()),
                 null,
-                "Password"
+                "Password",
+                false
         );
         categoryDao.create(defaultCat);
     }

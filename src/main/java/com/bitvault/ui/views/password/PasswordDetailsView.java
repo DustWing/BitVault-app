@@ -25,8 +25,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,8 +34,6 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignR.REFRESH;
 
 
 public class PasswordDetailsView extends BorderPane {
-
-    private static Logger logger = LoggerFactory.getLogger(PasswordDetailsView.class);
 
     private final PasswordDetailsVM passwordDetailsVM;
 
@@ -69,21 +65,21 @@ public class PasswordDetailsView extends BorderPane {
 
         final BvTextField titleTf = getTitleTf();
 
-        final BvTextField userName = getUserNameTf(passwordDetailsVM.userNamePropertyProperty());
+        final BvTextField userName = getUserNameTf(passwordDetailsVM.getPassword().usernameProperty());
         validatedForm.add(userName);
 
-        final BvPasswordInput passwordInput = getPassword(passwordDetailsVM.passwordPropertyProperty());
+        final BvPasswordInput passwordInput = getPassword(passwordDetailsVM.getPassword().passwordProperty());
         validatedForm.add(passwordInput);
-        final Button generatePassBtn = generatePassBtn(passwordDetailsVM.passwordPropertyProperty());
+        final Button generatePassBtn = generatePassBtn(passwordDetailsVM.getPassword().passwordProperty());
         final BvSimpleGrid passwordGenerate = BvSimpleGrid.createSingleDoubleColumn(passwordInput, generatePassBtn);
 
         //bind password property string -> password complexity
-        passwordDetailsVM.passwordPropertyProperty()
+        passwordDetailsVM.getPassword().passwordProperty()
                 .addListener((observable, oldValue, newValue) ->
-                        this.passBarProperty.set(calculatePasswordComplexity(this.passwordDetailsVM.getPasswordProperty()))
+                        this.passBarProperty.set(calculatePasswordComplexity(this.passwordDetailsVM.getPassword().getPassword()))
                 );
         //init password complexity bar
-        this.passBarProperty.set(calculatePasswordComplexity(this.passwordDetailsVM.getPasswordProperty()));
+        this.passBarProperty.set(calculatePasswordComplexity(this.passwordDetailsVM.getPassword().getPassword()));
         final ProgressBar progressBar = passwordBar(this.passBarProperty);
 
         final BvTextField domainTf = getDomainTf();
@@ -123,7 +119,7 @@ public class PasswordDetailsView extends BorderPane {
     private BvTextField getTitleTf() {
 
         final BvTextField titleTf = new BvTextField()
-                .withBinding(passwordDetailsVM.titlePropertyProperty())
+                .withBinding(passwordDetailsVM.getPassword().getSecureDetails().titleProperty())
                 .required(true)
                 .maxLength(50)
                 .withDefaultSize()
@@ -160,7 +156,7 @@ public class PasswordDetailsView extends BorderPane {
 
     private BvTextField getDomainTf() {
         final BvTextField domainTf = new BvTextField()
-                .withBinding(passwordDetailsVM.domainPropertyProperty())
+                .withBinding(passwordDetailsVM.getPassword().getSecureDetails().domainProperty())
                 .withDefaultSize()
                 .withPromptText(Labels.i18n("domain"));
         return domainTf;
@@ -168,7 +164,7 @@ public class PasswordDetailsView extends BorderPane {
 
     private TextArea createDescription() {
         TextArea descriptionTf = new TextArea();
-        descriptionTf.textProperty().bindBidirectional(passwordDetailsVM.descriptionPropertyProperty());
+        descriptionTf.textProperty().bindBidirectional(passwordDetailsVM.getPassword().getSecureDetails().descriptionProperty());
         descriptionTf.setPromptText(Labels.i18n("description"));
         descriptionTf.setMinWidth(BvWidths.SMALL);
         descriptionTf.setPrefWidth(BvWidths.LARGE);
@@ -190,14 +186,14 @@ public class PasswordDetailsView extends BorderPane {
 
         ObservableList<Category> categories = FXCollections.observableArrayList(passwordDetailsVM.getCategories());
         final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withCircle(categories);
-        categoriesDd.valueProperty().bindBidirectional(passwordDetailsVM.selectedCatProperty());
+        categoriesDd.valueProperty().bindBidirectional(this.passwordDetailsVM.getPassword().getSecureDetails().categoryProperty());
         JavaFxUtil.mediumSize(categoriesDd);
         return categoriesDd;
     }
 
     private CheckBox masterPassword() {
         CheckBox checkBox = new CheckBox(Labels.i18n("master.password"));
-        checkBox.selectedProperty().bindBidirectional(passwordDetailsVM.requiredMpProperty());
+        checkBox.selectedProperty().bindBidirectional(this.passwordDetailsVM.getPassword().getSecureDetails().requiresMpProperty());
         checkBox.setTooltip(new Tooltip(Messages.i18n("master.password.tooltip")));
         return checkBox;
     }

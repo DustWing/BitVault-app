@@ -42,7 +42,6 @@ public class NewAccountVM {
 
         final ServiceFactory serviceFactory = new LocalServiceFactory(location, encryptionProvider);
 
-
         User user = new User(
                 UUID.randomUUID().toString(),
                 getUsername(),

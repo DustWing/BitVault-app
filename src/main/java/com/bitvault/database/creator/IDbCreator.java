@@ -1,7 +1,9 @@
 package com.bitvault.database.creator;
 
+import com.bitvault.util.Result;
+
 public interface IDbCreator {
 
-    boolean create();
+    Result<Boolean> create();
 
 }

@@ -1,13 +1,12 @@
 package com.bitvault.ui.model;
 
 import com.bitvault.ui.hyperlink.IWebLocation;
-
-import java.util.Objects;
+import javafx.beans.property.SimpleStringProperty;
 
 public final class Password implements IWebLocation {
     private final String id;
-    private final String username;
-    private final String password;
+    private final SimpleStringProperty username;
+    private final SimpleStringProperty password;
     private final SecureDetails secureDetails;
 
     public Password(
@@ -17,64 +16,60 @@ public final class Password implements IWebLocation {
             SecureDetails secureDetails
     ) {
         this.id = id;
-        this.username = username;
-        this.password = password;
+        this.username = new SimpleStringProperty(username);
+        this.password = new SimpleStringProperty(password);
         this.secureDetails = secureDetails;
     }
 
-    public Password copyOf() {
+    public Password deepCopy() {
         return new Password(
-                this.id,
-                this.username,
-                this.password,
-                this.secureDetails
+                this.getId(),
+                this.getUsername(),
+                this.getPassword(),
+                this.getSecureDetails().deepCopy()
         );
     }
 
+    public void update(Password password) {
+        this.usernameProperty().set(password.getUsername());
+        this.passwordProperty().set(password.getPassword());
+        this.getSecureDetails().update(password.getSecureDetails());
+    }
+
+
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public String getUsername() {
+        return username.get();
+    }
+
+    public SimpleStringProperty usernameProperty() {
         return username;
     }
 
     public String getPassword() {
-        return password;
+        return password.get();
     }
 
-    @Override
-    public String getUrl() {
-        return this.secureDetails.getDomain();
+    public SimpleStringProperty passwordProperty() {
+        return password;
     }
 
     public SecureDetails getSecureDetails() {
         return secureDetails;
     }
 
+
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (Password) obj;
-        return Objects.equals(this.id, that.id) &&
-                Objects.equals(this.username, that.username) &&
-                Objects.equals(this.password, that.password) &&
-                Objects.equals(this.secureDetails, that.secureDetails);
+    public String getDomain() {
+        return this.secureDetails.getDomain();
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, username, password, secureDetails);
-    }
-
-    @Override
-    public String toString() {
-        return "Password[" +
-                "id=" + id + ", " +
-                "username=" + username + ", " +
-                "password=" + password + ", " +
-                "secureDetails=" + secureDetails + ']';
+    public SimpleStringProperty domainProperty() {
+        return this.secureDetails.domainProperty();
     }
 
 
@@ -92,14 +87,6 @@ public final class Password implements IWebLocation {
         if (this.getSecureDetails().getTitle() != null && this.getSecureDetails().getTitle().contains(toLower)) {
             contains = true;
         }
-
-//        if (this.getSecureDetails().getCategory().getText().contains(toLower)) {
-//            contains = true;
-//        }
-//
-//        if (this.getSecureDetails().getDescription() != null && this.getSecureDetails().getDescription().contains(toLower)) {
-//            contains = true;
-//        }
 
         return contains;
     }

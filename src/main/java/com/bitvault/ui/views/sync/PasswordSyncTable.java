@@ -11,26 +11,22 @@ import javafx.scene.control.TableView;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class PasswordSyncTable extends TableView<SyncValue<Password>>{
+public class PasswordSyncTable extends TableView<SyncValue<Password>> {
 
-    private final SyncViewModel syncViewModel;
-
-    public PasswordSyncTable(SyncViewModel syncViewModel) {
-        this.syncViewModel = syncViewModel;
-    }
 
 
     public static TableView<SyncValue<Password>> createTable(
             ObservableList<SyncValue<Password>> passwords,
             List<Category> categories,
+            int passLength,
             Consumer<SyncValue<Password>> onSave
-            ) {
+    ) {
 
         TableView<SyncValue<Password>> tableView = new TableView<>();
 
         tableView.setItems(passwords);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tableView.setRowFactory(param -> new SyncPasswordTableRowFactory(categories, onSave));
+        tableView.setRowFactory(param -> new SyncPasswordTableRowFactory(categories, passLength, onSave));
 
         final TableColumn<SyncValue<Password>, SyncValue.ActionState> iconC = new TableColumn<>("");
         iconC.setCellValueFactory(cellData -> cellData.getValue().actionStateProperty());

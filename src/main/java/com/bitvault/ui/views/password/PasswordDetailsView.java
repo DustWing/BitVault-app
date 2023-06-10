@@ -46,17 +46,17 @@ public class PasswordDetailsView extends BorderPane {
         var profile = new Profile("TestId", "TestProf", LocalDateTime.now(), null);
         Consumer<Password> onAction = System.out::println;
 
-        final PasswordDetailsVM vm = new PasswordDetailsVM(null, categories, profile, Action.NEW, onAction);
+        final PasswordDetailsVM vm = new PasswordDetailsVM(null, categories, profile, Action.NEW, 16, onAction);
         return new PasswordDetailsView(vm);
     }
 
-    public static PasswordDetailsView editPassword(Password password, List<Category> categories, Profile profile, Consumer<Password> onAction) {
-        final PasswordDetailsVM vm = new PasswordDetailsVM(password, categories, profile, Action.EDIT, onAction);
+    public static PasswordDetailsView editPassword(Password password, List<Category> categories, Profile profile, final int passLength, Consumer<Password> onAction) {
+        final PasswordDetailsVM vm = new PasswordDetailsVM(password, categories, profile, Action.EDIT, passLength, onAction);
         return new PasswordDetailsView(vm);
     }
 
-    public static PasswordDetailsView newPassword(List<Category> categories, Profile profile, Consumer<Password> onAction) {
-        final PasswordDetailsVM vm = new PasswordDetailsVM(null, categories, profile, Action.NEW, onAction);
+    public static PasswordDetailsView newPassword(List<Category> categories, Profile profile, final int passLength, Consumer<Password> onAction) {
+        final PasswordDetailsVM vm = new PasswordDetailsVM(null, categories, profile, Action.NEW, passLength, onAction);
         return new PasswordDetailsView(vm);
     }
 
@@ -151,11 +151,13 @@ public class PasswordDetailsView extends BorderPane {
 
     private Button generatePassBtn(SimpleStringProperty stringProperty) {
 
+        int passLength = this.passwordDetailsVM.getPassLength();
+
         final FontIcon refresh = new FontIcon(REFRESH);
 
         //TODO this should be configurable - implement settings
         BvButton button = new BvButton("", refresh)
-                .action(event -> stringProperty.set(PasswordUtils.generatePassString(16)));
+                .action(event -> stringProperty.set(PasswordUtils.generatePassString(passLength)));
         button.setTooltip(new Tooltip(Labels.i18n("generate")));
         return button;
     }

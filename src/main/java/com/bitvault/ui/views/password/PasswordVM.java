@@ -170,10 +170,14 @@ public class PasswordVM {
     }
 
     public Profile getProfile() {
-        return userSession.getProfile();
+        return this.userSession.getProfile();
     }
 
     public ICategoryService getCategoryService() {
         return categoryService;
+    }
+
+    public int getPassLength(){
+        return this.userSession.getSettings().passwordGenerateLength();
     }
 }

@@ -210,4 +210,8 @@ public class SyncViewModel {
     public EncryptionProvider getEncryptionProvider() {
         return userSession.getEncryptionProvider();
     }
+
+    public int getPassLength(){
+        return this.userSession.getSettings().passwordGenerateLength();
+    }
 }

@@ -21,16 +21,19 @@ public class PasswordDetailsVM {
     private final Password password;
     private final SimpleObjectProperty<LocalDate> expiresOn = new SimpleObjectProperty<>();
 
+    private final int passLength;
 
     public PasswordDetailsVM(
             final Password password,
             final List<Category> categories,
             final Profile profile,
             final Action action,
+            final int passLength,
             final Consumer<Password> onAction
     ) {
         this.categories = categories;
         this.onAction = onAction;
+        this.passLength = passLength;
 
         if (Action.EDIT.equals(action)) {
             this.password = password.deepCopy();
@@ -71,5 +74,9 @@ public class PasswordDetailsVM {
 
     public SimpleObjectProperty<LocalDate> expiresOnProperty() {
         return expiresOn;
+    }
+
+    public int getPassLength(){
+        return this.passLength;
     }
 }

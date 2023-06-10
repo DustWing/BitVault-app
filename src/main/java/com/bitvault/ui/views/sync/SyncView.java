@@ -89,6 +89,7 @@ public class SyncView extends VBox {
         return PasswordSyncTable.createTable(
                 this.syncViewModel.getPasswords(),
                 this.syncViewModel.getCategories(),
+                this.syncViewModel.getPassLength(),
                 password -> {
 
                 }

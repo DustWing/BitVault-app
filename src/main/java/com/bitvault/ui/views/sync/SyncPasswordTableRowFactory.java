@@ -23,9 +23,17 @@ public class SyncPasswordTableRowFactory extends TableRow<SyncValue<Password>> {
     private final List<Category> categories;
     private final Consumer<SyncValue<Password>> onSave;
 
-    public SyncPasswordTableRowFactory(List<Category> categories, Consumer<SyncValue<Password>> onSave) {
+    private final int passLength;
+
+
+    public SyncPasswordTableRowFactory(
+            List<Category> categories,
+            final int passLength,
+            Consumer<SyncValue<Password>> onSave
+    ) {
         super();
         this.categories = categories;
+        this.passLength = passLength;
         this.onSave = onSave;
     }
 
@@ -95,6 +103,7 @@ public class SyncPasswordTableRowFactory extends TableRow<SyncValue<Password>> {
                 password,
                 categories,
                 password.getSecureDetails().getProfile(),
+                this.passLength,
                 (passwordNew -> {
                     password.update(passwordNew);
                     onSave.accept(syncValue);

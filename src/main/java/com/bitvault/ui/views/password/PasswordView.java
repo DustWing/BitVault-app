@@ -134,8 +134,9 @@ public class PasswordView extends BorderPane {
 
         final PasswordDetailsView view = PasswordDetailsView.newPassword(
                 new ArrayList<>(passwordVM.getCategoriesList()),
-                passwordVM.getProfile(),
-                passwordVM::create
+                this.passwordVM.getProfile(),
+                this.passwordVM.getPassLength(),
+                this.passwordVM::create
         );
 
         ViewLoader.popUp(this.getScene().getWindow(), view, Labels.i18n("add.new.password")).show();

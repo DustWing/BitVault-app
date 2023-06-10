@@ -103,6 +103,7 @@ public class PasswordTableRowFactory extends TableRow<Password> {
                 password,
                 new ArrayList<>(this.passwordVM.getCategoriesList()),
                 oldPass.getSecureDetails().getProfile(),//use old profile
+                this.passwordVM.getPassLength(),
                 this.passwordVM::update
         );
 

@@ -89,7 +89,12 @@ public class PasswordVM {
         boolean confirm = ConfirmAlert.deleteConfirm(userSession, password.getSecureDetails().isRequiresMp());
 
         if (confirm) {
-            passwordService.delete(password);
+            Result<Boolean> delete = passwordService.delete(password);
+            if(delete.hasError()){
+                ErrorAlert.show("Error deleting", delete.getError());
+                return;
+            }
+
             passwords.removeIf(oldPass -> oldPass.getId().equals(password.getId()));
         }
 
@@ -147,10 +152,6 @@ public class PasswordVM {
         );
 
         return Result.ok(password);
-    }
-
-    public ObservableList<Password> getPasswords() {
-        return passwords;
     }
 
     public FilteredList<Password> getFilteredList() {

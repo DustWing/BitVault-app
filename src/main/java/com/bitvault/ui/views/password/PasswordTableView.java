@@ -9,7 +9,6 @@ import com.bitvault.ui.utils.BvStyles;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.ui.utils.KeyCombinationConst;
 import com.bitvault.util.Labels;
-import javafx.collections.ObservableList;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -27,7 +26,7 @@ public class PasswordTableView extends BorderPane {
     public PasswordTableView(PasswordVM passwordVM) {
         this.passwordVM = passwordVM;
 
-        final TableView<Password> tableView = createTable(this.passwordVM.getFilteredList());
+        final TableView<Password> tableView = createTable();
 
         this.timerBar = new TimerBar(new ProgressBar(), JavaFxUtil::clearClipBoard);
         timerBar.getProgressBar().setVisible(false);
@@ -39,9 +38,9 @@ public class PasswordTableView extends BorderPane {
         this.setBottom(bottomHBox);
     }
 
-    private TableView<Password> createTable(ObservableList<Password> passwords) {
+    private TableView<Password> createTable() {
 
-        TableView<Password> tableView = new TableView<>(passwords);
+        TableView<Password> tableView = new TableView<>(this.passwordVM.getFilteredList());
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.setRowFactory(param -> new PasswordTableRowFactory(this.passwordVM, () -> this.timerBar.start(30)));
 
@@ -104,6 +103,10 @@ public class PasswordTableView extends BorderPane {
 
     private void showDetailsDialog(TableView<Password> tableView) {
         final Password selectedItem = tableView.getSelectionModel().getSelectedItem();
+        if(selectedItem==null){
+            return;
+        }
+
         showDetailsPopup(
                 this.getScene(),
                 selectedItem,

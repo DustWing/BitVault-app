@@ -1,13 +1,12 @@
 package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
+import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;
 import com.bitvault.ui.model.SecureDetails;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,7 +16,6 @@ import java.util.function.Consumer;
 
 public class PasswordDetailsVM {
 
-    private final Action action;
     private final List<Category> categories;
     private final Consumer<Password> onAction;
     private final Password password;
@@ -32,7 +30,6 @@ public class PasswordDetailsVM {
             final Consumer<Password> onAction
     ) {
         this.categories = categories;
-        this.action = action;
         this.onAction = onAction;
 
         if (Action.EDIT.equals(action)) {

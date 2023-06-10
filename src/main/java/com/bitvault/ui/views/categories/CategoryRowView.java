@@ -140,7 +140,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
     private void save() {
         ValidateResult validate = validateForm.validate();
         if(!validate.valid()){
-            ErrorAlert.show("Category Error", validate.errorMessages().toString());
+            ErrorAlert.show("Category Error", validate.errorMessages());
             JavaFxUtil.focus(this.categoryName);
             return;
         }

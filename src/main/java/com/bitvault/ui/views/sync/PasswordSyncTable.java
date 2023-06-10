@@ -1,6 +1,5 @@
 package com.bitvault.ui.views.sync;
 
-import com.bitvault.security.EncryptionProvider;
 import com.bitvault.ui.hyperlink.HyperLinkCell;
 import com.bitvault.ui.model.*;
 import com.bitvault.ui.utils.BvStyles;
@@ -10,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class PasswordSyncTable extends TableView<SyncValue<Password>>{
 
@@ -23,19 +23,21 @@ public class PasswordSyncTable extends TableView<SyncValue<Password>>{
     public static TableView<SyncValue<Password>> createTable(
             ObservableList<SyncValue<Password>> passwords,
             List<Category> categories,
-            EncryptionProvider encryptionProvider
-    ) {
+            Consumer<SyncValue<Password>> onSave
+            ) {
 
         TableView<SyncValue<Password>> tableView = new TableView<>();
 
         tableView.setItems(passwords);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tableView.setRowFactory(param -> new SyncPasswordTableRowFactory(categories, encryptionProvider));
+        tableView.setRowFactory(param -> new SyncPasswordTableRowFactory(categories, onSave));
 
         final TableColumn<SyncValue<Password>, SyncValue.ActionState> iconC = new TableColumn<>("");
         iconC.setCellValueFactory(cellData -> cellData.getValue().actionStateProperty());
         iconC.setCellFactory(param -> new SyncTableIconCellFactory<>());
-        iconC.setPrefWidth(10);
+        iconC.setMaxWidth(30);
+        iconC.setMinWidth(30);
+
 
         final TableColumn<SyncValue<Password>, String> titleC = new TableColumn<>(Labels.i18n("title"));
         titleC.setCellValueFactory(cellData -> cellData.getValue().getNewValue().getSecureDetails().titleProperty());

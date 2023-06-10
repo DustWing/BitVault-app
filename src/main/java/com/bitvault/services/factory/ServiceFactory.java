@@ -13,4 +13,6 @@ public interface ServiceFactory {
     IProfileService getProfileService();
 
     ISettingsService getSettingsService();
+
+    ISyncService getSyncService();
 }

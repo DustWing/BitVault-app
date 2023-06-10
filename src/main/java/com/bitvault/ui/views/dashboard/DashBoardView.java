@@ -10,6 +10,8 @@ import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
 import com.bitvault.ui.views.password.PasswordVM;
 import com.bitvault.ui.views.password.PasswordView;
+import com.bitvault.ui.views.settings.SettingsVM;
+import com.bitvault.ui.views.settings.SettingsView;
 import com.bitvault.ui.views.sync.SyncView;
 import com.bitvault.ui.views.sync.SyncViewModel;
 import com.bitvault.util.Labels;
@@ -64,11 +66,12 @@ public final class DashBoardView extends BorderPane {
 
         final FontIcon settingIcon = new FontIcon(COG);
         final MenuItem settings = new MenuItem(Labels.i18n("settings"), settingIcon);
+        settings.setOnAction(__ -> createSettingsView());
         menu.getItems().add(settings);
 
         final FontIcon logOutIcon = new FontIcon(LOGOUT);
         final MenuItem logout = new MenuItem(Labels.i18n("logout"), logOutIcon);
-        logout.setOnAction(event -> logout());
+        logout.setOnAction(__ -> logout());
         menu.getItems().add(logout);
 
         final MenuBar menuBar = new MenuBar();
@@ -116,20 +119,27 @@ public final class DashBoardView extends BorderPane {
         ViewLoader.load(stage, aDefault.width(), aDefault.height(), WelcomeView::new);
     }
 
+    private void createSettingsView() {
+        AsyncTask.toRun(() -> new SettingsView(new SettingsVM(dashBoardVM.getUserSession())))
+                .onFailure(asyncTaskException -> ErrorAlert.show("DashBoard", asyncTaskException))
+                .onSuccess(view -> Platform.runLater(() -> this.setCenter(view)))
+                .start();
+    }
+
     private void createPasswordView() {
 
-        AsyncTask.toRun(() -> new PasswordView(new PasswordVM(dashBoardVM.getUserSession()))
-                ).onFailure(asyncTaskException -> ErrorAlert.show("DashBoard", asyncTaskException))
-                .onSuccess(passwordView -> Platform.runLater(() -> this.setCenter(passwordView)))
+        AsyncTask.toRun(() -> new PasswordView(new PasswordVM(dashBoardVM.getUserSession())))
+                .onFailure(asyncTaskException -> ErrorAlert.show("DashBoard", asyncTaskException))
+                .onSuccess(view -> Platform.runLater(() -> this.setCenter(view)))
                 .start();
 
     }
 
     private void createSyncView() {
 
-        AsyncTask.toRun(() -> new SyncView(new SyncViewModel(this.dashBoardVM.getUserSession()))
-                ).onFailure(asyncTaskException -> ErrorAlert.show("DashBoard", asyncTaskException))
-                .onSuccess(passwordView -> Platform.runLater(() -> this.setCenter(passwordView)))
+        AsyncTask.toRun(() -> new SyncView(new SyncViewModel(this.dashBoardVM.getUserSession())))
+                .onFailure(asyncTaskException -> ErrorAlert.show("DashBoard", asyncTaskException))
+                .onSuccess(view -> Platform.runLater(() -> this.setCenter(view)))
                 .start();
 
     }

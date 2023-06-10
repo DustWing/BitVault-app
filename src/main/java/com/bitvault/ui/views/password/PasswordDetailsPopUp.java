@@ -66,8 +66,10 @@ public class PasswordDetailsPopUp {
                 new Label(Labels.i18n("description")), descrText)
         );
 
+        String categoryName = selectedItem.getSecureDetails().getCategory() != null
+                ? selectedItem.getSecureDetails().getCategory().name() : null;
         GridRow category = new GridRow(List.of(
-                new Label(Labels.i18n("category")), new Label(selectedItem.getSecureDetails().getCategory().name())
+                new Label(Labels.i18n("category")), new Label(categoryName)
         ));
 
         String expiresOn = DateTimeUtils.formatNoTime(selectedItem.getSecureDetails().getExpiresOn());

@@ -1,6 +1,5 @@
 package com.bitvault.ui.views.sync;
 
-import com.bitvault.security.EncryptionProvider;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.SyncValue;
@@ -14,6 +13,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.Tooltip;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.bitvault.ui.views.password.PasswordDetailsPopUp.showDetailsPopup;
 
@@ -21,12 +21,12 @@ public class SyncPasswordTableRowFactory extends TableRow<SyncValue<Password>> {
 
 
     private final List<Category> categories;
-    private final EncryptionProvider encryptionProvider;
+    private final Consumer<SyncValue<Password>> onSave;
 
-    public SyncPasswordTableRowFactory(List<Category> categories, EncryptionProvider encryptionProvider) {
+    public SyncPasswordTableRowFactory(List<Category> categories, Consumer<SyncValue<Password>> onSave) {
         super();
         this.categories = categories;
-        this.encryptionProvider = encryptionProvider;
+        this.onSave = onSave;
     }
 
     @Override
@@ -48,7 +48,6 @@ public class SyncPasswordTableRowFactory extends TableRow<SyncValue<Password>> {
 
     private void addContextMenu(TableRow<SyncValue<Password>> row) {
 
-
         final ContextMenu contextMenu = new ContextMenu();
         SyncValue<Password> selectedItem = row.getItem();
 
@@ -57,7 +56,7 @@ public class SyncPasswordTableRowFactory extends TableRow<SyncValue<Password>> {
         contextMenu.getItems().add(details);
 
         MenuItem edit = new MenuItem(Labels.i18n("edit"));
-        edit.setOnAction(event -> showEditPopUp(selectedItem.getNewValue()));
+        edit.setOnAction(event -> showEditPopUp(selectedItem));
         contextMenu.getItems().add(edit);
 
         if (SyncValue.ActionState.REQUIRED.equals(selectedItem.getActionState())
@@ -84,17 +83,22 @@ public class SyncPasswordTableRowFactory extends TableRow<SyncValue<Password>> {
                 this.getScene(),
                 password,
                 JavaFxUtil::copyToClipBoard,
-                (passwordVal) -> JavaFxUtil.copyToClipBoard(encryptionProvider.decrypt(passwordVal))
+                JavaFxUtil::copyToClipBoard
         );
     }
 
-    public void showEditPopUp(Password password) {
+    public void showEditPopUp(SyncValue<Password> syncValue) {
+
+        Password password = syncValue.getNewValue();
 
         final PasswordDetailsView view = PasswordDetailsView.editPassword(
                 password,
                 categories,
-                password.getSecureDetails().getProfile(),//use old profile
-                password::update
+                password.getSecureDetails().getProfile(),
+                (passwordNew -> {
+                    password.update(passwordNew);
+                    onSave.accept(syncValue);
+                })
         );
 
         ViewLoader.popUp(this.getScene().getWindow(), view, Labels.i18n("edit.password")).show();

@@ -113,12 +113,12 @@ public class DbScripts {
 
 
     public final static String t_settings = """
-                  CREATE TABLE IF NOT EXISTS t_domain_details
+                  CREATE TABLE IF NOT EXISTS t_settings
                         (
                             name            TEXT NOT NULL PRIMARY KEY,
-                            value           TEXT NOT NULL PRIMARY KEY,
+                            value           TEXT NOT NULL,
                             created_on      TEXT not null,
-                            modified_on     TEXT,
+                            modified_on     TEXT
                         );
             """;
 

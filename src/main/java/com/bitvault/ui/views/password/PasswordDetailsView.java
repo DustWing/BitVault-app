@@ -66,10 +66,9 @@ public class PasswordDetailsView extends BorderPane {
         final BvTextField titleTf = getTitleTf();
 
         final BvTextField userName = getUserNameTf(passwordDetailsVM.getPassword().usernameProperty());
-        validatedForm.add(userName);
 
         final BvPasswordInput passwordInput = getPassword(passwordDetailsVM.getPassword().passwordProperty());
-        validatedForm.add(passwordInput);
+
         final Button generatePassBtn = generatePassBtn(passwordDetailsVM.getPassword().passwordProperty());
         final BvSimpleGrid passwordGenerate = BvSimpleGrid.createSingleDoubleColumn(passwordInput, generatePassBtn);
 
@@ -83,11 +82,11 @@ public class PasswordDetailsView extends BorderPane {
         final ProgressBar progressBar = passwordBar(this.passBarProperty);
 
         final BvTextField domainTf = getDomainTf();
-
         final TextArea descriptionTf = createDescription();
 
         final DatePicker expiresOn = getExpiryDp();
         final TextColorComboBox<Category> categoriesDd = categoryDd();
+
         final BvSimpleGrid expiryCategory = BvSimpleGrid.createSingleDoubleColumn(expiresOn, categoriesDd);
 
         final CheckBox masterPassword = masterPassword();
@@ -124,6 +123,9 @@ public class PasswordDetailsView extends BorderPane {
                 .maxLength(50)
                 .withDefaultSize()
                 .withPromptText(Labels.i18n("title"));
+
+        this.validatedForm.add(titleTf);
+
         return titleTf;
     }
 
@@ -134,12 +136,16 @@ public class PasswordDetailsView extends BorderPane {
                 .maxLength(50)
                 .withDefaultSize()
                 .withPromptText(Labels.i18n("username"));
+        this.validatedForm.add(usernameTf);
+
         return usernameTf;
     }
 
     private BvPasswordInput getPassword(SimpleStringProperty stringProperty) {
         final BvPasswordInput passwordInput = new BvPasswordInput()
                 .withBinding(stringProperty);
+
+        this.validatedForm.add(passwordInput);
         return passwordInput;
     }
 
@@ -185,9 +191,13 @@ public class PasswordDetailsView extends BorderPane {
     private TextColorComboBox<Category> categoryDd() {
 
         ObservableList<Category> categories = FXCollections.observableArrayList(passwordDetailsVM.getCategories());
-        final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withCircle(categories);
+        final TextColorComboBox<Category> categoriesDd = TextColorComboBox.withCircle(categories)
+                .required(true);
         categoriesDd.valueProperty().bindBidirectional(this.passwordDetailsVM.getPassword().getSecureDetails().categoryProperty());
         JavaFxUtil.mediumSize(categoriesDd);
+
+        validatedForm.add(categoriesDd);
+
         return categoriesDd;
     }
 
@@ -257,9 +267,10 @@ public class PasswordDetailsView extends BorderPane {
         ValidateResult validateResult = validatedForm.validate();
 
         if (!validateResult.valid()) {
-            ErrorAlert.show("New Password", validateResult.errorMessages().toString());
+            ErrorAlert.show("New Password", validateResult.errorMessages());
             return;
         }
+
         passwordDetailsVM.save();
         this.getScene().getWindow().hide();
     }

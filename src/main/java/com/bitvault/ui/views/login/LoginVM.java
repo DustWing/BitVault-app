@@ -65,9 +65,13 @@ public class LoginVM {
 
         final UserSession userSession = new UserSession(username, encryptionProvider, serviceFactory);
 
-        Settings settings = createSettings();
+        final Settings settings = createSettings();
+        userSession.setSettings(settings);
 
-        Result<Boolean> saveSettings = userSession.getServiceFactory().getSettingsService().save(settings);
+        Result<Boolean> saveSettings = userSession
+                .getServiceFactory()
+                .getSettingsService()
+                .save(settings);
 
         if (saveSettings.hasError()) {
             logger.error("", saveSettings.getError());

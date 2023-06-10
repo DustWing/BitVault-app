@@ -7,6 +7,8 @@ import com.bitvault.server.cache.ImportCache;
 import com.bitvault.server.dto.SecureItemRqDto;
 import com.bitvault.server.endpoints.EndpointResolver;
 import com.bitvault.server.http.HttpServer;
+import com.bitvault.services.interfaces.ISyncService;
+import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.exceptions.ViewLoadException;
 import com.bitvault.ui.model.*;
 import com.bitvault.util.*;
@@ -119,6 +121,12 @@ public class SyncViewModel {
         return Result.ok(portResult.get());
     }
 
+    public void stopServer() {
+        if (httpServer != null) {
+            httpServer.stop();
+        }
+    }
+
 
     public void onAddPassword(SecureItemRqDto.LocalPasswordDto localPasswordDto) {
         final Password passwordNew = fromDto(localPasswordDto);
@@ -175,11 +183,21 @@ public class SyncViewModel {
         return password;
     }
 
-    public void stopServer() {
-        if (httpServer != null) {
-            httpServer.stop();
+    public void save() {
+
+        //TODO revisit
+        List<String> list = this.passwords.stream().map(SyncValue::getWarningMsg).toList();
+        if (!list.isEmpty()) {
+            ErrorAlert.show("Sync error", list);
+            return;
         }
+
+        ISyncService syncService = this.userSession.getServiceFactory().getSyncService();
+
+        List<Password> passwordToSave = this.passwords.stream().map(SyncValue::getNewValue).toList();
+        List<Result<Password>> results = syncService.savePasswords(passwordToSave);
     }
+
 
     public ObservableList<SyncValue<Password>> getPasswords() {
         return passwords;
@@ -188,7 +206,8 @@ public class SyncViewModel {
     public List<Category> getCategories() {
         return categories;
     }
-    public EncryptionProvider getEncryptionProvider(){
+
+    public EncryptionProvider getEncryptionProvider() {
         return userSession.getEncryptionProvider();
     }
 }

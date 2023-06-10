@@ -58,6 +58,7 @@ public class SyncView extends VBox {
 
         setAlignment(Pos.CENTER);
         JavaFxUtil.vGrowAlways(this);
+
     }
 
     private ButtonBar createButtonBar() {
@@ -71,9 +72,15 @@ public class SyncView extends VBox {
                 .defaultButton(false)
                 .withDefaultSize();
 
+
+        final BvButton save = new BvButton(Labels.i18n("save"))
+                .action(event -> stop())
+                .defaultButton(false)
+                .withDefaultSize();
+
         final ButtonBar buttonBar = new ButtonBar();
         buttonBar.getButtons()
-                .addAll(start, stop);
+                .addAll(start, stop, save);
 
         return buttonBar;
     }
@@ -82,7 +89,9 @@ public class SyncView extends VBox {
         return PasswordSyncTable.createTable(
                 this.syncViewModel.getPasswords(),
                 this.syncViewModel.getCategories(),
-                this.syncViewModel.getEncryptionProvider()
+                password -> {
+
+                }
         );
     }
 

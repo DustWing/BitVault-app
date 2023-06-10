@@ -10,16 +10,25 @@ public record Settings(
 
 ) {
 
+    public static int defaultMasterPasswordCoolDown = 5;
+    public static int defaultPasswordGenerateLength = 16;
+
+
     public static Settings createOnLogin(UserNameFile lastUserNameFile) {
-        return new Settings(lastUserNameFile, List.of(lastUserNameFile), 1, 16);
+        return new Settings(
+                lastUserNameFile,
+                List.of(lastUserNameFile),
+                defaultMasterPasswordCoolDown,
+                defaultPasswordGenerateLength
+        );
     }
 
     public Settings copyOnLogin(UserNameFile lastUserNameFile, List<UserNameFile> userNameFiles) {
         return new Settings(
                 lastUserNameFile,
                 userNameFiles,
-                this.masterPasswordCoolDown,
-                this.passwordGenerateLength
+                this.masterPasswordCoolDown == null ? defaultMasterPasswordCoolDown : masterPasswordCoolDown,
+                this.passwordGenerateLength == null ? defaultPasswordGenerateLength : passwordGenerateLength
         );
     }
 }

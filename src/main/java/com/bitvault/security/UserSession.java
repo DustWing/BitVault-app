@@ -93,4 +93,12 @@ public class UserSession {
         final LocalDateTime now = LocalDateTime.now();
         return now.isBefore(previousAuthTime.plus(coolDown));
     }
+
+    public Settings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
 }

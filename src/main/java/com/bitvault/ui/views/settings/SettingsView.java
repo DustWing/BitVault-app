@@ -27,9 +27,9 @@ public class SettingsView extends BorderPane {
 
     public SettingsView(SettingsVM settingsVM) {
         this.settingsVM = settingsVM;
-        ScrollPane settings = settings();
 
-        Button button = saveBtn();
+        final ScrollPane settings = settings();
+        final Button button = saveBtn();
 
         this.setCenter(settings);
         this.setBottom(button);
@@ -69,8 +69,8 @@ public class SettingsView extends BorderPane {
         spinner.setEditable(true);
         spinner.setPrefWidth(BvWidths.SMALL);
         spinner.setMinWidth(BvWidths.SMALL);
+        spinner.getValueFactory().valueProperty().bindBidirectional(this.settingsVM.masterPasswordCoolDownProperty());
         IntegerStringConverter.createFor(spinner);
-
 
         return new GridRow(List.of(label, spinner));
     }
@@ -90,6 +90,7 @@ public class SettingsView extends BorderPane {
         spinner.setEditable(true);
         spinner.setPrefWidth(BvWidths.SMALL);
         spinner.setMinWidth(BvWidths.SMALL);
+        spinner.getValueFactory().valueProperty().bindBidirectional(this.settingsVM.passwordGenerationLengthProperty());
         IntegerStringConverter.createFor(spinner);
 
         return new GridRow(List.of(label, spinner));
@@ -97,6 +98,7 @@ public class SettingsView extends BorderPane {
 
     public Button saveBtn() {
         BvButton button = new BvButton(Labels.i18n("save"))
+                .action((event) -> this.settingsVM.save())
                 .defaultButton(true)
                 .withDefaultSize();
 

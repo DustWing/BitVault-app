@@ -15,6 +15,7 @@ public class LocalServiceFactory implements ServiceFactory {
     private final IUserService userService;
     private final IProfileService profileService;
     private final ISettingsService settingsService;
+    private final ISyncService syncService;
 
     public LocalServiceFactory(String location, EncryptionProvider encryptionProvider) {
         final ConnectionProvider connectionProvider = new LocalDB(location);
@@ -25,6 +26,7 @@ public class LocalServiceFactory implements ServiceFactory {
         this.userService = new UserService(connectionProvider, argonAuthenticator);
         this.profileService = new ProfileService(connectionProvider);
         this.settingsService = new SettingsService();
+        this.syncService = new SyncService(passwordService);
     }
 
 
@@ -51,5 +53,10 @@ public class LocalServiceFactory implements ServiceFactory {
     @Override
     public ISettingsService getSettingsService() {
         return this.settingsService;
+    }
+
+    @Override
+    public ISyncService getSyncService() {
+        return null;
     }
 }

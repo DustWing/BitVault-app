@@ -97,4 +97,9 @@ public class TestServiceFactory implements ServiceFactory {
         return this.settingsService;
     }
 
+    @Override
+    public ISyncService getSyncService() {
+        throw new IllegalStateException("Not implemented");
+    }
+
 }

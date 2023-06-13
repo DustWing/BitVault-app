@@ -31,6 +31,8 @@ public class PasswordTableRowFactory extends TableRow<Password> {
 
         //do nothing
         if (item == null || empty) {
+            setText(null);
+            setGraphic(null);
             return;
         }
 

@@ -16,8 +16,8 @@ ext {
     junitVersion = '5.9.0'
 }
 
-sourceCompatibility = '19'
-targetCompatibility = '19'
+sourceCompatibility = '20'
+targetCompatibility = '20'
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
@@ -30,7 +30,7 @@ application {
 
 
 javafx {
-    version = '19'
+    version = '20'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
@@ -52,7 +52,7 @@ dependencies {
     implementation group: 'org.kordamp.ikonli', name: 'ikonli-materialdesign2-pack', version: '12.3.1'
 
     //sqlite
-    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.39.2.0'
+    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.42.0.0'
 
     //server
     var nettyVersion = '4.1.86.Final'

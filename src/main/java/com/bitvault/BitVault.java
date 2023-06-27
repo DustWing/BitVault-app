@@ -1,7 +1,6 @@
 package com.bitvault;
 
 import atlantafx.base.theme.Dracula;
-import atlantafx.base.theme.PrimerDark;
 import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.IconUtils;
 import com.bitvault.ui.utils.ViewLoader;

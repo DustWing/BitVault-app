@@ -1,7 +1,6 @@
 package com.bitvault.ui.views.password;
 
 import com.bitvault.enums.Action;
-import com.bitvault.ui.components.alert.ErrorAlert;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.model.Password;
 import com.bitvault.ui.model.Profile;

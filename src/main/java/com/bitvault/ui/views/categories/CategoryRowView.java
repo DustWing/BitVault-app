@@ -15,10 +15,8 @@ import com.bitvault.util.Labels;
 import com.bitvault.util.ResourceLoader;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
@@ -26,7 +24,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 

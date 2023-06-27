@@ -12,7 +12,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextFormatter;
 
-import javax.swing.text.Style;
 import java.util.ArrayList;
 import java.util.List;
 

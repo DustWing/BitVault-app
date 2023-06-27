@@ -1,6 +1,5 @@
 package com.bitvault.database.daos;
 
-import com.bitvault.database.models.PasswordDM;
 import com.bitvault.database.models.SettingsDM;
 import com.bitvault.database.utils.DBUtils;
 

@@ -1,8 +1,8 @@
 package com.bitvault.ui.components.textfield;
 
+import atlantafx.base.theme.Styles;
 import com.bitvault.ui.components.validation.ValidateField;
 import com.bitvault.ui.components.validation.ValidateResult;
-import com.bitvault.ui.utils.BvStyles;
 import com.bitvault.ui.utils.JavaFxUtil;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -12,6 +12,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextFormatter;
 
+import javax.swing.text.Style;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class BvPasswordField extends PasswordField implements ValidateField {
     private void addRequiredListener() {
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
                     if (!newValue) {// when focus lost
-                        this.pseudoClassStateChanged(BvStyles.STATE_DANGER, this.getText() != null && this.getText().isBlank());
+                        this.pseudoClassStateChanged(Styles.STATE_DANGER, this.getText() != null && this.getText().isBlank());
                     }
                 }
         );
@@ -83,7 +84,7 @@ public class BvPasswordField extends PasswordField implements ValidateField {
     private void onWrite() {
         this.textProperty().addListener((observable, oldValue, newValue) -> {
             //if it was blank before remove the danger to avoid updating css
-            if (oldValue==null || oldValue.isBlank()) this.pseudoClassStateChanged(BvStyles.STATE_DANGER, false);
+            if (oldValue==null || oldValue.isBlank()) this.pseudoClassStateChanged(Styles.STATE_DANGER, false);
         });
     }
 
@@ -171,7 +172,7 @@ public class BvPasswordField extends PasswordField implements ValidateField {
             errorMessages.add(getPromptText() + " minLength:" + minLength);
         }
         if (!valid) {
-            this.pseudoClassStateChanged(BvStyles.STATE_DANGER, true);
+            this.pseudoClassStateChanged(Styles.STATE_DANGER, true);
         }
 
         return new ValidateResult(valid, errorMessages);

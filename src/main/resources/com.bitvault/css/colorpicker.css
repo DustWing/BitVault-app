@@ -1,0 +1,8 @@
+
+.color-picker {
+    -fx-color-label-visible: false;
+}
+
+.color-palette > .hyperlink {
+    visibility: hidden;
+}

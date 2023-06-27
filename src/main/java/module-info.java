@@ -26,6 +26,7 @@ module com.bitvault {
     requires java.net.http;
     requires io.netty.codec;
     requires io.netty.common;
+    requires atlantafx.base;
 
 //    requires atlantafx.base;
 

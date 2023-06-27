@@ -1,18 +1,17 @@
 package com.bitvault;
 
+import atlantafx.base.theme.Dracula;
+import atlantafx.base.theme.PrimerDark;
 import com.bitvault.ui.utils.BvSceneSize;
 import com.bitvault.ui.utils.IconUtils;
 import com.bitvault.ui.utils.ViewLoader;
 import com.bitvault.ui.views.WelcomeView;
-import com.bitvault.util.ResourceLoader;
-import com.bitvault.util.Theme;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -44,8 +43,8 @@ public class BitVault extends Application {
 
 
         //set default css
-        final URL themeUrl = ResourceLoader.loadURL(Theme.DARK);
-        BitVault.setUserAgentStylesheet(themeUrl.toExternalForm());
+        String userAgentStylesheet = new Dracula().getUserAgentStylesheet();
+        BitVault.setUserAgentStylesheet(userAgentStylesheet);
 
         stage.setTitle("The Vault");
         stage.getIcons().add(IconUtils.STAGE_ICON);
@@ -54,6 +53,8 @@ public class BitVault extends Application {
         stage.setOnCloseRequest(event -> runOnCloseActions());
         BvSceneSize aDefault = BvSceneSize.Default;
         ViewLoader.load(stage, aDefault.width(), aDefault.height(), WelcomeView::new);
+
+//        ViewLoader.loadFxml(stage, "Spotify.fxml");
     }
 
 }

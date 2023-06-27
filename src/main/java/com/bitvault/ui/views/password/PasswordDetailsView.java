@@ -1,5 +1,6 @@
 package com.bitvault.ui.views.password;
 
+import atlantafx.base.theme.Styles;
 import com.bitvault.enums.Action;
 import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.components.TextColorComboBox;
@@ -242,17 +243,17 @@ public class PasswordDetailsView extends BorderPane {
 
     private void setBarProgress(ProgressBar bar, double value) {
         if (value > 0.80) {
-            bar.pseudoClassStateChanged(BvStyles.STATE_SUCCESS, true);
-            bar.pseudoClassStateChanged(BvStyles.STATE_WARNING, false);
-            bar.pseudoClassStateChanged(BvStyles.STATE_DANGER, false);
+            bar.pseudoClassStateChanged(Styles.STATE_SUCCESS, true);
+            bar.pseudoClassStateChanged(Styles.STATE_WARNING, false);
+            bar.pseudoClassStateChanged(Styles.STATE_DANGER, false);
         } else if (value > 0.47) {
-            bar.pseudoClassStateChanged(BvStyles.STATE_SUCCESS, false);
-            bar.pseudoClassStateChanged(BvStyles.STATE_WARNING, true);
-            bar.pseudoClassStateChanged(BvStyles.STATE_DANGER, false);
+            bar.pseudoClassStateChanged(Styles.STATE_SUCCESS, false);
+            bar.pseudoClassStateChanged(Styles.STATE_WARNING, true);
+            bar.pseudoClassStateChanged(Styles.STATE_DANGER, false);
         } else {
-            bar.pseudoClassStateChanged(BvStyles.STATE_SUCCESS, false);
-            bar.pseudoClassStateChanged(BvStyles.STATE_WARNING, false);
-            bar.pseudoClassStateChanged(BvStyles.STATE_DANGER, true);
+            bar.pseudoClassStateChanged(Styles.STATE_SUCCESS, false);
+            bar.pseudoClassStateChanged(Styles.STATE_WARNING, false);
+            bar.pseudoClassStateChanged(Styles.STATE_DANGER, true);
         }
     }
 

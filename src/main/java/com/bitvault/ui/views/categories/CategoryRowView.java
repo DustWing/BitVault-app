@@ -12,10 +12,13 @@ import com.bitvault.ui.utils.BvSpacing;
 import com.bitvault.ui.utils.BvWidths;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
+import com.bitvault.util.ResourceLoader;
 import com.bitvault.util.Result;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
@@ -23,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -37,6 +41,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
 
     private final ValidateForm validateForm;
 
+    public static String colorpicker = ResourceLoader.load("/com.bitvault/css/colorpicker.css");
 
 
     public static CategoryRowView createFromCategory(
@@ -59,23 +64,11 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
     public CategoryRowView(CategoryRowVM categoryRowVM) {
         this.categoryRowVM = categoryRowVM;
 
-        this.categoryName = new BvTextField()
-                .withDefaultSize()
-                .withBinding(this.categoryRowVM.categoryNameProperty())
-                .withPromptText("Category")
-                .required(true)
-                .maxLength(50)
-                .minLength(10);
-        categoryName.disableProperty().bind(this.categoryRowVM.allowEditProperty());
-
-        validateForm = new ValidateForm( this.categoryName);
+        this.categoryName = categoryName();
+        this.validateForm = new ValidateForm(this.categoryName);
 
         //color picker
-        final ColorPicker colorPicker = new ColorPicker();
-        colorPicker.disableProperty().bind(this.categoryRowVM.allowEditProperty());
-        JavaFxUtil.tinySize(colorPicker);
-        if (this.categoryRowVM.getCategoryColor() != null) colorPicker.setValue(categoryRowVM.getCategoryColor());
-        colorPicker.setOnAction(event -> this.categoryRowVM.categoryColorProperty().set(colorPicker.getValue()));
+        final ColorPicker colorPicker = colorPicker();
 
         //buttons
         final StackPane actionBtnPane = actionBtn();
@@ -87,6 +80,29 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
         this.setAlignment(Pos.CENTER);
         JavaFxUtil.hGrowAlways(this);
 
+    }
+
+    private BvTextField categoryName() {
+        BvTextField textField = new BvTextField()
+                .withDefaultSize()
+                .withBinding(this.categoryRowVM.categoryNameProperty())
+                .withPromptText("Category")
+                .required(true)
+                .maxLength(50)
+                .minLength(10);
+        textField.disableProperty().bind(this.categoryRowVM.allowEditProperty());
+        return textField;
+    }
+
+    private ColorPicker colorPicker() {
+
+        final ColorPicker colorPicker = new ColorPicker();
+        colorPicker.getStylesheets().add(colorpicker);
+        colorPicker.disableProperty().bind(this.categoryRowVM.allowEditProperty());
+        JavaFxUtil.tinySize(colorPicker);
+        if (this.categoryRowVM.getCategoryColor() != null) colorPicker.setValue(categoryRowVM.getCategoryColor());
+        colorPicker.valueProperty().bind(this.categoryRowVM.categoryColorProperty());
+        return colorPicker;
     }
 
     private StackPane actionBtn() {
@@ -139,7 +155,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
 
     private void save() {
         ValidateResult validate = validateForm.validate();
-        if(!validate.valid()){
+        if (!validate.valid()) {
             ErrorAlert.show("Category Error", validate.errorMessages());
             JavaFxUtil.focus(this.categoryName);
             return;

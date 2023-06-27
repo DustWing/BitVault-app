@@ -1,14 +1,15 @@
 package com.bitvault.ui.views.categories;
 
+import atlantafx.base.theme.Tweaks;
 import com.bitvault.services.interfaces.ICategoryService;
 import com.bitvault.ui.components.BvButton;
 import com.bitvault.ui.model.Category;
 import com.bitvault.ui.utils.BvColors;
 import com.bitvault.ui.utils.BvInsets;
-import com.bitvault.ui.utils.BvStyles;
 import com.bitvault.ui.utils.JavaFxUtil;
 import com.bitvault.util.Labels;
 import com.bitvault.util.Result;
+import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -32,10 +33,10 @@ public class CategoryView extends BorderPane {
     public static CategoryView createTest() {
 
         ICategoryService categoryService = () -> Result.ok(List.of(
-                new Category(UUID.randomUUID().toString(), "Cat1", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password",false),
-                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password",false),
-                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password",false),
-                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password",false)
+                new Category(UUID.randomUUID().toString(), "Cat1", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password", false),
+                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password", false),
+                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password", false),
+                new Category(UUID.randomUUID().toString(), "Cat2", BvColors.randomHex(), LocalDateTime.now(), LocalDateTime.now(), "Password", false)
         ));
 
         CategoryVM categoryVM = new CategoryVM(categoryService);
@@ -61,7 +62,7 @@ public class CategoryView extends BorderPane {
         ListView<CategoryRowView> listView = new ListView<>(this.categoryVM.getCategories());
         listView.setPlaceholder(new Label(Labels.i18n("no.records")));
         listView.setFixedCellSize(60);
-        listView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
+        listView.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
 
         this.categoryVM.loadingProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) loading();
@@ -77,7 +78,7 @@ public class CategoryView extends BorderPane {
 
         ToolBar toolBar = new ToolBar(
                 backBtn(),
-                new Separator(),
+                new Separator(Orientation.VERTICAL),
                 createAddNewBtn()
         );
 

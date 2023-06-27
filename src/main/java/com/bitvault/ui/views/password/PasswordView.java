@@ -13,6 +13,7 @@ import com.bitvault.ui.views.categories.CategoryVM;
 import com.bitvault.ui.views.categories.CategoryView;
 import com.bitvault.util.Labels;
 import javafx.collections.transformation.FilteredList;
+import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -67,9 +68,9 @@ public class PasswordView extends BorderPane {
 
         ToolBar toolBar = new ToolBar(
                 addNewBtn,
-                new Separator(),
+                new Separator(Orientation.VERTICAL),
                 categoriesBtn,
-                new Separator(),
+                new Separator(Orientation.VERTICAL),
                 categoriesDd,
                 searchTf
         );

@@ -1,10 +1,10 @@
 package com.bitvault.ui.components;
 
+import atlantafx.base.theme.Styles;
 import com.bitvault.ui.components.validation.ValidateField;
 import com.bitvault.ui.components.validation.ValidateResult;
 import com.bitvault.ui.listcell.ITextColorCell;
 import com.bitvault.ui.listcell.TextColorListCell;
-import com.bitvault.ui.utils.BvStyles;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.shape.Circle;
@@ -53,7 +53,7 @@ public class TextColorComboBox<T extends ITextColorCell> extends ComboBox<T> imp
         if (required && this.getValue() == null) {
             valid = false;
             errorMessages.add("category.required");
-            this.pseudoClassStateChanged(BvStyles.STATE_DANGER, true);
+            this.pseudoClassStateChanged(Styles.STATE_DANGER, true);
         }
 
         return new ValidateResult(valid, errorMessages);

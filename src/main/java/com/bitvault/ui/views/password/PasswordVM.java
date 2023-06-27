@@ -32,6 +32,7 @@ public class PasswordVM {
     private final List<Category> categoriesList = new ArrayList<>();  //to pass to new category window
     private final Category fakeCategory = Category.createFake("ALL", "ALL", "#000000");
 
+
     private final IPasswordService passwordService;
     private final ICategoryService categoryService;
 
@@ -60,7 +61,6 @@ public class PasswordVM {
             ErrorAlert.show(Labels.i18n("error"), passwordsRes.getError());
             return;
         }
-
 
         categoriesList.clear();
         categoriesList.addAll(categoriesResult.get());
@@ -181,4 +181,5 @@ public class PasswordVM {
     public int getPassLength(){
         return this.userSession.getSettings().passwordGenerateLength();
     }
+
 }

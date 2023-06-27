@@ -1,8 +1,10 @@
 package com.bitvault.ui.views.sync;
 
+import atlantafx.base.theme.Tweaks;
 import com.bitvault.ui.hyperlink.HyperLinkCell;
-import com.bitvault.ui.model.*;
-import com.bitvault.ui.utils.BvStyles;
+import com.bitvault.ui.model.Category;
+import com.bitvault.ui.model.Password;
+import com.bitvault.ui.model.SyncValue;
 import com.bitvault.util.Labels;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -55,7 +57,7 @@ public class PasswordSyncTable extends TableView<SyncValue<Password>> {
         tableView.getColumns().add(domainC);
 
         //to remove border
-        tableView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
+        tableView.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
 
         return tableView;
 

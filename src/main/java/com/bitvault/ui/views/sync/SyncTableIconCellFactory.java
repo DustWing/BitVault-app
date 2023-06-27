@@ -1,8 +1,8 @@
 package com.bitvault.ui.views.sync;
 
+import atlantafx.base.theme.Styles;
 import com.bitvault.ui.hyperlink.IWebLocation;
 import com.bitvault.ui.model.SyncValue;
-import com.bitvault.ui.utils.BvStyles;
 import javafx.scene.Node;
 import javafx.scene.control.TableCell;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -30,12 +30,12 @@ public class SyncTableIconCellFactory<T extends IWebLocation> extends TableCell<
 
         if (actionState.equals(SyncValue.ActionState.REQUIRED)) {
             FontIcon warning = new FontIcon(ALERT_BOX_OUTLINE);
-            warning.pseudoClassStateChanged(BvStyles.STATE_WARNING, true);
+            warning.pseudoClassStateChanged(Styles.STATE_WARNING, true);
             return warning;
         }
 
         FontIcon checkBox = new FontIcon(CHECK_BOX_OUTLINE);
-        checkBox.pseudoClassStateChanged(BvStyles.STATE_SUCCESS, true);
+        checkBox.pseudoClassStateChanged(Styles.STATE_SUCCESS, true);
 
         return checkBox;
 

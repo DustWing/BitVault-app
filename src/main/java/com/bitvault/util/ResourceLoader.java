@@ -18,7 +18,7 @@ public class ResourceLoader {
     }
 
     public static String load(String path) {
-        return loadURL(path).toString();
+        return loadURL(path).toExternalForm();
     }
 
     public static InputStream loadStream(String name) {

@@ -74,7 +74,7 @@ public class SyncView extends VBox {
 
 
         final BvButton save = new BvButton(Labels.i18n("save"))
-                .action(event -> stop())
+                .action(event -> this.syncViewModel.save())
                 .defaultButton(false)
                 .withDefaultSize();
 
@@ -90,11 +90,10 @@ public class SyncView extends VBox {
                 this.syncViewModel.getPasswords(),
                 this.syncViewModel.getCategories(),
                 this.syncViewModel.getPassLength(),
-                password -> {
-
-                }
+                this.syncViewModel::onEditPassword
         );
     }
+
 
     public void start() {
         Result<Integer> portResult = this.syncViewModel.startServer();

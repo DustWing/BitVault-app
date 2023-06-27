@@ -53,7 +53,6 @@ public class PasswordDetailsVM {
 
         LocalDateTime expiresOn = getExpiresOn() == null ? null : getExpiresOn().atStartOfDay();
         password.getSecureDetails().expiresOnProperty().set(expiresOn);
-
         onAction.accept(this.password);
 
     }

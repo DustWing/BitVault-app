@@ -57,6 +57,6 @@ public class LocalServiceFactory implements ServiceFactory {
 
     @Override
     public ISyncService getSyncService() {
-        return null;
+        return syncService;
     }
 }

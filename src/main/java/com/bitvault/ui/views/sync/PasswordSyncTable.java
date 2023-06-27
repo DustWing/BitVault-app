@@ -21,13 +21,13 @@ public class PasswordSyncTable extends TableView<SyncValue<Password>> {
             ObservableList<SyncValue<Password>> passwords,
             List<Category> categories,
             int passLength,
-            Consumer<SyncValue<Password>> onSave
+            Consumer<Password> onSave
     ) {
 
         TableView<SyncValue<Password>> tableView = new TableView<>();
 
         tableView.setItems(passwords);
-        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         tableView.setRowFactory(param -> new SyncPasswordTableRowFactory(categories, passLength, onSave));
 
         final TableColumn<SyncValue<Password>, SyncValue.ActionState> iconC = new TableColumn<>("");

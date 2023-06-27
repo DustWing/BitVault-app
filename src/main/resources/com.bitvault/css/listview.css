@@ -1,0 +1,26 @@
+/*.cell .text-input {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-insets: 0;*/
+/*    -fx-background-radius: 0;*/
+/*    -fx-padding: 0;*/
+/*}*/
+
+
+.text-input {
+    -color-input-bg: -color-bg-default;
+    -color-input-fg: -color-fg-default;
+    -color-input-border: -color-border-default;
+    -color-input-bg-focused: -color-bg-default;
+    -color-input-border-focused: -color-accent-emphasis;
+    -color-input-bg-highlight: -color-accent-subtle;
+    -color-input-fg-highlight: -color-fg-default;
+    -fx-background-color: -color-input-border, -color-input-bg;
+    -fx-background-insets: 0, 1px;
+    -fx-background-radius: 4px, 3px;
+    -fx-text-fill: -color-input-fg;
+    -fx-highlight-fill: -color-input-bg-highlight;
+    -fx-highlight-text-fill: -color-input-fg-highlight;
+    -fx-prompt-text-fill: -color-fg-subtle;
+    -fx-padding: 8px 12px 8px 12px;
+    -fx-cursor: text;
+}

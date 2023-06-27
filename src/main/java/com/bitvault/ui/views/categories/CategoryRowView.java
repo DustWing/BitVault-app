@@ -33,12 +33,15 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignP.PENCIL;
 
 
 public class CategoryRowView extends HBox implements IdentifiableNode {
+
     private final CategoryRowVM categoryRowVM;
     final BvTextField categoryName;
 
     private final ValidateForm validateForm;
 
-    public static String colorpicker = ResourceLoader.load("/com.bitvault/css/colorpicker.css");
+    private static String colorpicker = ResourceLoader.load("/com.bitvault/css/colorpicker.css");
+    public static String listViewCss = ResourceLoader.load("/com.bitvault/css/listview.css");
+
 
 
     public static CategoryRowView createFromCategory(
@@ -87,6 +90,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
                 .required(true)
                 .maxLength(50)
                 .minLength(10);
+        textField.getStylesheets().add(listViewCss);
         textField.disableProperty().bind(this.categoryRowVM.allowEditProperty());
         return textField;
     }
@@ -97,8 +101,7 @@ public class CategoryRowView extends HBox implements IdentifiableNode {
         colorPicker.getStylesheets().add(colorpicker);
         colorPicker.disableProperty().bind(this.categoryRowVM.allowEditProperty());
         JavaFxUtil.tinySize(colorPicker);
-        if (this.categoryRowVM.getCategoryColor() != null) colorPicker.setValue(categoryRowVM.getCategoryColor());
-        colorPicker.valueProperty().bind(this.categoryRowVM.categoryColorProperty());
+        colorPicker.valueProperty().bindBidirectional(categoryRowVM.categoryColorProperty());
         return colorPicker;
     }
 

@@ -70,7 +70,6 @@ public class CategoryView extends BorderPane {
         });
 
         BorderPane.setMargin(listView, BvInsets.all10);
-
         return listView;
     }
 

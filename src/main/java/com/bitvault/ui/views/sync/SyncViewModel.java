@@ -15,6 +15,8 @@ import com.bitvault.util.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -27,6 +29,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class SyncViewModel {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SyncViewModel.class);
+
     private HttpServer httpServer;
     private final UserSession userSession;
     private final List<Password> oldPasswords;
@@ -183,10 +187,28 @@ public class SyncViewModel {
         return password;
     }
 
+    public void onEditPassword(Password password) {
+        Optional<SyncValue<Password>> syncValue = this.passwords.stream()
+                .filter(e -> e.getNewValue().getId().equals(password.getId()))
+                .findAny();
+        if (syncValue.isEmpty()) {
+            ErrorAlert.show("Sync error", "Pass Not found to update.");
+            return;
+        }
+        SyncValue<Password> passwordSyncValue = syncValue.get();
+        passwordSyncValue.warningMsgProperty().set("");
+        passwordSyncValue.actionStateProperty().set(SyncValue.ActionState.NON_REQUIRED);
+        passwordSyncValue.getNewValue().update(password);
+    }
+
     public void save() {
 
-        //TODO revisit
-        List<String> list = this.passwords.stream().map(SyncValue::getWarningMsg).toList();
+
+        List<String> list = this.passwords.stream()
+                .filter(e->e.getActionState().equals(SyncValue.ActionState.REQUIRED))
+                .map(SyncValue::getWarningMsg)
+                .toList();
+
         if (!list.isEmpty()) {
             ErrorAlert.show("Sync error", list);
             return;
@@ -194,8 +216,23 @@ public class SyncViewModel {
 
         ISyncService syncService = this.userSession.getServiceFactory().getSyncService();
 
-        List<Password> passwordToSave = this.passwords.stream().map(SyncValue::getNewValue).toList();
+        List<Password> passwordToSave = this.passwords.stream()
+                .map(SyncValue::getNewValue)
+                .toList();
+
         List<Result<Password>> results = syncService.savePasswords(passwordToSave);
+
+
+        //TODO handle error
+        results.forEach(
+                e -> {
+                    if (e.hasError()) {
+                        LOGGER.error("Sync Save", e.getError());
+                    }
+                }
+        );
+
+
     }
 
 
@@ -211,7 +248,7 @@ public class SyncViewModel {
         return userSession.getEncryptionProvider();
     }
 
-    public int getPassLength(){
+    public int getPassLength() {
         return this.userSession.getSettings().passwordGenerateLength();
     }
 }

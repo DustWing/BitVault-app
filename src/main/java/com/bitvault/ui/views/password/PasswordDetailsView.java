@@ -97,7 +97,7 @@ public class PasswordDetailsView extends BorderPane {
                 titleTf,
                 userName,
                 passwordGenerate,
-                progressBar,
+//                progressBar,
                 domainTf,
                 descriptionTf,
                 expiryCategory,
@@ -155,8 +155,6 @@ public class PasswordDetailsView extends BorderPane {
         int passLength = this.passwordDetailsVM.getPassLength();
 
         final FontIcon refresh = new FontIcon(REFRESH);
-
-        //TODO this should be configurable - implement settings
         BvButton button = new BvButton("", refresh)
                 .action(event -> stringProperty.set(PasswordUtils.generatePassString(passLength)));
         button.setTooltip(new Tooltip(Labels.i18n("generate")));

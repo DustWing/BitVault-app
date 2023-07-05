@@ -1,5 +1,6 @@
 package com.bitvault.ui.views.password;
 
+import atlantafx.base.theme.Tweaks;
 import com.bitvault.ui.components.TimerBar;
 import com.bitvault.ui.hyperlink.HyperLinkCell;
 import com.bitvault.ui.model.Category;
@@ -65,7 +66,7 @@ public class PasswordTableView extends BorderPane {
         tableView.getColumns().add(descriptionC);
         tableView.getColumns().add(domainC);
         tableView.getColumns().add(categoryC);
-//        tableView.getStyleClass().add(BvStyles.EDGE_TO_EDGE);
+        tableView.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
 
         setTableEvents(tableView);
 

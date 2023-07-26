@@ -11,6 +11,7 @@
 <p style="text-align: center;">
     Login Screen
 </p>
+
 ![loginScreen](https://github.com/DustWing/BitVault-app/assets/24978428/81b810e3-116b-424e-8e4c-703e13f8aa60)
 
 

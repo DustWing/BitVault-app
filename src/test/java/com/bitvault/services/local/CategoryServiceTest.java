@@ -45,7 +45,9 @@ class CategoryServiceTest {
                 BvColors.randomHex(),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                "Password"
+                "Password",
+                false
+
         );
 
         Result<Category> categoryResult = categoryService.create(category1);
@@ -65,7 +67,8 @@ class CategoryServiceTest {
                 BvColors.randomHex(),
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now(),
-                "Password"
+                "Password",
+                false
         );
 
 
@@ -117,7 +120,8 @@ class CategoryServiceTest {
                         category.color(),
                         category.createdOn(),
                         LocalDateTime.now(),
-                        category.type()
+                        category.type(),
+                        false
                 )
         );
 
